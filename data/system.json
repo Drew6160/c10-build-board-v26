@@ -1,0 +1,11 @@
+{
+  "nodes":[
+    {"id":"battery"},
+    {"id":"ecm"},
+    {"id":"fuel_pump"}
+  ],
+  "edges":[
+    {"from":"battery","to":"ecm","type":"POWER","zone":"B"},
+    {"from":"ecm","to":"fuel_pump","type":"POWER","zone":"E"}
+  ]
+}

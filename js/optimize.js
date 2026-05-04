@@ -1,0 +1,4 @@
+function runOptimization(){
+  step();
+  renderAll();
+}

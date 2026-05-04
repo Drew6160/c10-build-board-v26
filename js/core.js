@@ -1,0 +1,4 @@
+function step(){
+  updateSimulation();
+  detectFailures();
+}
