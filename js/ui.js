@@ -7,6 +7,12 @@ function renderControls(){
   `;
 }
 
+function forceFailure(){
+  STATE.nodes.battery.effectiveVoltage = 9;
+  STATE.nodes.battery.failed = true;
+  renderAll();
+}
+
 function renderGraph(){
 
   const nodes = Object.values(STATE.nodes);
