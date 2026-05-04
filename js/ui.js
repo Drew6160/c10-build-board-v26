@@ -7,7 +7,39 @@ function renderControls(){
     <button onclick="killBattery()">Kill Battery</button>
   `;
 }
+function selectRoute(id){
 
+  const route = buildRoutes().find(r => r.id === id);
+  if (!route) return;
+
+  const spec = generateWiringSpec()
+    .find(s => s.id === id);
+
+  if (!spec){
+    document.getElementById("analysisPanel").innerHTML =
+      `<b>No data for route ${id}</b>`;
+    return;
+  }
+
+  document.getElementById("analysisPanel").innerHTML = `
+    <h3>Route Detail</h3>
+
+    <b>${route.from} → ${route.to}</b><br>
+
+    Base Load: ${spec.current} A<br>
+    Design Load: ${spec.adjustedCurrent.toFixed(1)} A<br>
+
+    Wire: ${spec.wire}<br>
+    Fuse: ${spec.fuse}<br>
+    Voltage Drop: ${spec.drop} V<br>
+
+    <br>
+    ${spec.warnings.length
+      ? `<b style="color:#B00020">⚠ ${spec.warnings.join(", ")}</b>`
+      : `<span style="color:#3E6B48">OK</span>`
+    }
+  `;
+}
 function forceFailure(){
   STATE.nodes.battery.effectiveVoltage = 9;
   STATE.nodes.battery.failed = true;
