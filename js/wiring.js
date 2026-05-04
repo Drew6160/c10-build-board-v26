@@ -41,6 +41,16 @@ function generateWiringSpec(){
 
     const voltageDrop = (current * resistance);
 
+    let adjustedCurrent = current;
+
+// motors get extra margin
+if (toNode?.type === "motor"){
+  adjustedCurrent *= 1.5;
+}
+
+const wire = selectWireSize(adjustedCurrent);
+const fuse = selectFuse(adjustedCurrent);
+
     // --- validation flags
     let warnings = [];
 
