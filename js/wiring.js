@@ -5,6 +5,13 @@ const WIRE_TABLE = [
   { gauge: "10 AWG", maxAmp: 30 },
   { gauge: "8 AWG",  maxAmp: 50 }
 ];
+function selectWireSize(current){
+
+  return WIRE_TABLE.find(w => current <= w.maxAmp) || {
+    gauge: "4 AWG",
+    maxAmp: 100
+  };
+}
 
 function generateWiringSpec(){
 
