@@ -1,24 +1,23 @@
-const STATE = { nodes: {} };
-let EDGES = [];
-
-function initNodes(list){
-  const map = {};
-  list.forEach(n=>{
-    map[n.id] = {
-      ...n,
-      id: n.id,           // ← REQUIRED
-      effectiveVoltage: 12,
-      inputVoltage: 0,
-      failed: false
-    };
-  });
-  return map;
+{
+  "nodes": [
+    { "id": "battery", "type": "source" },
+    { "id": "ecm", "type": "control", "load": 5 },
+    { "id": "fuel_pump", "type": "motor", "load": 15 }
+  ],
+  "edges": [
+    {
+      "from": "battery",
+      "to": "ecm",
+      "type": "POWER",
+      "zone": "B",
+      "resistance": 0.02
+    },
+    {
+      "from": "ecm",
+      "to": "fuel_pump",
+      "type": "POWER",
+      "zone": "E",
+      "resistance": 0.04
+    }
+  ]
 }
-
-fetch("data/system.json")
-.then(r=>r.json())
-.then(d=>{
-  STATE.nodes = initNodes(d.nodes);
-  EDGES = d.edges;
-  renderAll();
-});
