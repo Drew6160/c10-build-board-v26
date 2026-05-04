@@ -14,6 +14,11 @@ function forceFailure(){
   renderAll();
 }
 
+function killBattery(){
+  STATE.nodes.battery.effectiveVoltage = 9;
+  renderAll();
+}
+
 function renderGraph(){
 
   const nodes = Object.values(STATE.nodes);
