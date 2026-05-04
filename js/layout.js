@@ -88,15 +88,25 @@ function selectRoute(id){
   const route = buildRoutes().find(r => r.id === id);
   if (!route) return;
 
-  const spec = generateWiringSpec()
-    .find(s => s.id === id); // cleaner match
+  const edge = EDGES.find(e =>
+    `${e.from}_${e.to}` === id
+  );
+
+  const toNode = STATE.nodes[route.to];
+
+  const current = toNode?.load || 0;
+  const resistance = edge?.resistance || 0;
+
+  const drop = (current * resistance).toFixed(2);
 
   document.getElementById("analysisPanel").innerHTML = `
     <h3>Route Detail</h3>
     <b>${route.from} → ${route.to}</b><br>
+
     Type: ${route.type}<br>
-    Wire: ${spec?.wire || "-"}<br>
-    Fuse: ${spec?.fuse || "-"}
+    Load: ${current} A<br>
+    Resistance: ${resistance} Ω<br>
+    Voltage Drop: ${drop} V
   `;
 }
 
