@@ -40,12 +40,11 @@ function drawNodes(){
 }
 
 function drawRoutes(){
-
 function selectRoute(id){
-
-  const route = buildRoutes().find(r => r.id === id);
-
-  const spec = generateWiringSpec()
+  
+ const route = buildRoutes().find(r => r.id === id);
+  
+ const spec = generateWiringSpec()
     .find(s => id.includes(s.circuit.split(" → ")[1]));
 
   document.getElementById("analysisPanel").innerHTML = `
