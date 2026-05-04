@@ -13,6 +13,15 @@ function selectWireSize(current){
   };
 }
 
+function selectFuse(current){
+
+  // typical rule: 125–150% of load
+  const target = current * 1.25;
+
+  const standard = [5,10,15,20,25,30,40,50,60,80,100];
+
+  return standard.find(f => f >= target) || 100;
+}
 function generateWiringSpec(){
 
   return EDGES.map(e=>{
