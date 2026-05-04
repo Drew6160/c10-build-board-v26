@@ -1,3 +1,11 @@
+const WIRE_TABLE = [
+  { gauge: "16 AWG", maxAmp: 10 },
+  { gauge: "14 AWG", maxAmp: 15 },
+  { gauge: "12 AWG", maxAmp: 20 },
+  { gauge: "10 AWG", maxAmp: 30 },
+  { gauge: "8 AWG",  maxAmp: 50 }
+];
+
 function generateWiringSpec(){
 
   return EDGES.map(e=>{
