@@ -83,32 +83,22 @@ function drawRoutes(){
 // -----------------------------
 // Route selection handler
 // -----------------------------
-function selectRoute(id){
+document.getElementById("analysisPanel").innerHTML = `
+  <h3>Route Detail</h3>
 
-  const route = buildRoutes().find(r => r.id === id);
-  if (!route) return;
+  <b>${route.from} → ${route.to}</b><br>
 
-  const spec = generateWiringSpec()
-    .find(s => s.id === id);
+  Current: ${spec.current} A<br>
+  Wire: ${spec.wire}<br>
+  Fuse: ${spec.fuse}<br>
+  Voltage Drop: ${spec.drop} V<br>
 
-  document.getElementById("analysisPanel").innerHTML = `
-    <h3>Route Detail</h3>
-
-    <b>${route.from} → ${route.to}</b><br>
-
-    Current: ${spec.current} A<br>
-    Wire: ${spec.wire}<br>
-    Fuse: ${spec.fuse}<br>
-    Voltage Drop: ${spec.drop} V<br>
-
-    <br>
-    ${spec.warnings.length
-      ? `<b style="color:#B00020">⚠ ${spec.warnings.join(", ")}</b>`
-      : `<span style="color:#3E6B48">OK</span>`
-    }
-  `;
-}
-
+  <br>
+  ${spec.warnings.length
+    ? `<b style="color:#B00020">⚠ ${spec.warnings.join(", ")}</b>`
+    : `<span style="color:#3E6B48">OK</span>`
+  }
+`;
 // -----------------------------
 // Main render
 // -----------------------------
