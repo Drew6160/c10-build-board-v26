@@ -40,7 +40,7 @@ function drawNodes(){
 }
 
 function drawRoutes(){
-function selectRoute(id){
+onclick="selectRoute('${r.id}')"
   
  const route = buildRoutes().find(r => r.id === id);
   
