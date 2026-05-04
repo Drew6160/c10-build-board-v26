@@ -4,6 +4,7 @@ function renderControls(){
     <button onclick="runOptimization()">Optimize</button>
     <button onclick="downloadReport()">Export</button>
     <button onclick="forceFailure()">Force Battery Failure</button>
+    <button onclick="killBattery()">Kill Battery</button>
   `;
 }
 
