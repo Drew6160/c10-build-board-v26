@@ -69,12 +69,31 @@ function drawRoutes(){
   }).join("");
 }
 
+function selectRoute(id){
+
+  const route = buildRoutes().find(r => r.id === id);
+  if (!route) return;
+
+  const spec = generateWiringSpec()
+    .find(s => id.includes(s.circuit.split(" → ")[1]));
+
+  document.getElementById("analysisPanel").innerHTML = `
+    <h3>Route Detail</h3>
+    <b>${id}</b><br>
+    Type: ${route.type}<br>
+    Wire: ${spec?.wire || "-"}<br>
+    Fuse: ${spec?.fuse || "-"}
+  `;
+}
+
 function renderLayout(){
+
   const svg = document.getElementById("layoutSVG");
 
   svg.innerHTML = `
     <rect x="50" y="80" width="900" height="340"
       fill="none" stroke="#ccc"/>
+
     ${drawRoutes()}
     ${drawNodes()}
   `;
