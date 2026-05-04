@@ -4,7 +4,13 @@ let EDGES = [];
 function initNodes(list){
   const map = {};
   list.forEach(n=>{
-    map[n.id] = { ...n, load: Math.random()*20, active:true };
+    map[n.id] = {
+      ...n,
+      id: n.id,           // ← REQUIRED
+      effectiveVoltage: 12,
+      inputVoltage: 0,
+      failed: false
+    };
   });
   return map;
 }
