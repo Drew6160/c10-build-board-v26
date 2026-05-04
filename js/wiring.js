@@ -33,28 +33,26 @@ function generateWiringSpec(){
 
     const toNode = STATE.nodes[e.to];
 
-    const current = toNode?.load || 1;
+    const baseCurrent = toNode?.load || 1;
+
+    // --- device-aware adjustment
+    let adjustedCurrent = baseCurrent;
+
+    if (toNode?.type === "motor"){
+      adjustedCurrent *= 1.5;
+    }
+
     const resistance = e.resistance || 0.02;
 
-    const wire = selectWireSize(current);
-    const fuse = selectFuse(current);
+    const wire = selectWireSize(adjustedCurrent);
+    const fuse = selectFuse(adjustedCurrent);
 
-    const voltageDrop = (current * resistance);
+    const voltageDrop = (baseCurrent * resistance);
 
-    let adjustedCurrent = current;
-
-// motors get extra margin
-if (toNode?.type === "motor"){
-  adjustedCurrent *= 1.5;
-}
-
-const wire = selectWireSize(adjustedCurrent);
-const fuse = selectFuse(adjustedCurrent);
-
-    // --- validation flags
+    // --- validation
     let warnings = [];
 
-    if (current > wire.maxAmp){
+    if (adjustedCurrent > wire.maxAmp){
       warnings.push("UNDERSIZED WIRE");
     }
 
@@ -69,9 +67,15 @@ const fuse = selectFuse(adjustedCurrent);
     return {
       id,
       circuit: `${e.from} → ${e.to}`,
-      current,
+      current: baseCurrent,
+      adjustedCurrent: adjustedCurrent,
       wire: wire.gauge,
       fuse: `${fuse}A`,
+      drop: voltageDrop.toFixed(2),
+      warnings
+    };
+  });
+}
       drop: voltageDrop.toFixed(2),
       warnings
     };
