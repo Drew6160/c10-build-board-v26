@@ -7,7 +7,10 @@ const WIRE_TABLE = [
 ];
 function selectWireSize(current){
 
-  return WIRE_TABLE.find(w => current <= w.maxAmp) || {
+  // apply safety margin (automotive best practice)
+  const designCurrent = current * 1.3;
+
+  return WIRE_TABLE.find(w => designCurrent <= w.maxAmp) || {
     gauge: "4 AWG",
     maxAmp: 100
   };
