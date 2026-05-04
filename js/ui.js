@@ -3,6 +3,7 @@ function renderControls(){
     <button onclick="step()">Step</button>
     <button onclick="runOptimization()">Optimize</button>
     <button onclick="downloadReport()">Export</button>
+    <button onclick="forceFailure()">Force Battery Failure</button>
   `;
 }
 
