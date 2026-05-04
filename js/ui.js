@@ -8,7 +8,8 @@ function renderControls(){
 
 function renderGraph(){
   document.getElementById("graphPanel").innerHTML =
-    "<b>Graph running</b>";
+    "<b>Harness Visualization Active</b>";
+
 }
 
 function renderBOM(){
