@@ -1,6 +1,13 @@
 function detectFailures(){
 
   Object.values(STATE.nodes).forEach(n=>{
-    n.failed = n.effectiveVoltage < 12; // raise threshold
+
+    // failure zones
+    if (n.effectiveVoltage < 11.5){
+      n.failed = true;
+    } else {
+      n.failed = false;
+    }
+
   });
 }
