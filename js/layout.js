@@ -40,20 +40,23 @@ function drawNodes(){
 }
 
 function drawRoutes(){
-onclick="selectRoute('${r.id}')"
-  
- const route = buildRoutes().find(r => r.id === id);
-  
- const spec = generateWiringSpec()
-    .find(s => id.includes(s.circuit.split(" → ")[1]));
 
-  document.getElementById("analysisPanel").innerHTML = `
-    <h3>Route Detail</h3>
-    <b>${id}</b><br>
-    Type: ${route.type}<br>
-    Wire: ${spec?.wire}<br>
-    Fuse: ${spec?.fuse}
-  `;
+  return buildRoutes().map(r => {
+
+    const pts = r.points.map(p => p.join(",")).join(" ");
+
+    return `
+      <polyline
+        points="${pts}"
+        stroke="${ROUTE_COLORS[r.type] || "#999"}"
+        stroke-width="3"
+        fill="none"
+        stroke-dasharray="6,3"
+        onclick="selectRoute('${r.id}')"
+        style="cursor:pointer"
+      />
+    `;
+  }).join("");
 }
   return buildRoutes().map(r=>{
     const pts = r.points.map(p=>p.join(",")).join(" ");
