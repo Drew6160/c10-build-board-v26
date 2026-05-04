@@ -26,13 +26,41 @@ function generateWiringSpec(){
 
   return EDGES.map(e=>{
 
-    const load = 10; // placeholder
+    const id = `${e.from}_${e.to}`;
+
+    const toNode = STATE.nodes[e.to];
+
+    const current = toNode?.load || 1;
+    const resistance = e.resistance || 0.02;
+
+    const wire = selectWireSize(current);
+    const fuse = selectFuse(current);
+
+    const voltageDrop = (current * resistance);
+
+    // --- validation flags
+    let warnings = [];
+
+    if (current > wire.maxAmp){
+      warnings.push("UNDERSIZED WIRE");
+    }
+
+    if (fuse > wire.maxAmp * 1.5){
+      warnings.push("FUSE TOO LARGE");
+    }
+
+    if (voltageDrop > 1.0){
+      warnings.push("HIGH VOLTAGE DROP");
+    }
 
     return {
-      id: `${e.from}_${e.to}`,   // ← THIS IS CRITICAL
+      id,
       circuit: `${e.from} → ${e.to}`,
-      wire: load > 15 ? "10 AWG" : "12 AWG",
-      fuse: load > 15 ? "30A" : "20A"
+      current,
+      wire: wire.gauge,
+      fuse: `${fuse}A`,
+      drop: voltageDrop.toFixed(2),
+      warnings
     };
   });
 }
