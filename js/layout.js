@@ -1,3 +1,7 @@
+// =============================
+// Layout + Routing Engine v26.1
+// =============================
+
 const LAYOUT_POS = {
   battery: {x:120,y:300},
   ecm: {x:450,y:220},
@@ -11,6 +15,9 @@ const ROUTE_COLORS = {
   GROUND: "#3E6B48"
 };
 
+// -----------------------------
+// Build route geometry
+// -----------------------------
 function buildRoutes(){
   return EDGES.map(e=>{
     const from = LAYOUT_POS[e.from];
@@ -21,6 +28,8 @@ function buildRoutes(){
 
     return {
       id: `${e.from}_${e.to}`,
+      from: e.from,
+      to: e.to,
       type: e.type,
       points: [
         [from.x, from.y],
@@ -32,13 +41,25 @@ function buildRoutes(){
   }).filter(Boolean);
 }
 
+// -----------------------------
+// Draw nodes (with failure color)
+// -----------------------------
 function drawNodes(){
-  return Object.entries(LAYOUT_POS).map(([id,p])=>`
-    <circle cx="${p.x}" cy="${p.y}" r="8" fill="#2E2A26"/>
-    <text x="${p.x+10}" y="${p.y+4}" font-size="12">${id}</text>
-  `).join("");
+  return Object.entries(LAYOUT_POS).map(([id,p])=>{
+
+    const node = STATE.nodes[id];
+    const color = node?.failed ? "#B00020" : "#2E2A26";
+
+    return `
+      <circle cx="${p.x}" cy="${p.y}" r="8" fill="${color}"/>
+      <text x="${p.x+10}" y="${p.y+4}" font-size="12">${id}</text>
+    `;
+  }).join("");
 }
 
+// -----------------------------
+// Draw routes (clickable)
+// -----------------------------
 function drawRoutes(){
 
   return buildRoutes().map(r => {
@@ -58,34 +79,30 @@ function drawRoutes(){
     `;
   }).join("");
 }
-  return buildRoutes().map(r=>{
-    const pts = r.points.map(p=>p.join(",")).join(" ");
-    return `
-      <polyline points="${pts}"
-        stroke="${ROUTE_COLORS[r.type] || "#999"}"
-        stroke-width="3"
-        fill="none"/>
-    `;
-  }).join("");
-}
 
+// -----------------------------
+// Route selection handler
+// -----------------------------
 function selectRoute(id){
 
   const route = buildRoutes().find(r => r.id === id);
   if (!route) return;
 
   const spec = generateWiringSpec()
-    .find(s => id.includes(s.circuit.split(" → ")[1]));
+    .find(s => s.id === id); // cleaner match
 
   document.getElementById("analysisPanel").innerHTML = `
     <h3>Route Detail</h3>
-    <b>${id}</b><br>
+    <b>${route.from} → ${route.to}</b><br>
     Type: ${route.type}<br>
     Wire: ${spec?.wire || "-"}<br>
     Fuse: ${spec?.fuse || "-"}
   `;
 }
 
+// -----------------------------
+// Main render
+// -----------------------------
 function renderLayout(){
 
   const svg = document.getElementById("layoutSVG");
