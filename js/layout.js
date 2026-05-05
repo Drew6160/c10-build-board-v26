@@ -1,3 +1,4 @@
+console.log("layout.js LOADED");
 // =============================
 // Layout + Routing Engine v26.2
 // =============================
