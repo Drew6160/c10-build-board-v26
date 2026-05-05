@@ -84,7 +84,7 @@ function drawRoutes(){
 // -----------------------------
 // Route selection handler
 // -----------------------------
-document.getElementById("analysisPanel").innerHTML = `
+
   <h3>Route Detail</h3>
 
   <b>${route.from} → ${route.to}</b><br>
