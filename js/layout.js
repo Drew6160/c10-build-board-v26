@@ -1,3 +1,6 @@
+function renderLayout(){
+  console.log("renderLayout fired");
+
 // =============================
 // Layout + Routing Engine v26.1
 // =============================
