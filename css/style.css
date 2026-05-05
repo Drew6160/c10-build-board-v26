@@ -1,9 +1,9 @@
 :root {
-  --bg: #F4F1EC;
-  --card: #FFFFFF;
+  --bg:     #F4F1EC;
+  --card:   #FFFFFF;
   --accent: #C4622D;
-  --text: #2E2A26;
-  --line: #D8D2C8;
+  --text:   #2E2A26;
+  --line:   #D8D2C8;
 }
 
 body {
@@ -24,6 +24,7 @@ body {
   grid-template-columns: 2fr 1fr;
   gap: 10px;
   padding: 10px;
+  align-items: start;
 }
 
 .stack {
@@ -40,37 +41,31 @@ button {
   margin: 2px;
   cursor: pointer;
   border-radius: 4px;
+  font-size: 12px;
 }
 
-button:hover {
-  opacity: 0.85;
-  cursor: pointer;
-}
+button:hover { opacity: 0.85; }
 
-#layoutPanel {
-  min-height: 520px;
-}
+#layoutPanel  { min-height: 560px; }
 
 #layoutSVG {
   display: block;
   width: 100%;
-  height: 500px;
+  height: 560px;
   border: 1px solid var(--line);
   border-radius: 6px;
 }
 
 #graphPanel {
   overflow-y: auto;
-  max-height: 480px;
+  max-height: 420px;
 }
 
-#analysisPanel {
-  min-height: 120px;
-}
+#analysisPanel { min-height: 130px; }
 
 #bomPanel {
   overflow-y: auto;
-  max-height: 200px;
+  max-height: 280px;
   font-size: 12px;
 }
 
