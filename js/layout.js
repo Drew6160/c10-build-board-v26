@@ -1,8 +1,5 @@
-function renderLayout(){
-  console.log("renderLayout fired");
-
 // =============================
-// Layout + Routing Engine v26.1
+// Layout + Routing Engine v26.2
 // =============================
 
 const LAYOUT_POS = {
@@ -45,12 +42,12 @@ function buildRoutes(){
 }
 
 // -----------------------------
-// Draw nodes (with failure color)
+// Draw nodes
 // -----------------------------
 function drawNodes(){
   return Object.entries(LAYOUT_POS).map(([id,p])=>{
 
-    const node = STATE.nodes[id];
+    const node = STATE.nodes?.[id];
     const color = node?.failed ? "#B00020" : "#2E2A26";
 
     return `
@@ -61,10 +58,9 @@ function drawNodes(){
 }
 
 // -----------------------------
-// Draw routes (clickable)
+// Draw routes
 // -----------------------------
 function drawRoutes(){
-
   return buildRoutes().map(r => {
 
     const pts = r.points.map(p => p.join(",")).join(" ");
@@ -85,30 +81,13 @@ function drawRoutes(){
 }
 
 // -----------------------------
-// Route selection handler
-// -----------------------------
-
-  <h3>Route Detail</h3>
-
-  <b>${route.from} → ${route.to}</b><br>
-
-  Current: ${spec.current} A<br>
-  Wire: ${spec.wire}<br>
-  Fuse: ${spec.fuse}<br>
-  Voltage Drop: ${spec.drop} V<br>
-
-  <br>
-  ${spec.warnings.length
-    ? `<b style="color:#B00020">⚠ ${spec.warnings.join(", ")}</b>`
-    : `<span style="color:#3E6B48">OK</span>`
-  }
-`;
-// -----------------------------
 // Main render
 // -----------------------------
 function renderLayout(){
+  console.log("renderLayout fired");
 
   const svg = document.getElementById("layoutSVG");
+  if (!svg) return;
 
   svg.innerHTML = `
     <rect x="50" y="80" width="900" height="340"
