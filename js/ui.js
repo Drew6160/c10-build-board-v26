@@ -1,10 +1,31 @@
 // -----------------------------
 // Route selection handler
 // -----------------------------
-
-  <h3>Route Detail</h3>
-
-  <b>${route.from} → ${route.to}</b><br>
+window.selectRoute = function(id){
+  const route = buildRoutes().find(r => r.id === id);
+  if (!route) return;
+  const spec = generateWiringSpec()
+    .find(s => s.id === id);
+  if (!spec){
+    document.getElementById("analysisPanel").innerHTML =
+      `<b>No data for route ${id}</b>`;
+    return;
+  }
+  document.getElementById("analysisPanel").innerHTML = `
+    <h3>Route Detail</h3>
+    <b>${route.from} → ${route.to}</b><br>
+    Base Load: ${spec.current} A<br>
+    Design Load: ${spec.adjustedCurrent.toFixed(1)} A<br>
+    Wire: ${spec.wire}<br>
+    Fuse: ${spec.fuse}<br>
+    Voltage Drop: ${spec.drop} V<br>
+    <br>
+    ${spec.warnings.length
+      ? `<b style="color:#B00020">⚠ ${spec.warnings.join(", ")}</b>`
+      : `<span style="color:#3E6B48">OK</span>`
+    }
+  `;
+};
 
 function renderControls(){
   document.getElementById("controlsPanel").innerHTML = `
@@ -16,72 +37,6 @@ function renderControls(){
   `;
 }
 
-window.selectRoute = function(id){
-
-  const route = buildRoutes().find(r => r.id === id);
-  if (!route) return;
-
-  const spec = generateWiringSpec()
-    .find(s => s.id === id);
-
-  if (!spec){
-    document.getElementById("analysisPanel").innerHTML =
-      `<b>No data for route ${id}</b>`;
-    return;
-  }
-
-  document.getElementById("analysisPanel").innerHTML = `
-    <h3>Route Detail</h3>
-
-    <b>${route.from} → ${route.to}</b><br>
-
-    Base Load: ${spec.current} A<br>
-    Design Load: ${spec.adjustedCurrent.toFixed(1)} A<br>
-
-    Wire: ${spec.wire}<br>
-    Fuse: ${spec.fuse}<br>
-    Voltage Drop: ${spec.drop} V<br>
-
-    <br>
-    ${spec.warnings.length
-      ? `<b style="color:#B00020">⚠ ${spec.warnings.join(", ")}</b>`
-      : `<span style="color:#3E6B48">OK</span>`
-    }
-  `;
-};
-function selectRoute(id){
-
-  const route = buildRoutes().find(r => r.id === id);
-  if (!route) return;
-
-  const spec = generateWiringSpec()
-    .find(s => s.id === id);
-
-  if (!spec){
-    document.getElementById("analysisPanel").innerHTML =
-      `<b>No data for route ${id}</b>`;
-    return;
-  }
-
-  document.getElementById("analysisPanel").innerHTML = `
-    <h3>Route Detail</h3>
-
-    <b>${route.from} → ${route.to}</b><br>
-
-    Base Load: ${spec.current} A<br>
-    Design Load: ${spec.adjustedCurrent.toFixed(1)} A<br>
-
-    Wire: ${spec.wire}<br>
-    Fuse: ${spec.fuse}<br>
-    Voltage Drop: ${spec.drop} V<br>
-
-    <br>
-    ${spec.warnings.length
-      ? `<b style="color:#B00020">⚠ ${spec.warnings.join(", ")}</b>`
-      : `<span style="color:#3E6B48">OK</span>`
-    }
-  `;
-}
 function forceFailure(){
   STATE.nodes.battery.effectiveVoltage = 9;
   STATE.nodes.battery.failed = true;
@@ -94,25 +49,18 @@ function killBattery(){
 }
 
 function renderGraph(){
-
   const nodes = Object.values(STATE.nodes);
-
   const total = nodes.length;
   const failed = nodes.filter(n => n.failed).length;
-
   const avgVoltage = (
     nodes.reduce((sum,n)=>sum + (n.effectiveVoltage || 12),0) / total
   ).toFixed(2);
-
   document.getElementById("graphPanel").innerHTML = `
     <h3>System Status</h3>
-
     <div><b>Nodes:</b> ${total}</div>
     <div><b>Failures:</b> ${failed}</div>
     <div><b>Avg Voltage:</b> ${avgVoltage}V</div>
-
     <hr>
-
     ${nodes.map(n=>`
       <div style="
         padding:4px;
@@ -126,8 +74,6 @@ function renderGraph(){
     `).join("")}
   `;
 }
-
-
 
 function renderBOM(){
   const b = buildBOM();
