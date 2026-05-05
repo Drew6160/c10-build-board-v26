@@ -1,3 +1,11 @@
+// -----------------------------
+// Route selection handler
+// -----------------------------
+
+  <h3>Route Detail</h3>
+
+  <b>${route.from} → ${route.to}</b><br>
+
 function renderControls(){
   document.getElementById("controlsPanel").innerHTML = `
     <button onclick="step()">Step</button>
