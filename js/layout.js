@@ -70,7 +70,8 @@ function drawRoutes(){
       <polyline
         points="${pts}"
         stroke="${ROUTE_COLORS[r.type] || "#999"}"
-        stroke-width="3"
+        stroke-width="6"
+        pointer-events="stroke"
         fill="none"
         stroke-dasharray="6,3"
         onclick="selectRoute('${r.id}')"
