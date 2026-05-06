@@ -24,6 +24,10 @@
     "fuel_sender":    { "status": "planned"   },
     "accuair_comp":   { "status": "installed" },
     "accuair_valves": { "status": "installed" },
-    "tail_lights":    { "status": "planned"   }
+    "tail_lights":    { "status": "planned"   },
+    "power_windows":  { "status": "planned"   },
+    "heated_seats":   { "status": "planned"   },
+    "alarm":          { "status": "planned"   },
+    "backup_cam":     { "status": "planned"   }
   }
 }
