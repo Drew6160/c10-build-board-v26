@@ -97,3 +97,8 @@ header h2 {
   font-size: 1.2rem;
   letter-spacing: 0.02em;
 }
+
+#statusEditorPanel {
+  overflow-y: auto;
+  max-height: 480px;
+}
