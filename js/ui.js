@@ -235,60 +235,87 @@ function renderGraph(){
   const done=statusCounts.installed+statusCounts.tested;
   const pct=Math.round((done/total)*100);
 
-  const zones={A:[],B:[],C:[]};
-  nodes.forEach(n=>{if(zones[n.zone])zones[n.zone].push(n);});
-  const zoneLabels={A:"Engine Bay",B:"Cab",C:"Rear Node"};
-  const sColors={planned:"#AAA",ordered:"#2D6C8C",
-                 installed:"#C4622D",tested:"#3E6B48"};
+  // compact stat chips
+  const chips = [
+    { label:"Nodes",    val:total,             color:"#2E2A26" },
+    { label:"Failures", val:failed,            color:failed>0?"#B00020":"#3E6B48" },
+    { label:"Avg V",    val:avgV+"V",          color:"#2E2A26" },
+    { label:"Done",     val:done+"/"+total,    color:"#C4622D" },
+    { label:"Progress", val:pct+"%",           color:"#3E6B48" }
+  ].map(c=>`
+    <div style="background:#F4F1EC;border-radius:6px;padding:6px 10px;
+                text-align:center;flex:1">
+      <div style="font-size:16px;font-weight:bold;color:${c.color}">${c.val}</div>
+      <div style="font-size:9px;color:#AAA;text-transform:uppercase;
+                  letter-spacing:0.5px">${c.label}</div>
+    </div>`).join("");
 
-  const zoneHTML=Object.entries(zones).map(([key,znodes])=>`
-    <div style="margin:6px 0 2px;font-size:10px;font-weight:bold;
-                color:#AAA;letter-spacing:1px">
-      ${zoneLabels[key].toUpperCase()}
-    </div>
-    ${znodes.map(n=>{
-      const v=(n.effectiveVoltage||12).toFixed(1);
-      const hc=n.failed?"#B00020":n.effectiveVoltage<12?"#E09B2D":"#3E6B48";
-      const sk=STATE.status?.[n.id]?.status||"planned";
-      const inLoom=!ACTIVE_LOOM||isNodeInActiveLoom(n.id);
-      return `<div style="display:flex;align-items:center;gap:6px;
-                padding:2px 4px;font-size:11px;cursor:pointer;
-                border-radius:4px;opacity:${inLoom?(n.tier===2?0.6:1):0.25}"
-               onclick="handleNodeClick('${n.id}')"
-               onmouseover="this.style.background='#F4F1EC'"
-               onmouseout="this.style.background='none'">
-        <span style="color:${hc};font-size:10px">●</span>
-        <span style="flex:1">${n.label||n.id}${n.tier===2?
-          ' <span style="color:#CCC;font-size:9px">(T2)</span>':''}</span>
-        <span style="width:7px;height:7px;border-radius:50%;
-                     border:2px solid ${sColors[sk]};
-                     display:inline-block;flex-shrink:0"></span>
-        <span style="color:${hc==="#B00020"?hc:"#AAA"};font-size:10px;
-                     min-width:36px;text-align:right">${v}V</span>
-      </div>`;
-    }).join("")}
-  `).join("");
-
-  document.getElementById("graphPanel").innerHTML=`
-    <h3 style="margin:0 0 6px;color:#C4622D">System Status</h3>
-    <div style="display:flex;gap:12px;font-size:12px;margin-bottom:6px">
-      <span><b>${total}</b> nodes</span>
-      <span style="color:${failed>0?"#B00020":"#3E6B48"}">
-        <b>${failed}</b> failure${failed!==1?"s":""}</span>
-      <span><b>${avgV}V</b> avg</span>
-    </div>
-    <div style="margin-bottom:8px">
+  // progress bar
+  const progressBar=`
+    <div style="margin:8px 0 4px">
       <div style="display:flex;justify-content:space-between;
                   font-size:10px;color:#888;margin-bottom:3px">
         <span>Build Progress</span><span>${done}/${total} — ${pct}%</span>
       </div>
-      <div style="background:#F0EDE8;border-radius:4px;height:6px">
-        <div style="background:#C4622D;width:${pct}%;height:6px;
-                    border-radius:4px;transition:width 0.3s"></div>
+      <div style="background:#F0EDE8;border-radius:4px;height:8px">
+        <div style="background:linear-gradient(90deg,#C4622D,#E09B2D);
+                    width:${pct}%;height:8px;border-radius:4px;
+                    transition:width 0.4s"></div>
       </div>
+    </div>`;
+
+  // status breakdown mini-bar
+  const sColors2={planned:"#AAA",ordered:"#2D6C8C",
+                  installed:"#C4622D",tested:"#3E6B48"};
+  const breakdown=Object.entries(statusCounts).map(([s,count])=>`
+    <div style="display:flex;align-items:center;gap:6px;font-size:11px;
+                padding:2px 0">
+      <span style="width:8px;height:8px;border-radius:50%;
+                   background:${sColors2[s]};display:inline-block"></span>
+      <span style="flex:1;color:#555">${s.charAt(0).toUpperCase()+s.slice(1)}</span>
+      <span style="font-weight:bold;color:#2E2A26">${count}</span>
+    </div>`).join("");
+
+  // faults section — only shown when failures exist
+  const faultNodes = nodes.filter(n=>n.failed);
+  const faultHTML = faultNodes.length ? `
+    <hr style="border:none;border-top:1px solid #D8D2C8;margin:8px 0 6px">
+    <div style="font-size:10px;font-weight:bold;color:#B00020;
+                letter-spacing:1px;margin-bottom:4px">
+      ACTIVE FAULTS
     </div>
-    <hr style="border:none;border-top:1px solid #D8D2C8;margin:0 0 4px">
-    ${zoneHTML}`;
+    ${faultNodes.map(n=>`
+      <div style="display:flex;align-items:center;gap:6px;
+                  padding:3px 6px;margin:2px 0;border-radius:4px;
+                  background:#FFF0F0;border-left:3px solid #B00020;
+                  font-size:11px;cursor:pointer"
+           onclick="handleNodeClick('${n.id}')">
+        <span style="flex:1;color:#B00020">${n.label||n.id}</span>
+        <span style="color:#B00020;font-size:10px">
+          ${(n.effectiveVoltage||0).toFixed(1)}V ✕
+        </span>
+      </div>`).join("")}` : "";
+
+  // manage tab link
+  const manageLink=`
+    <div style="margin-top:8px;text-align:right">
+      <button onclick="switchTab('manage')"
+        style="background:#F4F1EC;color:#555;border:1px solid #D8D2C8;
+               font-size:10px;padding:3px 10px">
+        Full Status & BOM →
+      </button>
+    </div>`;
+
+  document.getElementById("graphPanel").innerHTML=`
+    <h3 style="margin:0 0 8px;color:#C4622D">System Status</h3>
+    <div style="display:flex;gap:6px;margin-bottom:8px">${chips}</div>
+    ${progressBar}
+    <hr style="border:none;border-top:1px solid #D8D2C8;margin:8px 0 6px">
+    <div style="font-size:10px;font-weight:bold;color:#AAA;
+                letter-spacing:1px;margin-bottom:4px">BUILD STATUS</div>
+    ${breakdown}
+    ${faultHTML}
+    ${manageLink}`;
 }
 
 // ==============================
