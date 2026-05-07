@@ -98,7 +98,7 @@ header h2 {
 }
 #graphPanel {
   overflow-y: auto;
-  max-height: 280px;
+  max-height: 380px;
 }
 #analysisPanel    { min-height: 180px; }
 #statusEditorPanel {
