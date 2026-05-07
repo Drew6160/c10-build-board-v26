@@ -6,29 +6,58 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<header class="card">
-  <h2>1967 C10 — Electrical Build Board</h2>
-</header>
-<div class="grid">
 
-  <!-- LEFT: loom filter + layout diagram -->
-  <div class="stack-left">
-    <div class="card" id="loomPanel"></div>
-    <div class="card" id="layoutPanel">
-      <svg id="layoutSVG" viewBox="0 0 990 615"></svg>
+<header class="card">
+  <div style="display:flex;align-items:center;justify-content:space-between">
+    <h2>1967 C10 — Electrical Build Board</h2>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('diagram')">
+        ⚡ Diagram
+      </button>
+      <button class="tab-btn" onclick="switchTab('manage')">
+        🔧 Build Management
+      </button>
     </div>
   </div>
+</header>
 
-  <!-- RIGHT: controls / status / analysis / status editor / BOM -->
-  <div class="stack">
-    <div class="card" id="controlsPanel"></div>
-    <div class="card" id="graphPanel"></div>
-    <div class="card" id="analysisPanel"></div>
-    <div class="card" id="statusEditorPanel"></div>
-    <div class="card" id="bomPanel"></div>
+<!-- TAB 1: DIAGRAM -->
+<div id="tab-diagram" class="tab-content">
+  <div class="grid">
+    <div class="stack-left">
+      <div class="card" id="loomPanel"></div>
+      <div class="card" id="layoutPanel">
+        <svg id="layoutSVG" viewBox="0 0 990 615"></svg>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="card" id="controlsPanel"></div>
+      <div class="card" id="graphPanel"></div>
+      <div class="card" id="analysisPanel"></div>
+    </div>
   </div>
-
 </div>
+
+<!-- TAB 2: BUILD MANAGEMENT -->
+<div id="tab-manage" class="tab-content" style="display:none">
+  <div class="manage-grid">
+
+    <!-- LEFT: Component editor -->
+    <div class="stack">
+      <div class="card" id="componentEditorPanel"></div>
+    </div>
+
+    <!-- RIGHT: Status editor + BOM + Wiring spec + Export -->
+    <div class="stack">
+      <div class="card" id="statusEditorPanel"></div>
+      <div class="card" id="bomPanel"></div>
+      <div class="card" id="wiringSpecPanel"></div>
+      <div class="card" id="exportPanel"></div>
+    </div>
+
+  </div>
+</div>
+
 <script src="js/data.js"></script>
 <script src="js/core.js"></script>
 <script src="js/simulation.js"></script>
