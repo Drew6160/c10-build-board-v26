@@ -6,12 +6,51 @@
   --line:   #D8D2C8;
 }
 
+* { box-sizing: border-box; }
+
 body {
-  font-family: Inter, system-ui;
+  font-family: Inter, system-ui, sans-serif;
   background: var(--bg);
   margin: 0;
 }
 
+/* ---- Header ---- */
+header.card {
+  margin: 10px;
+  padding: 10px 16px;
+}
+header h2 {
+  margin: 0;
+  color: var(--accent);
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+
+/* ---- Tab bar ---- */
+.tab-bar {
+  display: flex;
+  gap: 6px;
+}
+.tab-btn {
+  background: #F4F1EC;
+  color: #555;
+  border: 1px solid var(--line);
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tab-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.tab-btn:hover:not(.active) {
+  background: #EAE6DF;
+}
+
+/* ---- Cards ---- */
 .card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -19,6 +58,7 @@ body {
   border-radius: 10px;
 }
 
+/* ---- Tab 1: Diagram grid ---- */
 .grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -26,19 +66,58 @@ body {
   padding: 10px;
   align-items: start;
 }
-
+.stack-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .stack {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.stack-left {
-  display: flex;
-  flex-direction: column;
+/* ---- Tab 2: Manage grid ---- */
+.manage-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
+  padding: 10px;
+  align-items: start;
 }
 
+/* ---- Panel sizing ---- */
+#loomPanel        { padding: 10px 12px; }
+#layoutPanel      { min-height: 560px; }
+#layoutSVG {
+  display: block;
+  width: 100%;
+  height: 620px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+#graphPanel {
+  overflow-y: auto;
+  max-height: 280px;
+}
+#analysisPanel    { min-height: 180px; }
+#statusEditorPanel {
+  overflow-y: auto;
+  max-height: 440px;
+}
+#bomPanel {
+  overflow-y: auto;
+  max-height: 320px;
+}
+#wiringSpecPanel {
+  overflow-y: auto;
+  max-height: 400px;
+}
+#componentEditorPanel {
+  min-height: 500px;
+}
+
+/* ---- Buttons ---- */
 button {
   background: var(--accent);
   color: white;
@@ -48,57 +127,48 @@ button {
   cursor: pointer;
   border-radius: 4px;
   font-size: 12px;
+  transition: opacity 0.15s;
 }
-
 button:hover { opacity: 0.85; }
 
-#loomPanel { padding: 10px 12px; }
-
-#layoutPanel { min-height: 560px; }
-
-#layoutSVG {
-  display: block;
+/* ---- Forms ---- */
+input, select, textarea {
   width: 100%;
-  height: 620px;
+  padding: 6px 8px;
   border: 1px solid var(--line);
-  border-radius: 6px;
-}
-
-/* Tall enough to show all 29 nodes across 3 zones */
-#graphPanel {
-  overflow-y: auto;
-  max-height: 600px;
-}
-
-#analysisPanel {
-  min-height: 160px;
-}
-
-#bomPanel {
-  overflow-y: auto;
-  max-height: 320px;
+  border-radius: 4px;
   font-size: 12px;
+  font-family: inherit;
+  color: var(--text);
+  background: white;
+  margin-bottom: 6px;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+label {
+  font-size: 10px;
+  font-weight: bold;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 2px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.form-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
 }
 
 pre {
   margin: 0;
   white-space: pre-wrap;
   word-break: break-word;
-}
-
-header.card {
-  margin: 10px;
-  padding: 10px 16px;
-}
-
-header h2 {
-  margin: 0;
-  color: var(--accent);
-  font-size: 1.2rem;
-  letter-spacing: 0.02em;
-}
-
-#statusEditorPanel {
-  overflow-y: auto;
-  max-height: 480px;
 }
