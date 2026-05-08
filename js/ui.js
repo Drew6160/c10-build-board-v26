@@ -7,7 +7,7 @@
 // -----------------------------
 // Tab switching
 // -----------------------------
-window.switchTab = function(tab){
+window.switchTab = function(tab, btn){
   document.querySelectorAll(".tab-content").forEach(el=>{
     el.style.display = "none";
   });
@@ -15,7 +15,8 @@ window.switchTab = function(tab){
     el.classList.remove("active");
   });
   document.getElementById(`tab-${tab}`).style.display = "block";
-  event.target.classList.add("active");
+  const activeBtn = btn || (typeof event !== "undefined" ? event.target : null);
+  if(activeBtn) activeBtn.classList.add("active");
 
   if(tab === "manage"){
     renderStatusEditor();
@@ -195,26 +196,49 @@ window.selectRoute = function(id){
 function renderControls(){
   document.getElementById("controlsPanel").innerHTML=`
     <div style="display:flex;flex-wrap:wrap;gap:4px">
-      <button onclick="step()">▶ Step</button>
+      <button onclick="step()" title="Run one simulation step and record to history">
+        ▶ Step
+      </button>
       <button onclick="runOptimization()">⚡ Optimize</button>
       <button onclick="forceFailure()"
-        style="background:#B00020">⚠ Battery Low</button>
+        style="background:#B00020"
+        title="Drop battery to 9V and trigger cascade failure">
+        ⚠ Battery Low
+      </button>
       <button onclick="resetSim()"
-        style="background:#555">↺ Reset</button>
+        style="background:#555"
+        title="Restore all nodes to 12V and clear history">
+        ↺ Reset
+      </button>
     </div>`;
 }
 
 function forceFailure(){
-  STATE.nodes.battery.effectiveVoltage=9;
-  STATE.nodes.battery.failed=true;
+  // exit playback first
+  if(STATE.playbackFrame !== null && STATE.playbackFrame !== undefined){
+    stopPlaybackTimer();
+    STATE.playbackFrame = null;
+  }
+  STATE.nodes.battery.effectiveVoltage = 9;
+  STATE.nodes.battery.failed = true;
   propagateFailures();
+  detectFailures();
+  recordHistory();
   renderAll();
+  renderPlaybackControls();
 }
+
 function resetSim(){
+  stopPlaybackTimer();
+  STATE.playbackFrame = null;
+  STATE.history = [];
   Object.values(STATE.nodes).forEach(n=>{
-    n.effectiveVoltage=12; n.inputVoltage=0; n.failed=false;
+    n.effectiveVoltage = 12;
+    n.inputVoltage     = 0;
+    n.failed           = false;
   });
   renderAll();
+  renderPlaybackControls();
 }
 
 // -----------------------------
@@ -814,6 +838,7 @@ window.exportSystemJSON = function(){
 function renderAll(){
   renderGraph();
   renderControls();
+  renderPlaybackControls();
   renderLayout();
   // only render tab 2 panels if visible
   if(document.getElementById("tab-manage").style.display!=="none"){
