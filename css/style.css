@@ -101,6 +101,7 @@ header h2 {
   max-height: 380px;
 }
 #analysisPanel    { min-height: 180px; }
+#playbackPanel    { min-height: 48px; }
 #statusEditorPanel {
   overflow-y: auto;
   max-height: 440px;
