@@ -141,7 +141,7 @@ window.handleNodeClick = function(id){
       <span style="font-size:10px;font-weight:bold;color:#AAA;letter-spacing:1px">
         UPSTREAM DIAGNOSTIC CHAIN
       </span>
-      <button onclick="switchTab('manage');setTimeout(()=>scrollToNode('${id}'),200)"
+      <button onclick="switchTab('manage',null);setTimeout(()=>scrollToNode('${id}'),200)"
         style="font-size:9px;padding:2px 8px;background:#F4F1EC;
                color:#555;border:1px solid #D8D2C8">
         Edit in Manage →
@@ -323,7 +323,7 @@ function renderGraph(){
   // manage tab link
   const manageLink=`
     <div style="margin-top:8px;text-align:right">
-      <button onclick="switchTab('manage')"
+      <button onclick="switchTab('manage',null)"
         style="background:#F4F1EC;color:#555;border:1px solid #D8D2C8;
                font-size:10px;padding:3px 10px">
         Full Status & BOM →
