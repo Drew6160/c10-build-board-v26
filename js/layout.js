@@ -426,17 +426,99 @@ function renderLoomButtons(){
 
 // -----------------------------
 // Main render
+// Two modes:
+// 1. Full redraw (animation OFF or first render)
+//    — replaces innerHTML, animation starts fresh
+// 2. Targeted update (animation ON)
+//    — only updates node colors/voltages in place
+//    — preserves running CSS animations on routes
 // -----------------------------
 function renderLayout(){
   const svg = document.getElementById("layoutSVG");
   if(!svg) return;
   svg.setAttribute("viewBox","0 0 990 615");
-  svg.innerHTML=`
-    ${drawDefs()}
-    ${drawZones()}
-    ${drawRoutes()}
-    ${drawNodes()}
-    ${drawLegend()}
-  `;
+
+  if(!ANIM_ENABLED || !svg.querySelector(".trace-line")){
+    // Full redraw — safe when animation is off or first load
+    svg.innerHTML=`
+      ${drawDefs()}
+      ${drawZones()}
+      <g id="routeLayer">${drawRoutes()}</g>
+      <g id="nodeLayer">${drawNodes()}</g>
+      ${drawLegend()}
+    `;
+    _lastFaultState = JSON.stringify(
+      Object.values(STATE.nodes).map(n=>n.failed)
+    );
+  } else {
+    // Targeted update — preserve route animation elements
+    // Only patch node visuals (fill, glow, voltage text)
+    patchNodes(svg);
+    // Re-draw routes only if loom filter or fault state changed
+    // (routes change color/width on fault — need redraw for those)
+    const faultChanged = _lastFaultState !==
+      JSON.stringify(Object.values(STATE.nodes).map(n=>n.failed));
+    if(faultChanged){
+      _lastFaultState = JSON.stringify(
+        Object.values(STATE.nodes).map(n=>n.failed)
+      );
+      // replace just the route layer — find and replace route group
+      let routeGroup = svg.querySelector("#routeLayer");
+      if(!routeGroup){
+        // first time — full redraw
+        svg.innerHTML=`
+          ${drawDefs()}
+          ${drawZones()}
+          <g id="routeLayer">${drawRoutes()}</g>
+          <g id="nodeLayer">${drawNodes()}</g>
+          ${drawLegend()}
+        `;
+        return;
+      }
+      routeGroup.innerHTML = drawRoutes();
+    }
+  }
   renderLoomButtons();
+}
+
+// Track last fault state to detect changes
+let _lastFaultState = "";
+
+// Patch only node visual properties in-place
+// preserves position, click handlers, and avoids animation interruption
+function patchNodes(svg){
+  Object.entries(LAYOUT_POS).forEach(([id, p])=>{
+    const node      = STATE.nodes?.[id];
+    const healthKey = getHealthKey(node);
+    const fill      = HEALTH_FILL[healthKey];
+    const volts     = node ? `${(node.effectiveVoltage||0).toFixed(1)}V` : "";
+
+    const glowStyle = healthKey==="failed"
+      ? "filter:drop-shadow(0 0 5px #B00020)"
+      : healthKey==="warn"
+      ? "filter:drop-shadow(0 0 3px #E09B2D)"
+      : "filter:drop-shadow(0 1px 2px rgba(0,0,0,0.15))";
+
+    // find existing node group by searching for circle near this position
+    // nodes are grouped as <g> elements — find by text content matching label
+    const groups = svg.querySelectorAll("g[onclick]");
+    groups.forEach(g=>{
+      if(g.getAttribute("onclick") === `handleNodeClick('${id}')`){
+        // update inner circle fill
+        const circles = g.querySelectorAll("circle");
+        if(circles[1]){
+          circles[1].setAttribute("fill", fill);
+          circles[1].setAttribute("style", glowStyle);
+        }
+        // update voltage text (second text element)
+        const texts = g.querySelectorAll("text");
+        if(texts[1]) texts[1].textContent = volts;
+        // update label color on fault
+        if(texts[0]){
+          texts[0].setAttribute("fill",
+            healthKey==="failed" ? "#B00020" : "#2E2A26");
+        }
+      }
+    });
+  });
 }
