@@ -289,6 +289,56 @@
       "load": 1,
       "partNumber": "\u2014",
       "notes": "Tier 2 \u2014 integrate with Kenwood DMX908S rear camera input"
+    },
+    {
+      "id": "radium_dmr",
+      "type": "fuel",
+      "tier": 1,
+      "zone": "A",
+      "label": "Radium DMR-RA Reg",
+      "load": 0,
+      "partNumber": "Radium 20-1623-00",
+      "notes": "Direct-mount EFI regulator on DW LS3 fuel rail. Tool-less 1psi detent adjustment. 1/8 NPT port for Holley 554-102 sensor. 6AN ORB return to Boyd tank. Replaces Aeromotive 13129."
+    },
+    {
+      "id": "t56_disconnect",
+      "type": "connector",
+      "tier": 1,
+      "zone": "B",
+      "label": "T56 Service Disconnect",
+      "load": 0,
+      "partNumber": "Deutsch DT 8-pin",
+      "notes": "Mid-vehicle bulkhead connector at trans crossmember. Allows trans removal without cutting cab wiring. VSS, reverse signal, lockout solenoid, neutral safety pass through here."
+    },
+    {
+      "id": "ground_block",
+      "type": "distribution",
+      "tier": 1,
+      "zone": "B",
+      "label": "Ground Block (Marine)",
+      "load": 0,
+      "partNumber": "Marine grade",
+      "notes": "Star ground point \u2014 engine to frame, frame to body, battery negative. Critical for Dakota HDX and ECM sensor accuracy. All sensor grounds terminate here before single heavy run to battery negative."
+    },
+    {
+      "id": "power_block",
+      "type": "distribution",
+      "tier": 1,
+      "zone": "B",
+      "label": "Power Block (Marine)",
+      "load": 0,
+      "partNumber": "Marine grade",
+      "notes": "Positive distribution block. Feeds fuse panel, ECM power feed, and accessory circuits from battery via 4/0 AWG main feed. Mounted near mid-ship battery location."
+    },
+    {
+      "id": "fuel_pressure_sensor",
+      "type": "sensor",
+      "tier": 1,
+      "zone": "A",
+      "label": "Fuel Pressure Sensor",
+      "load": 0.1,
+      "partNumber": "Holley 554-102",
+      "notes": "100 PSI stainless sensor in 1/8 NPT port on Radium DMR-RA. Wired to Terminator X Max harness fuel pressure input. Data broadcast via CAN to Dakota HDX through BIM-EFI-1."
     }
   ],
   "edges": [
@@ -307,14 +357,6 @@
       "zone": "A",
       "loom": "charge_system",
       "resistance": 0.01
-    },
-    {
-      "from": "battery",
-      "to": "fuse_panel",
-      "type": "POWER",
-      "zone": "A",
-      "loom": "charge_system",
-      "resistance": 0.02
     },
     {
       "from": "fuse_panel",
@@ -531,6 +573,70 @@
       "zone": "C",
       "loom": "rear_trunk",
       "resistance": 0.03
+    },
+    {
+      "from": "dw440_pump",
+      "to": "radium_dmr",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "fuel_system",
+      "resistance": 0.01
+    },
+    {
+      "from": "radium_dmr",
+      "to": "fuel_pressure_sensor",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.01
+    },
+    {
+      "from": "fuel_pressure_sensor",
+      "to": "ecm",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.01
+    },
+    {
+      "from": "ecm",
+      "to": "t56_disconnect",
+      "type": "SIGNAL",
+      "zone": "B",
+      "loom": "t56_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "t56_disconnect",
+      "to": "fuel_relay",
+      "type": "SIGNAL",
+      "zone": "C",
+      "loom": "t56_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "battery",
+      "to": "ground_block",
+      "type": "GROUND",
+      "zone": "B",
+      "loom": "charge_system",
+      "resistance": 0.01
+    },
+    {
+      "from": "battery",
+      "to": "power_block",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "charge_system",
+      "resistance": 0.01
+    },
+    {
+      "from": "power_block",
+      "to": "fuse_panel",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "charge_system",
+      "resistance": 0.02
     }
   ]
 }
