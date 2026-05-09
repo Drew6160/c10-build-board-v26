@@ -59,6 +59,15 @@ const LAYOUT_POS = {
   heated_seats:  { x: 510, y: 460 },
   alarm:         { x: 600, y: 460 },
   backup_cam:    { x: 690, y: 460 },
+  // fuel system additions
+  radium_dmr:       { x: 160, y: 170 },
+  fuel_pressure_sensor: { x: 160, y: 250 },
+  // power/ground distribution
+  power_block:      { x: 400, y: 320 },
+  ground_block:     { x: 400, y: 410 },
+  // T56 service disconnect
+  t56_disconnect:   { x: 500, y: 340 },
+
   fuel_relay:    { x: 760, y: 140 },
   fuel_sender:   { x: 930, y: 140 },
   c102_ctrl:     { x: 760, y: 260 },
