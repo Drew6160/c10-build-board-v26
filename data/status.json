@@ -7,7 +7,7 @@
       "status": "ordered"
     },
     "starter": {
-      "status": "installed"
+      "status": "planned"
     },
     "ecm": {
       "status": "ordered"
@@ -37,7 +37,7 @@
       "status": "installed"
     },
     "ignition_sw": {
-      "status": "installed"
+      "status": "ordered"
     },
     "dakota_hdx": {
       "status": "ordered"
@@ -57,14 +57,14 @@
     "fuel_relay": {
       "status": "planned"
     },
-    "c102_ctrl": {
+    "c105_ctrl": {
       "status": "ordered"
     },
     "dw440_pump": {
       "status": "ordered"
     },
     "fuel_sender": {
-      "status": "planned"
+      "status": "ordered"
     },
     "accuair_comp": {
       "status": "installed"
@@ -73,7 +73,7 @@
       "status": "installed"
     },
     "tail_lights": {
-      "status": "planned"
+      "status": "ordered"
     },
     "power_windows": {
       "status": "planned"
