@@ -348,7 +348,7 @@
       "type": "POWER",
       "zone": "A",
       "loom": "charge_system",
-      "resistance": 0.01
+      "resistance": 0.003
     },
     {
       "from": "battery",
@@ -356,7 +356,7 @@
       "type": "POWER",
       "zone": "A",
       "loom": "charge_system",
-      "resistance": 0.01
+      "resistance": 0.004
     },
     {
       "from": "fuse_panel",
@@ -636,7 +636,7 @@
       "type": "POWER",
       "zone": "B",
       "loom": "charge_system",
-      "resistance": 0.02
+      "resistance": 0.004
     }
   ]
 }
