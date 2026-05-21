@@ -7,7 +7,7 @@
       "zone": "A",
       "label": "Battery",
       "load": 0,
-      "partNumber": "\u2014",
+      "partNumber": "—",
       "notes": "Group 34/78 minimum for full accessory load"
     },
     {
@@ -18,7 +18,7 @@
       "label": "Alternator",
       "load": 0,
       "partNumber": "Level 7 Motorsports",
-      "notes": "Powermaster-based unit for Holley mid-mount. No assigned part number \u2014 contact Level 7 directly. Includes external ground lug and corrected 3in pulley ratio"
+      "notes": "Powermaster-based unit for Holley mid-mount. No assigned part number — contact Level 7 directly. Includes external ground lug and corrected 3in pulley ratio"
     },
     {
       "id": "starter",
@@ -27,8 +27,8 @@
       "zone": "A",
       "label": "Starter",
       "load": 150,
-      "partNumber": "\u2014",
-      "notes": "LS3 crate engine starter \u2014 confirm fitment with T56 bellhousing"
+      "partNumber": "—",
+      "notes": "Powermaster Starter for LS from Level 7 Motorsports\n\nThe starter uses a 2.5 kW, in a 3.4 hp motor.  4.4:1 Gear reduction."
     },
     {
       "id": "ecm",
@@ -48,7 +48,7 @@
       "label": "LS3 Coils (x8)",
       "load": 8,
       "partNumber": "OEM LS3",
-      "notes": "Factory LS3 coil packs \u2014 retained from crate engine"
+      "notes": "Factory LS3 coil packs — retained from crate engine"
     },
     {
       "id": "injectors",
@@ -77,7 +77,7 @@
       "zone": "A",
       "label": "Cooling Fan",
       "load": 20,
-      "partNumber": "\u2014",
+      "partNumber": "—",
       "notes": "ECM-controlled via PWM output. Fan-on threshold set in Holley software"
     },
     {
@@ -87,8 +87,8 @@
       "zone": "A",
       "label": "A/C Compressor",
       "load": 10,
-      "partNumber": "\u2014",
-      "notes": "Vintage Air compressor \u2014 coordinate mount with blower accessory drive"
+      "partNumber": "—",
+      "notes": "Vintage Air compressor — coordinate mount with blower accessory drive"
     },
     {
       "id": "wideband_o2",
@@ -118,7 +118,7 @@
       "label": "AAW Fuse Panel",
       "load": 0,
       "partNumber": "AAW 510333",
-      "notes": "Classic Update Series \u2014 First Design. Add 150A mega fuse on charge cable"
+      "notes": "Classic Update Series — First Design. Add 150A mega fuse on charge cable"
     },
     {
       "id": "ignition_sw",
@@ -128,7 +128,7 @@
       "label": "Ignition Switch",
       "load": 1,
       "partNumber": "OEM style",
-      "notes": "Routes through AAW harness \u2014 verify neutral safety wiring for T56"
+      "notes": "Routes through AAW harness — verify neutral safety wiring for T56"
     },
     {
       "id": "dakota_hdx",
@@ -198,7 +198,7 @@
       "label": "DW C105 Controller",
       "load": 1,
       "partNumber": "DW C105",
-      "notes": "Dual speed controller \u2014 replaces C102. ECM ground-side trigger switches low/high speed"
+      "notes": "Dual speed controller — replaces C102. ECM ground-side trigger switches low/high speed"
     },
     {
       "id": "dw440_pump",
@@ -228,7 +228,7 @@
       "label": "Accuair Compressor",
       "load": 20,
       "partNumber": "Accuair",
-      "notes": "Rear node. Dedicated 8-10 AWG feed. Rear ground stud \u2014 do not rely on chassis only"
+      "notes": "Rear node. Dedicated 8-10 AWG feed. Rear ground stud — do not rely on chassis only"
     },
     {
       "id": "accuair_valves",
@@ -247,7 +247,7 @@
       "zone": "C",
       "label": "Tail/Brake Lights",
       "load": 8,
-      "partNumber": "\u2014",
+      "partNumber": "—",
       "notes": "Rear trunk loom. LED recommended for reduced load"
     },
     {
@@ -257,8 +257,8 @@
       "zone": "B",
       "label": "Power Windows",
       "load": 20,
-      "partNumber": "\u2014",
-      "notes": "Tier 2 accessory \u2014 planned"
+      "partNumber": "—",
+      "notes": "Tier 2 accessory — planned"
     },
     {
       "id": "heated_seats",
@@ -267,8 +267,8 @@
       "zone": "B",
       "label": "Heated Seats",
       "load": 8,
-      "partNumber": "\u2014",
-      "notes": "Tier 2 accessory \u2014 planned"
+      "partNumber": "—",
+      "notes": "Tier 2 accessory — planned"
     },
     {
       "id": "alarm",
@@ -277,8 +277,8 @@
       "zone": "B",
       "label": "Alarm System",
       "load": 2,
-      "partNumber": "\u2014",
-      "notes": "Tier 2 accessory \u2014 planned"
+      "partNumber": "—",
+      "notes": "Tier 2 accessory — planned"
     },
     {
       "id": "backup_cam",
@@ -287,8 +287,8 @@
       "zone": "B",
       "label": "Backup Camera",
       "load": 1,
-      "partNumber": "\u2014",
-      "notes": "Tier 2 \u2014 integrate with Kenwood DMX908S rear camera input"
+      "partNumber": "—",
+      "notes": "Tier 2 — integrate with Kenwood DMX908S rear camera input"
     },
     {
       "id": "radium_dmr",
@@ -318,7 +318,7 @@
       "label": "Ground Block (Marine)",
       "load": 0,
       "partNumber": "Marine grade",
-      "notes": "Star ground point \u2014 engine to frame, frame to body, battery negative. Critical for Dakota HDX and ECM sensor accuracy. All sensor grounds terminate here before single heavy run to battery negative."
+      "notes": "Star ground point — engine to frame, frame to body, battery negative. Critical for Dakota HDX and ECM sensor accuracy. All sensor grounds terminate here before single heavy run to battery negative."
     },
     {
       "id": "power_block",
