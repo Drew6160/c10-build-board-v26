@@ -1,3 +1,8 @@
+// =============================
+// Wiring Specification Engine
+// Full heavy-gauge wire table
+// =============================
+
 const WIRE_TABLE = [
   { gauge: "16 AWG", maxAmp: 10  },
   { gauge: "14 AWG", maxAmp: 15  },
@@ -36,17 +41,30 @@ function generateWiringSpec({ loom } = {}){
     const baseCurrent     = toNode?.load || 1;
     let   adjustedCurrent = baseCurrent;
 
-    if(toNode?.type === "motor") adjustedCurrent *= 1.5;
+    if(toNode?.type === "motor"){
+      adjustedCurrent = baseCurrent <= 20
+        ? baseCurrent * 1.5   // small motors: fans, pumps
+        : baseCurrent * 1.25; // large motors: starter
+    }
 
     const resistance  = e.resistance || 0.02;
-    const wire        = selectWireSize(adjustedCurrent);
+
+    // wireOverride lets system.json specify exact gauge for known cable runs
+    const wireOverride = e.wireOverride || null;
+    const wireTable    = wireOverride
+      ? { gauge: wireOverride, maxAmp: 9999 }
+      : selectWireSize(adjustedCurrent);
+
     const fuse        = selectFuse(adjustedCurrent);
     const voltageDrop = (baseCurrent * resistance).toFixed(2);
 
     const warnings = [];
-    if(adjustedCurrent > wire.maxAmp)        warnings.push("UNDERSIZED WIRE");
-    if(fuse > wire.maxAmp * 1.5)             warnings.push("FUSE TOO LARGE");
-    if(parseFloat(voltageDrop) > 1.0)        warnings.push("HIGH VOLTAGE DROP");
+    if(!wireOverride && adjustedCurrent > wireTable.maxAmp)
+      warnings.push("UNDERSIZED WIRE");
+    if(fuse > wireTable.maxAmp * 1.5 && !wireOverride)
+      warnings.push("FUSE TOO LARGE");
+    if(parseFloat(voltageDrop) > 1.0)
+      warnings.push("HIGH VOLTAGE DROP");
 
     return {
       id,
@@ -54,7 +72,7 @@ function generateWiringSpec({ loom } = {}){
       loom:            e.loom || "—",
       current:         baseCurrent,
       adjustedCurrent,
-      wire:            wire.gauge,
+      wire:            wireTable.gauge,
       fuse:            `${fuse}A`,
       drop:            voltageDrop,
       warnings
