@@ -348,7 +348,8 @@
       "type": "POWER",
       "zone": "A",
       "loom": "charge_system",
-      "resistance": 0.003
+      "resistance": 0.003,
+      "wireOverride": "2/0 AWG"
     },
     {
       "from": "battery",
@@ -356,7 +357,8 @@
       "type": "POWER",
       "zone": "A",
       "loom": "charge_system",
-      "resistance": 0.004
+      "resistance": 0.004,
+      "wireOverride": "2/0 AWG"
     },
     {
       "from": "fuse_panel",
@@ -620,7 +622,8 @@
       "type": "GROUND",
       "zone": "B",
       "loom": "charge_system",
-      "resistance": 0.01
+      "resistance": 0.01,
+      "wireOverride": "2/0 AWG"
     },
     {
       "from": "battery",
@@ -628,7 +631,8 @@
       "type": "POWER",
       "zone": "B",
       "loom": "charge_system",
-      "resistance": 0.01
+      "resistance": 0.01,
+      "wireOverride": "4/0 AWG"
     },
     {
       "from": "power_block",
@@ -636,7 +640,8 @@
       "type": "POWER",
       "zone": "B",
       "loom": "charge_system",
-      "resistance": 0.004
+      "resistance": 0.004,
+      "wireOverride": "4/0 AWG"
     }
   ]
 }
