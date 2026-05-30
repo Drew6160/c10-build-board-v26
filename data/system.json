@@ -290,16 +290,7 @@
       "partNumber": "—",
       "notes": "Tier 2 — integrate with Kenwood DMX908S rear camera input"
     },
-    {
-      "id": "radium_dmr",
-      "type": "fuel",
-      "tier": 1,
-      "zone": "A",
-      "label": "Radium DMR-RA Reg",
-      "load": 0,
-      "partNumber": "Radium 20-1623-00",
-      "notes": "Direct-mount EFI regulator on DW LS3 fuel rail. Tool-less 1psi detent adjustment. 1/8 NPT port for Holley 554-102 sensor. 6AN ORB return to Boyd tank. Replaces Aeromotive 13129."
-    },
+  
     {
       "id": "t56_disconnect",
       "type": "connector",
