@@ -576,14 +576,6 @@
       "resistance": 0.01
     },
     {
-      "from": "radium_dmr",
-      "to": "fuel_pressure_sensor",
-      "type": "SIGNAL",
-      "zone": "A",
-      "loom": "engine_harness",
-      "resistance": 0.01
-    },
-    {
       "from": "fuel_pressure_sensor",
       "to": "ecm",
       "type": "SIGNAL",
