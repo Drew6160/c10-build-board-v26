@@ -37,50 +37,64 @@ let ACTIVE_LOOM  = null;
 let ANIM_ENABLED = false;
 
 const LAYOUT_POS = {
-  alternator:    { x: 70,  y: 130 },
-  ecm:           { x: 220, y: 110 },
-  coils:         { x: 100, y: 210 },
-  throttle_body: { x: 230, y: 210 },
-  injectors:     { x: 100, y: 310 },
-  wideband_o2:   { x: 230, y: 310 },
-  cooling_fan:   { x: 150, y: 390 },
-  battery:       { x: 60,  y: 430 },
-  map_sensor:    { x: 280, y: 390 },
-  ac_compressor: { x: 70,  y: 490 },
-  starter:       { x: 200, y: 490 },
-  ignition_sw:   { x: 420, y: 120 },
-  dakota_hdx:    { x: 530, y: 120 },
-  bim_04:        { x: 640, y: 120 },
-  fuse_panel:    { x: 480, y: 260 },
-  accuair_ctrl:  { x: 620, y: 260 },
-  vintage_air:   { x: 430, y: 370 },
-  radio:         { x: 560, y: 370 },
-  power_windows: { x: 420, y: 460 },
-  heated_seats:  { x: 510, y: 460 },
-  alarm:         { x: 600, y: 460 },
-  backup_cam:    { x: 690, y: 460 },
-  // fuel system additions
-  radium_dmr:       { x: 160, y: 170 },
-  fuel_pressure_sensor: { x: 160, y: 250 },
-  // power/ground distribution
-  power_block:      { x: 400, y: 320 },
-  ground_block:     { x: 400, y: 410 },
-  // T56 service disconnect
-  t56_disconnect:   { x: 500, y: 340 },
+  // --- Zone A: Engine Bay ---
+  alternator:           { x: 70,  y: 130 },
+  ecm:                  { x: 220, y: 110 },
+  coils:                { x: 100, y: 210 },
+  throttle_body:        { x: 230, y: 210 },
+  injectors:            { x: 100, y: 310 },
+  wideband_o2:          { x: 230, y: 310 },
+  cooling_fan:          { x: 150, y: 390 },
+  battery:              { x: 60,  y: 430 },
+  map_sensor:           { x: 280, y: 390 },
+  ac_compressor:        { x: 70,  y: 490 },
+  starter:              { x: 200, y: 490 },
+  fuel_pressure_sensor: { x: 160, y: 170 },
+  // Accuair front height sensors — lower engine bay corners
+  accuair_sensor_lf:    { x: 80,  y: 560 },
+  accuair_sensor_rf:    { x: 270, y: 560 },
 
-  fuel_relay:    { x: 760, y: 140 },
-  fuel_sender:   { x: 930, y: 140 },
-  c102_ctrl:     { x: 760, y: 260 },
-  dw440_pump:    { x: 920, y: 260 },
-  accuair_valves:{ x: 760, y: 370 },
-  accuair_comp:  { x: 920, y: 370 },
-  tail_lights:   { x: 840, y: 460 }
+  // --- Zone B: Cab ---
+  ignition_sw:          { x: 420, y: 120 },
+  dakota_hdx:           { x: 530, y: 120 },
+  bim_efi1:             { x: 640, y: 120 },
+  bim_04:               { x: 720, y: 120 },
+  fuse_panel:           { x: 480, y: 240 },
+  accuair_touchpad:     { x: 680, y: 240 },
+  vintage_air:          { x: 420, y: 350 },
+  radio:                { x: 540, y: 350 },
+  power_block:          { x: 390, y: 240 },
+  ground_block:         { x: 390, y: 340 },
+  t56_disconnect:       { x: 490, y: 340 },
+  power_windows:        { x: 410, y: 450 },
+  heated_seats:         { x: 500, y: 450 },
+  alarm:                { x: 590, y: 450 },
+  backup_cam:           { x: 680, y: 450 },
+
+  // --- Zone E: Rear Node ---
+  // Fuel system
+  fuel_relay:           { x: 790, y: 110 },
+  fuel_sender:          { x: 940, y: 110 },
+  c102_ctrl:            { x: 790, y: 190 },
+  dw440_pump:           { x: 940, y: 190 },
+  // Accuair rear cluster
+  accuair_ecu:          { x: 790, y: 290 },
+  accuair_tank:         { x: 940, y: 290 },
+  accuair_vu4:          { x: 790, y: 370 },
+  accuair_pressure:     { x: 940, y: 370 },
+  accuair_relay_1:      { x: 790, y: 450 },
+  accuair_relay_2:      { x: 870, y: 450 },
+  accuair_comp_1:       { x: 790, y: 530 },
+  accuair_comp_2:       { x: 870, y: 530 },
+  accuair_sensor_lr:    { x: 940, y: 450 },
+  accuair_sensor_rr:    { x: 940, y: 530 },
+  tail_lights:          { x: 870, y: 110 }
 };
 
 const ZONES = [
-  { label:"ENGINE BAY", x:30,  y:70, w:320, h:490, color:"#FFF8F0" },
-  { label:"CAB",        x:370, y:70, w:370, h:490, color:"#F0F4FF" },
-  { label:"REAR NODE",  x:760, y:70, w:210, h:490, color:"#F0FFF4" }
+  { label:"ENGINE BAY", x:30,  y:70, w:320, h:550, color:"#FFF8F0" },
+  { label:"CAB",        x:360, y:70, w:390, h:550, color:"#F0F4FF" },
+  { label:"REAR NODE",  x:760, y:70, w:220, h:550, color:"#F0FFF4" }
 ];
 
 // -----------------------------
@@ -445,7 +459,7 @@ function renderLoomButtons(){
 function renderLayout(){
   const svg = document.getElementById("layoutSVG");
   if(!svg) return;
-  svg.setAttribute("viewBox","0 0 990 615");
+  svg.setAttribute("viewBox","0 0 1000 680");
 
   if(!ANIM_ENABLED || !svg.querySelector(".trace-line")){
     // Full redraw — safe when animation is off or first load
