@@ -18,7 +18,7 @@
       "label": "Alternator",
       "load": 0,
       "partNumber": "Level 7 Motorsports",
-      "notes": "Powermaster-based unit for Holley mid-mount. No assigned part number — contact Level 7 directly. Includes external ground lug and corrected 3in pulley ratio"
+      "notes": "Powermaster-based unit for Holley mid-mount. Self-exciting — no Holley 197-400 excite pigtail needed. Includes external ground lug and corrected 3in pulley ratio."
     },
     {
       "id": "starter",
@@ -121,6 +121,26 @@
       "notes": "100 PSI stainless sensor. Mounts in 1/8 NPT port on Holley 12-876 regulator. Wired to Terminator X Max harness fuel pressure input. Data broadcast via CAN to Dakota HDX through BIM-EFI-1."
     },
     {
+      "id": "accuair_sensor_lf",
+      "type": "sensor",
+      "tier": 1,
+      "zone": "A",
+      "label": "Height Sensor LF",
+      "load": 0.1,
+      "partNumber": "Accuair ROT-120",
+      "notes": "TruPosition rotary sensor, front left corner. Wired via Accuair plug-and-play harness to e+ ECU in rear node. Route along driver frame rail keeping separate from fuel and ignition wiring."
+    },
+    {
+      "id": "accuair_sensor_rf",
+      "type": "sensor",
+      "tier": 1,
+      "zone": "A",
+      "label": "Height Sensor RF",
+      "load": 0.1,
+      "partNumber": "Accuair ROT-120",
+      "notes": "TruPosition rotary sensor, front right corner. Wired via Accuair plug-and-play harness to e+ ECU in rear node. Route along passenger frame rail."
+    },
+    {
       "id": "fuse_panel",
       "type": "distribution",
       "tier": 1,
@@ -171,14 +191,14 @@
       "notes": "4x temp inputs: oil, coolant, trans, diff. Sensor: SEN-04-5 x4"
     },
     {
-      "id": "accuair_ctrl",
+      "id": "accuair_touchpad",
       "type": "control",
       "tier": 1,
       "zone": "B",
-      "label": "Accuair e-Level",
-      "load": 3,
-      "partNumber": "Accuair e-Level",
-      "notes": "USB interface only to cab. Full system lives in rear node"
+      "label": "TouchPad+",
+      "load": 0.5,
+      "partNumber": "Accuair TouchPad+",
+      "notes": "Magnetic wired physical controller. USB cable runs to e+ ECU in rear node — this is the single cab penetration for the entire Accuair system."
     },
     {
       "id": "vintage_air",
@@ -218,7 +238,7 @@
       "label": "Power Block (Marine)",
       "load": 0,
       "partNumber": "Marine grade",
-      "notes": "Positive distribution block. Feeds fuse panel, ECM power feed, and accessory circuits from battery via 4/0 AWG main feed. Mounted near mid-ship battery location."
+      "notes": "Positive distribution block. Feeds fuse panel, ECM power feed, and accessory circuits from battery via 4/0 AWG main feed. Also feeds Accuair compressor relays directly — do not route 444C compressor loads through fuse panel."
     },
     {
       "id": "t56_disconnect",
@@ -311,24 +331,104 @@
       "notes": "Updated Boyd sender for 10in tank depth. Wired separately from pump — dedicated path to gauge."
     },
     {
-      "id": "accuair_comp",
-      "type": "motor",
-      "tier": 1,
-      "zone": "E",
-      "label": "Accuair Compressor",
-      "load": 20,
-      "partNumber": "Accuair",
-      "notes": "Rear node. Dedicated 8-10 AWG feed. Rear ground stud — do not rely on chassis only"
-    },
-    {
-      "id": "accuair_valves",
+      "id": "accuair_ecu",
       "type": "control",
       "tier": 1,
       "zone": "E",
-      "label": "Accuair Valves",
-      "load": 2,
-      "partNumber": "Accuair",
-      "notes": "Signal from e-Level controller via rear trunk bundle"
+      "label": "Accuair e+ ECU",
+      "load": 3,
+      "partNumber": "Accuair e+Connect",
+      "notes": "Brain of the Accuair system. Bluetooth 5.0 for smartphone control. RGB backlighting. Processes all height sensor data and controls VU4 manifold and compressors. Mounts in rear node near air tank. Switched IGN feed from fuse panel via rear trunk. Single USB cable to TouchPad+ in cab."
+    },
+    {
+      "id": "accuair_vu4",
+      "type": "control",
+      "tier": 1,
+      "zone": "E",
+      "label": "VU4 Manifold",
+      "load": 4,
+      "partNumber": "Accuair VU4",
+      "notes": "4-corner electric solenoid valve block. Controls directional air flow to/from each air spring independently. Controlled by signal from e+ ECU. Dedicated fused circuit from fuse panel via rear trunk."
+    },
+    {
+      "id": "accuair_tank",
+      "type": "source",
+      "tier": 1,
+      "zone": "E",
+      "label": "ENDO Air Tank",
+      "load": 0,
+      "partNumber": "Accuair ENDO-CVT",
+      "notes": "Air reservoir. Installed unit is ENDO-CVT (discontinued — integrated compressor design). Replacement spec: ENDO tank + dual Viair 444C external compressors. Tank size: confirm 3 or 5 gallon based on available space in bed area."
+    },
+    {
+      "id": "accuair_relay_1",
+      "type": "relay",
+      "tier": 1,
+      "zone": "E",
+      "label": "Compressor Relay 1",
+      "load": 0.5,
+      "partNumber": "30A Bosch SPDT 5-pin",
+      "notes": "Dedicated relay for Viair 444C compressor #1. Fed direct from power block — do not route through fuse panel. ECU triggers relay coil. 25A fuse on output feed."
+    },
+    {
+      "id": "accuair_relay_2",
+      "type": "relay",
+      "tier": 1,
+      "zone": "E",
+      "label": "Compressor Relay 2",
+      "load": 0.5,
+      "partNumber": "30A Bosch SPDT 5-pin",
+      "notes": "Dedicated relay for Viair 444C compressor #2. Fed direct from power block — do not route through fuse panel. ECU triggers relay coil. 25A fuse on output feed."
+    },
+    {
+      "id": "accuair_comp_1",
+      "type": "motor",
+      "tier": 1,
+      "zone": "E",
+      "label": "444C Compressor 1",
+      "load": 23,
+      "partNumber": "Viair 444C",
+      "notes": "Primary air compressor. 200 PSI max, 100% duty cycle at 100 PSI. 23A draw at max load. Fed via dedicated relay from power block. 10 AWG minimum wiring. Note: installed unit is ENDO-CVT with integrated compressor — 444C is replacement/upgrade spec."
+    },
+    {
+      "id": "accuair_comp_2",
+      "type": "motor",
+      "tier": 1,
+      "zone": "E",
+      "label": "444C Compressor 2",
+      "load": 23,
+      "partNumber": "Viair 444C",
+      "notes": "Secondary air compressor. Mirrors Compressor 1 spec. Dual compressor setup reduces fill time and provides redundancy. Fed via dedicated relay from power block. 10 AWG minimum wiring."
+    },
+    {
+      "id": "accuair_pressure",
+      "type": "sensor",
+      "tier": 1,
+      "zone": "E",
+      "label": "Air Pressure Sensor",
+      "load": 0.1,
+      "partNumber": "Accuair Digital Pressure Sensor",
+      "notes": "Monitors air tank PSI. Reports to e+ ECU to control compressor cycling. Plug-and-play connection to ECU harness."
+    },
+    {
+      "id": "accuair_sensor_lr",
+      "type": "sensor",
+      "tier": 1,
+      "zone": "E",
+      "label": "Height Sensor LR",
+      "load": 0.1,
+      "partNumber": "Accuair ROT-120",
+      "notes": "TruPosition rotary sensor, rear left corner. Wired via Accuair plug-and-play harness to e+ ECU. Short local run — ECU mounted in same rear node."
+    },
+    {
+      "id": "accuair_sensor_rr",
+      "type": "sensor",
+      "tier": 1,
+      "zone": "E",
+      "label": "Height Sensor RR",
+      "load": 0.1,
+      "partNumber": "Accuair ROT-120",
+      "notes": "TruPosition rotary sensor, rear right corner. Wired via Accuair plug-and-play harness to e+ ECU. Short local run — ECU mounted in same rear node."
     },
     {
       "id": "tail_lights",
@@ -402,14 +502,6 @@
       "zone": "B",
       "loom": "cab_harness",
       "resistance": 0.02
-    },
-    {
-      "from": "fuse_panel",
-      "to": "accuair_ctrl",
-      "type": "POWER",
-      "zone": "B",
-      "loom": "cab_harness",
-      "resistance": 0.03
     },
     {
       "from": "fuse_panel",
@@ -597,22 +689,6 @@
     },
     {
       "from": "fuse_panel",
-      "to": "accuair_comp",
-      "type": "POWER",
-      "zone": "E",
-      "loom": "rear_trunk",
-      "resistance": 0.05
-    },
-    {
-      "from": "accuair_ctrl",
-      "to": "accuair_valves",
-      "type": "SIGNAL",
-      "zone": "E",
-      "loom": "accuair_system",
-      "resistance": 0.03
-    },
-    {
-      "from": "fuse_panel",
       "to": "tail_lights",
       "type": "POWER",
       "zone": "E",
@@ -634,6 +710,130 @@
       "zone": "E",
       "loom": "t56_harness",
       "resistance": 0.02
+    },
+    {
+      "from": "fuse_panel",
+      "to": "accuair_ecu",
+      "type": "POWER",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.05
+    },
+    {
+      "from": "accuair_ecu",
+      "to": "accuair_touchpad",
+      "type": "SIGNAL",
+      "zone": "B",
+      "loom": "accuair_system",
+      "resistance": 0.03
+    },
+    {
+      "from": "fuse_panel",
+      "to": "accuair_vu4",
+      "type": "POWER",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.05
+    },
+    {
+      "from": "accuair_ecu",
+      "to": "accuair_vu4",
+      "type": "SIGNAL",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.02
+    },
+    {
+      "from": "accuair_ecu",
+      "to": "accuair_pressure",
+      "type": "SIGNAL",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.02
+    },
+    {
+      "from": "accuair_ecu",
+      "to": "accuair_sensor_lr",
+      "type": "SIGNAL",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.02
+    },
+    {
+      "from": "accuair_ecu",
+      "to": "accuair_sensor_rr",
+      "type": "SIGNAL",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.02
+    },
+    {
+      "from": "accuair_ecu",
+      "to": "accuair_sensor_lf",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "accuair_system",
+      "resistance": 0.06
+    },
+    {
+      "from": "accuair_ecu",
+      "to": "accuair_sensor_rf",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "accuair_system",
+      "resistance": 0.06
+    },
+    {
+      "from": "accuair_ecu",
+      "to": "accuair_relay_1",
+      "type": "SIGNAL",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.02
+    },
+    {
+      "from": "accuair_ecu",
+      "to": "accuair_relay_2",
+      "type": "SIGNAL",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.02
+    },
+    {
+      "from": "power_block",
+      "to": "accuair_relay_1",
+      "type": "POWER",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.03,
+      "wireOverride": "10 AWG"
+    },
+    {
+      "from": "power_block",
+      "to": "accuair_relay_2",
+      "type": "POWER",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.03,
+      "wireOverride": "10 AWG"
+    },
+    {
+      "from": "accuair_relay_1",
+      "to": "accuair_comp_1",
+      "type": "POWER",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.02,
+      "wireOverride": "10 AWG"
+    },
+    {
+      "from": "accuair_relay_2",
+      "to": "accuair_comp_2",
+      "type": "POWER",
+      "zone": "E",
+      "loom": "accuair_system",
+      "resistance": 0.02,
+      "wireOverride": "10 AWG"
     }
   ]
 }
