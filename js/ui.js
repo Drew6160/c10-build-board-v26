@@ -1,7 +1,9 @@
 // =============================
-// UI v28 — Two-Tab Architecture
-// Tab 1: Diagram + Diagnostics
-// Tab 2: Build Management
+// UI v29 — Four-Phase Architecture Update
+// Phase 1: system.json cleaned (done in JSON file)
+// Phase 2: Hardened deleteNode with orphan cleanup + confirmation summary
+// Phase 3: Import system.json — full state reload from file
+// Phase 4: Edge Editor — add / edit / delete edges in UI
 // =============================
 
 // -----------------------------
@@ -21,6 +23,7 @@ window.switchTab = function(tab, btn){
   if(tab === "manage"){
     renderStatusEditor();
     renderComponentEditor();
+    renderEdgeEditor();
     renderBOM();
     renderWiringSpec();
     renderExportPanel();
@@ -31,16 +34,13 @@ window.switchTab = function(tab, btn){
 // TAB 1 — DIAGRAM
 // ==============================
 
-// -----------------------------
-// Node click — diagnostics
-// -----------------------------
 window.handleNodeClick = function(id){
   const node      = STATE.nodes?.[id];
   const statusKey = STATE.status?.[id]?.status || "planned";
   const v         = node ? (node.effectiveVoltage||0).toFixed(2) : "—";
-  const healthKey = !node                              ? "unknown"
-                  : node.failed || node.effectiveVoltage < 10 ? "failed"
-                  : node.effectiveVoltage < 12.0       ? "warn"
+  const healthKey = !node                                        ? "unknown"
+                  : node.failed || node.effectiveVoltage < 10   ? "failed"
+                  : node.effectiveVoltage < 12.0                 ? "warn"
                   : "ok";
 
   const healthColor = {
@@ -152,9 +152,6 @@ window.handleNodeClick = function(id){
   `;
 };
 
-// -----------------------------
-// Route click
-// -----------------------------
 window.selectRoute = function(id){
   const route = buildRoutes().find(r=>r.id===id);
   if(!route) return;
@@ -214,7 +211,6 @@ function renderControls(){
 }
 
 function forceFailure(){
-  // exit playback first
   if(STATE.playbackFrame !== null && STATE.playbackFrame !== undefined){
     stopPlaybackTimer();
     STATE.playbackFrame = null;
@@ -243,8 +239,6 @@ function resetSim(){
 
 // -----------------------------
 // System status panel (Tab 1)
-// Compact — just summary +
-// progress bar
 // -----------------------------
 function renderGraph(){
   const nodes  = Object.values(STATE.nodes);
@@ -259,13 +253,12 @@ function renderGraph(){
   const done=statusCounts.installed+statusCounts.tested;
   const pct=Math.round((done/total)*100);
 
-  // compact stat chips
   const chips = [
-    { label:"Nodes",    val:total,             color:"#2E2A26" },
-    { label:"Failures", val:failed,            color:failed>0?"#B00020":"#3E6B48" },
-    { label:"Avg V",    val:avgV+"V",          color:"#2E2A26" },
-    { label:"Done",     val:done+"/"+total,    color:"#C4622D" },
-    { label:"Progress", val:pct+"%",           color:"#3E6B48" }
+    { label:"Nodes",    val:total,          color:"#2E2A26" },
+    { label:"Failures", val:failed,         color:failed>0?"#B00020":"#3E6B48" },
+    { label:"Avg V",    val:avgV+"V",       color:"#2E2A26" },
+    { label:"Done",     val:done+"/"+total, color:"#C4622D" },
+    { label:"Progress", val:pct+"%",        color:"#3E6B48" }
   ].map(c=>`
     <div style="background:#F4F1EC;border-radius:6px;padding:6px 10px;
                 text-align:center;flex:1">
@@ -274,7 +267,6 @@ function renderGraph(){
                   letter-spacing:0.5px">${c.label}</div>
     </div>`).join("");
 
-  // progress bar
   const progressBar=`
     <div style="margin:8px 0 4px">
       <div style="display:flex;justify-content:space-between;
@@ -288,7 +280,6 @@ function renderGraph(){
       </div>
     </div>`;
 
-  // status breakdown mini-bar
   const sColors2={planned:"#AAA",ordered:"#2D6C8C",
                   installed:"#C4622D",tested:"#3E6B48"};
   const breakdown=Object.entries(statusCounts).map(([s,count])=>`
@@ -300,14 +291,11 @@ function renderGraph(){
       <span style="font-weight:bold;color:#2E2A26">${count}</span>
     </div>`).join("");
 
-  // faults section — only shown when failures exist
   const faultNodes = nodes.filter(n=>n.failed);
   const faultHTML = faultNodes.length ? `
     <hr style="border:none;border-top:1px solid #D8D2C8;margin:8px 0 6px">
     <div style="font-size:10px;font-weight:bold;color:#B00020;
-                letter-spacing:1px;margin-bottom:4px">
-      ACTIVE FAULTS
-    </div>
+                letter-spacing:1px;margin-bottom:4px">ACTIVE FAULTS</div>
     ${faultNodes.map(n=>`
       <div style="display:flex;align-items:center;gap:6px;
                   padding:3px 6px;margin:2px 0;border-radius:4px;
@@ -320,7 +308,6 @@ function renderGraph(){
         </span>
       </div>`).join("")}` : "";
 
-  // manage tab link
   const manageLink=`
     <div style="margin-top:8px;text-align:right">
       <button onclick="switchTab('manage',null)"
@@ -346,28 +333,83 @@ function renderGraph(){
 // TAB 2 — BUILD MANAGEMENT
 // ==============================
 
-// -----------------------------
-// Component Editor
-// Add new nodes or edit existing
-// -----------------------------
 let EDITOR_MODE = "edit"; // "edit" | "add"
 let EDITOR_NODE = null;
 
+// -------------------------------------------------------
+// PHASE 2 — Hardened deleteNode
+// Shows exactly what will be removed before confirming,
+// then auto-cleans all orphaned edges
+// -------------------------------------------------------
+window.deleteNode = function(id){
+  const node = STATE.nodes[id];
+  if(!node) return;
+
+  // Find all edges that will be orphaned
+  const affectedEdges = EDGES.filter(e => e.from === id || e.to === id);
+
+  // Build a human-readable summary for the confirm dialog
+  const edgeSummary = affectedEdges.length
+    ? affectedEdges.map(e=>`  • ${e.from} → ${e.to} [${e.loom||e.type}]`).join("\n")
+    : "  (none)";
+
+  const message =
+    `Delete "${node.label||id}"?\n\n` +
+    `This will also remove ${affectedEdges.length} connected edge(s):\n` +
+    `${edgeSummary}\n\n` +
+    `This cannot be undone.`;
+
+  if(!confirm(message)) return;
+
+  // Remove node
+  delete STATE.nodes[id];
+  delete STATE.status[id];
+
+  // Remove all orphaned edges
+  EDGES = EDGES.filter(e => e.from !== id && e.to !== id);
+
+  EDITOR_NODE = null;
+  renderAll();
+  renderComponentEditor();
+  renderEdgeEditor();
+  renderStatusEditor();
+};
+
 function renderComponentEditor(){
   const nodes = Object.values(STATE.nodes);
-  const zones = ["A","B","C"];
+  const zones = ["A","B","C","D","E"];
   const tiers = [1,2];
   const types = ["source","motor","control","sensor","display","relay",
-                 "distribution","ignition","fuel","lighting","accessory"];
+                 "distribution","ignition","fuel","lighting","accessory","connector"];
   const looms = [...new Set(EDGES.map(e=>e.loom).filter(Boolean))];
 
   const nodeOptions = nodes.map(n=>
     `<option value="${n.id}" ${EDITOR_NODE===n.id?"selected":""}>
-      ${n.label||n.id} (${n.zone})
+      ${n.label||n.id} (Zone ${n.zone})
     </option>`
   ).join("");
 
   const sel = EDITOR_NODE ? STATE.nodes[EDITOR_NODE] : null;
+
+  // For edit mode, show connected edges as a mini-summary
+  const connectedEdges = sel
+    ? EDGES.filter(e=>e.from===sel.id||e.to===sel.id)
+    : [];
+  const edgeSummaryHTML = sel && connectedEdges.length ? `
+    <div style="margin:8px 0;padding:6px 8px;background:#F4F1EC;
+                border-radius:6px;font-size:10px">
+      <span style="color:#AAA;text-transform:uppercase;letter-spacing:0.5px">
+        Connected edges (${connectedEdges.length})
+      </span>
+      ${connectedEdges.map(e=>`
+        <div style="margin-top:3px;color:#555">
+          ${e.from===sel.id?`→ <b>${e.to}</b>`:`← <b>${e.from}</b>`}
+          <span style="color:#AAA;margin-left:4px">${e.loom||e.type}</span>
+        </div>`).join("")}
+      <div style="margin-top:4px;font-size:9px;color:#AAA">
+        Use Edge Editor to add or remove connections
+      </div>
+    </div>` : "";
 
   document.getElementById("componentEditorPanel").innerHTML=`
     <div style="display:flex;justify-content:space-between;
@@ -405,13 +447,15 @@ function renderComponentEditor(){
       <div class="form-row">
         <div>
           <label>Node ID (no spaces)</label>
-          <input id="ef_id" type="text" placeholder="e.g. horn_relay"
-            value="">
+          <input id="ef_id" type="text" placeholder="e.g. horn_relay" value="">
         </div>
         <div>
           <label>Zone</label>
           <select id="ef_zone">
-            ${zones.map(z=>`<option value="${z}">${z==="A"?"Engine Bay":z==="B"?"Cab":"Rear Node"}</option>`).join("")}
+            ${zones.map(z=>`<option value="${z}">Zone ${z}${
+              z==="A"?" — Engine Bay":z==="B"?" — Cab":
+              z==="C"?" — Trans Mid":z==="D"?" — Trans Rear":
+              z==="E"?" — Rear Node":""}</option>`).join("")}
           </select>
         </div>
       </div>` : ""}
@@ -454,9 +498,9 @@ function renderComponentEditor(){
       ${EDITOR_MODE==="add" ? `
       <div class="form-row">
         <div>
-          <label>Connect from (node ID)</label>
+          <label>Connect from (optional)</label>
           <select id="ef_from">
-            <option value="">— select source node —</option>
+            <option value="">— none / add edge later —</option>
             ${nodes.map(n=>`<option value="${n.id}">${n.label||n.id}</option>`).join("")}
           </select>
         </div>
@@ -464,7 +508,6 @@ function renderComponentEditor(){
           <label>Loom</label>
           <select id="ef_loom">
             ${looms.map(l=>`<option value="${l}">${l.replace(/_/g," ")}</option>`).join("")}
-            <option value="cab_harness">cab harness</option>
           </select>
         </div>
       </div>` : ""}
@@ -487,6 +530,8 @@ function renderComponentEditor(){
           >${sel?.notes||""}</textarea>
       </div>
 
+      ${edgeSummaryHTML}
+
       <div style="display:flex;gap:6px;margin-top:4px">
         <button onclick="saveEditorForm()"
           style="background:#3E6B48;flex:1">
@@ -494,8 +539,9 @@ function renderComponentEditor(){
         </button>
         ${EDITOR_MODE==="edit" && sel ? `
         <button onclick="deleteNode('${EDITOR_NODE}')"
-          style="background:#B00020;padding:6px 14px">
-          ✕
+          style="background:#B00020;padding:6px 14px"
+          title="Delete component and all connected edges">
+          ✕ Delete
         </button>` : ""}
       </div>
 
@@ -536,28 +582,25 @@ window.saveEditorForm = function(){
     const loom  = document.getElementById("ef_loom")?.value;
 
     if(!id){ msg.innerHTML=`<span style="color:#B00020">Node ID is required</span>`; return; }
-    if(STATE.nodes[id]){ msg.innerHTML=`<span style="color:#B00020">ID already exists</span>`; return; }
+    if(STATE.nodes[id]){ msg.innerHTML=`<span style="color:#B00020">ID already exists — choose a unique ID</span>`; return; }
 
-    // add node
     STATE.nodes[id] = {
       id,
       zone,
-      tier:        parseInt(document.getElementById("ef_tier")?.value||1),
-      type:        document.getElementById("ef_type")?.value||"accessory",
-      label:       document.getElementById("ef_label")?.value.trim()||id,
-      partNumber:  document.getElementById("ef_part")?.value.trim()||"—",
-      load:        parseFloat(document.getElementById("ef_load")?.value||0),
-      notes:       document.getElementById("ef_notes")?.value.trim()||"",
+      tier:       parseInt(document.getElementById("ef_tier")?.value||1),
+      type:       document.getElementById("ef_type")?.value||"accessory",
+      label:      document.getElementById("ef_label")?.value.trim()||id,
+      partNumber: document.getElementById("ef_part")?.value.trim()||"—",
+      load:       parseFloat(document.getElementById("ef_load")?.value||0),
+      notes:      document.getElementById("ef_notes")?.value.trim()||"",
       effectiveVoltage:12, inputVoltage:0, failed:false
     };
 
-    // add status
     STATE.status[id] = {
       status: document.getElementById("ef_status")?.value||"planned"
     };
 
-    // add edge if from node selected
-    if(from){
+    if(from && loom){
       EDGES.push({
         from, to:id,
         type:"POWER", zone,
@@ -590,19 +633,306 @@ window.saveEditorForm = function(){
 
   renderAll();
   renderStatusEditor();
+  renderEdgeEditor();
   renderWiringSpec();
 };
 
-window.deleteNode = function(id){
-  if(!confirm(`Delete ${STATE.nodes[id]?.label||id}? This cannot be undone.`)) return;
-  delete STATE.nodes[id];
-  delete STATE.status[id];
-  // remove edges connected to this node
-  EDGES = EDGES.filter(e=>e.from!==id && e.to!==id);
-  EDITOR_NODE = null;
+// -------------------------------------------------------
+// PHASE 4 — Edge Editor
+// Full add / edit / delete for edges
+// -------------------------------------------------------
+let EDGE_EDITOR_MODE = "list"; // "list" | "add" | "edit"
+let EDGE_EDITOR_IDX  = null;   // index into EDGES array
+
+function renderEdgeEditor(){
+  const panel = document.getElementById("edgeEditorPanel");
+  if(!panel) return;
+
+  const nodes    = Object.values(STATE.nodes);
+  const nodeOpts = nodes.map(n=>
+    `<option value="${n.id}">${n.label||n.id} (${n.zone})</option>`
+  ).join("");
+
+  const looms    = [...new Set(EDGES.map(e=>e.loom).filter(Boolean))];
+  const loomOpts = looms.map(l=>
+    `<option value="${l}">${l.replace(/_/g," ")}</option>`
+  ).join("");
+
+  const edgeTypes = ["POWER","SIGNAL","CAN","GROUND"];
+  const zones     = ["A","B","C","D","E"];
+
+  const sel = (EDGE_EDITOR_IDX !== null) ? EDGES[EDGE_EDITOR_IDX] : null;
+
+  // --- List view
+  const listHTML = `
+    <div style="max-height:220px;overflow-y:auto;margin-bottom:8px">
+      <table style="width:100%;border-collapse:collapse;font-size:10px">
+        <thead>
+          <tr style="background:#F4F1EC;position:sticky;top:0">
+            <th style="padding:4px 6px;text-align:left;color:#888">From</th>
+            <th style="padding:4px 6px;text-align:left;color:#888">To</th>
+            <th style="padding:4px 6px;text-align:left;color:#888">Loom</th>
+            <th style="padding:4px 6px;text-align:left;color:#888">Type</th>
+            <th style="padding:4px 6px;width:60px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${EDGES.map((e,i)=>{
+            const fromNode = STATE.nodes[e.from];
+            const toNode   = STATE.nodes[e.to];
+            const orphaned = !fromNode || !toNode;
+            return `
+              <tr style="background:${orphaned?"#FFF0F0":i%2===0?"white":"#FAFAF8"};
+                          border-bottom:1px solid #F0EDE8">
+                <td style="padding:3px 6px;color:${!fromNode?"#B00020":"#2E2A26"}">
+                  ${fromNode?.label||e.from}${!fromNode?' ⚠':''}
+                </td>
+                <td style="padding:3px 6px;color:${!toNode?"#B00020":"#2E2A26"}">
+                  ${toNode?.label||e.to}${!toNode?' ⚠':''}
+                </td>
+                <td style="padding:3px 6px;color:#888">
+                  ${(e.loom||"—").replace(/_/g," ")}
+                </td>
+                <td style="padding:3px 6px;color:#888">${e.type||"—"}</td>
+                <td style="padding:3px 6px;display:flex;gap:3px">
+                  <button onclick="editEdge(${i})"
+                    style="font-size:9px;padding:1px 6px;background:#F4F1EC;
+                           color:#555;border:1px solid #D8D2C8">
+                    Edit
+                  </button>
+                  <button onclick="deleteEdge(${i})"
+                    style="font-size:9px;padding:1px 6px;background:#B00020;
+                           color:white;border:none">
+                    ✕
+                  </button>
+                </td>
+              </tr>`;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>`;
+
+  // Orphan warning
+  const orphanedEdges = EDGES.filter(e=>!STATE.nodes[e.from]||!STATE.nodes[e.to]);
+  const orphanWarning = orphanedEdges.length ? `
+    <div style="margin-bottom:8px;padding:6px 10px;background:#FFF0F0;
+                border-left:3px solid #B00020;border-radius:0 4px 4px 0;
+                font-size:10px;color:#555">
+      <b style="color:#B00020">⚠ ${orphanedEdges.length} orphaned edge(s)</b>
+      — one or both nodes no longer exist.
+      <button onclick="pruneOrphanedEdges()"
+        style="margin-left:8px;font-size:9px;padding:1px 8px;
+               background:#B00020;color:white;border:none;border-radius:3px">
+        Remove All Orphans
+      </button>
+    </div>` : "";
+
+  // --- Add / Edit form
+  const formHTML = (EDGE_EDITOR_MODE === "add" || EDGE_EDITOR_MODE === "edit") ? `
+    <div style="padding:10px;background:#F4F1EC;border-radius:6px;margin-bottom:8px">
+      <div style="font-size:11px;font-weight:bold;color:#C4622D;margin-bottom:8px">
+        ${EDGE_EDITOR_MODE==="add"?"Add New Edge":"Edit Edge"}
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label>From Node</label>
+          <select id="ee_from">
+            ${nodes.map(n=>`<option value="${n.id}"
+              ${sel?.from===n.id?"selected":""}>${n.label||n.id}</option>`).join("")}
+          </select>
+        </div>
+        <div>
+          <label>To Node</label>
+          <select id="ee_to">
+            ${nodes.map(n=>`<option value="${n.id}"
+              ${sel?.to===n.id?"selected":""}>${n.label||n.id}</option>`).join("")}
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label>Type</label>
+          <select id="ee_type">
+            ${edgeTypes.map(t=>`<option value="${t}"
+              ${sel?.type===t?"selected":""}>${t}</option>`).join("")}
+          </select>
+        </div>
+        <div>
+          <label>Zone</label>
+          <select id="ee_zone">
+            ${zones.map(z=>`<option value="${z}"
+              ${sel?.zone===z?"selected":""}>${z}</option>`).join("")}
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label>Loom</label>
+          <select id="ee_loom">
+            ${loomOpts}
+            <option value="__custom__">+ Custom loom name…</option>
+          </select>
+        </div>
+        <div>
+          <label>Resistance (Ω)</label>
+          <input id="ee_resistance" type="number" min="0" step="0.001"
+            value="${sel?.resistance||0.02}" placeholder="0.02">
+        </div>
+      </div>
+
+      <div>
+        <label>Wire Override (optional — e.g. "4/0 AWG")</label>
+        <input id="ee_wire" type="text"
+          value="${sel?.wireOverride||""}" placeholder="leave blank for auto-sizing">
+      </div>
+
+      <div id="ee_custom_loom_row" style="display:none;margin-top:6px">
+        <label>Custom Loom Name</label>
+        <input id="ee_custom_loom" type="text" placeholder="e.g. hvac_harness">
+      </div>
+
+      <div style="display:flex;gap:6px;margin-top:10px">
+        <button onclick="saveEdge()"
+          style="background:#3E6B48;flex:1">
+          ${EDGE_EDITOR_MODE==="add"?"＋ Add Edge":"✓ Save Edge"}
+        </button>
+        <button onclick="cancelEdgeEdit()"
+          style="background:#888;padding:6px 14px">
+          Cancel
+        </button>
+      </div>
+      <div id="edgeMsg" style="margin-top:6px;font-size:11px"></div>
+    </div>` : "";
+
+  panel.innerHTML=`
+    <div style="display:flex;justify-content:space-between;
+                align-items:center;margin-bottom:8px">
+      <h3 style="margin:0;color:#C4622D;font-size:13px">
+        Edge Editor
+        <span style="font-size:10px;font-weight:normal;color:#AAA;margin-left:6px">
+          ${EDGES.length} connections
+        </span>
+      </h3>
+      <div style="display:flex;gap:4px">
+        <button onclick="pruneOrphanedEdges()"
+          style="background:#F4F1EC;color:#888;border:1px solid #D8D2C8;
+                 font-size:10px;padding:3px 8px"
+          title="Remove any edges pointing to deleted nodes">
+          🧹 Prune Orphans
+        </button>
+        <button onclick="startAddEdge()"
+          style="background:#3E6B48;font-size:10px;padding:3px 10px">
+          + Add Edge
+        </button>
+      </div>
+    </div>
+    ${orphanWarning}
+    ${formHTML}
+    ${EDGE_EDITOR_MODE==="list" ? listHTML : ""}
+  `;
+
+  // Wire up the custom loom toggle
+  const loomSel = document.getElementById("ee_loom");
+  if(loomSel){
+    // Set to current value if editing
+    if(sel?.loom && looms.includes(sel.loom)){
+      loomSel.value = sel.loom;
+    }
+    loomSel.addEventListener("change", ()=>{
+      const row = document.getElementById("ee_custom_loom_row");
+      if(row) row.style.display = loomSel.value==="__custom__" ? "block" : "none";
+    });
+  }
+}
+
+window.startAddEdge = function(){
+  EDGE_EDITOR_MODE = "add";
+  EDGE_EDITOR_IDX  = null;
+  renderEdgeEditor();
+};
+
+window.editEdge = function(idx){
+  EDGE_EDITOR_MODE = "edit";
+  EDGE_EDITOR_IDX  = idx;
+  renderEdgeEditor();
+};
+
+window.cancelEdgeEdit = function(){
+  EDGE_EDITOR_MODE = "list";
+  EDGE_EDITOR_IDX  = null;
+  renderEdgeEditor();
+};
+
+window.deleteEdge = function(idx){
+  const e = EDGES[idx];
+  if(!confirm(`Remove edge:\n${e.from} → ${e.to} [${e.loom||e.type}]?`)) return;
+  EDGES.splice(idx, 1);
   renderAll();
-  renderComponentEditor();
-  renderStatusEditor();
+  renderEdgeEditor();
+  renderWiringSpec();
+};
+
+window.pruneOrphanedEdges = function(){
+  const before = EDGES.length;
+  EDGES = EDGES.filter(e => STATE.nodes[e.from] && STATE.nodes[e.to]);
+  const removed = before - EDGES.length;
+  renderAll();
+  renderEdgeEditor();
+  renderWiringSpec();
+  if(removed > 0){
+    const panel = document.getElementById("edgeEditorPanel");
+    const note  = document.createElement("div");
+    note.style.cssText = "margin-top:6px;padding:5px 8px;background:#F4FFF6;"+
+                         "border-left:3px solid #3E6B48;font-size:11px;color:#3E6B48";
+    note.textContent = `✓ Removed ${removed} orphaned edge(s)`;
+    panel.appendChild(note);
+    setTimeout(()=>note.remove(), 3000);
+  }
+};
+
+window.saveEdge = function(){
+  const msg  = document.getElementById("edgeMsg");
+  const from = document.getElementById("ee_from")?.value;
+  const to   = document.getElementById("ee_to")?.value;
+  const type = document.getElementById("ee_type")?.value||"POWER";
+  const zone = document.getElementById("ee_zone")?.value||"A";
+  const res  = parseFloat(document.getElementById("ee_resistance")?.value||0.02);
+  const wire = document.getElementById("ee_wire")?.value.trim()||undefined;
+
+  const loomSel    = document.getElementById("ee_loom");
+  const customLoom = document.getElementById("ee_custom_loom")?.value.trim();
+  const loom       = loomSel?.value === "__custom__"
+    ? (customLoom || "custom_loom")
+    : (loomSel?.value || "cab_harness");
+
+  if(!from || !to){
+    msg.innerHTML=`<span style="color:#B00020">Both From and To nodes are required</span>`;
+    return;
+  }
+  if(from === to){
+    msg.innerHTML=`<span style="color:#B00020">From and To cannot be the same node</span>`;
+    return;
+  }
+
+  const edge = { from, to, type, zone, loom, resistance:res };
+  if(wire) edge.wireOverride = wire;
+
+  if(EDGE_EDITOR_MODE === "add"){
+    EDGES.push(edge);
+    msg.innerHTML=`<span style="color:#3E6B48">✓ Edge added: ${from} → ${to}</span>`;
+  } else if(EDGE_EDITOR_MODE === "edit" && EDGE_EDITOR_IDX !== null){
+    EDGES[EDGE_EDITOR_IDX] = edge;
+    msg.innerHTML=`<span style="color:#3E6B48">✓ Edge updated</span>`;
+  }
+
+  EDGE_EDITOR_MODE = "list";
+  EDGE_EDITOR_IDX  = null;
+  renderAll();
+  renderEdgeEditor();
+  renderWiringSpec();
 };
 
 // -----------------------------
@@ -618,18 +948,22 @@ window.updateNodeStatus = function(id, newStatus){
 
 function renderStatusEditor(){
   const nodes  = Object.values(STATE.nodes);
-  const zones  = {A:[],B:[],C:[]};
-  nodes.forEach(n=>{if(zones[n.zone])zones[n.zone].push(n);});
-  const zoneLabels={A:"Engine Bay",B:"Cab",C:"Rear Node"};
+  const zones  = {};
+  nodes.forEach(n=>{
+    if(!zones[n.zone]) zones[n.zone]=[];
+    zones[n.zone].push(n);
+  });
+  const zoneLabels={A:"Engine Bay",B:"Cab",C:"Trans Mid",D:"Trans Rear",E:"Rear Node"};
   const sColors={planned:"#AAA",ordered:"#2D6C8C",
                  installed:"#C4622D",tested:"#3E6B48"};
   const sList=["planned","ordered","installed","tested"];
 
-  const zoneHTML=Object.entries(zones).map(([key,znodes])=>`
+  const zoneHTML=Object.entries(zones).sort(([a],[b])=>a.localeCompare(b))
+    .map(([key,znodes])=>`
     <div style="margin-bottom:10px">
       <div style="font-size:10px;font-weight:bold;color:#AAA;
                   letter-spacing:1px;margin-bottom:4px">
-        ${zoneLabels[key].toUpperCase()}
+        ZONE ${key} — ${(zoneLabels[key]||key).toUpperCase()}
       </div>
       ${znodes.map(n=>{
         const cur=STATE.status?.[n.id]?.status||"planned";
@@ -778,44 +1112,66 @@ function renderBOM(){
     </table>`;
 }
 
-// -----------------------------
-// Export panel (Tab 2)
-// -----------------------------
+// -------------------------------------------------------
+// PHASE 3 — Export panel with Import system.json
+// -------------------------------------------------------
 function renderExportPanel(){
   const panel=document.getElementById("exportPanel");
   if(!panel) return;
   panel.innerHTML=`
-    <h3 style="margin:0 0 8px;color:#C4622D;font-size:13px">Export</h3>
+    <h3 style="margin:0 0 8px;color:#C4622D;font-size:13px">Export / Import</h3>
     <div style="display:flex;flex-direction:column;gap:6px">
+
       <button onclick="downloadReport()" style="text-align:left;padding:8px 12px">
         ⬇ Export Wiring Report (PDF)
         <span style="display:block;font-size:10px;opacity:0.8;font-weight:normal">
           Full report — component list, wiring spec, BOM
         </span>
       </button>
+
       <button onclick="exportStatusJSON()"
         style="background:#3E6B48;text-align:left;padding:8px 12px">
         ⬇ Save status.json
         <span style="display:block;font-size:10px;opacity:0.8;font-weight:normal">
-          Download updated build status file to push to GitHub
+          Download updated build status file — push to GitHub
         </span>
       </button>
+
       <button onclick="exportSystemJSON()"
         style="background:#2D6C8C;text-align:left;padding:8px 12px">
         ⬇ Save system.json
         <span style="display:block;font-size:10px;opacity:0.8;font-weight:normal">
-          Download updated system file including any added components
+          Download full system — nodes, edges, all component data
         </span>
       </button>
+
+      <div style="border:2px dashed #D8D2C8;border-radius:6px;padding:8px 12px;
+                  background:#FAFAF8">
+        <div style="font-size:11px;font-weight:bold;color:#555;margin-bottom:4px">
+          ⬆ Import system.json
+        </div>
+        <div style="font-size:10px;color:#888;margin-bottom:6px">
+          Load a saved system file — replaces all nodes and edges with the file contents.
+          Status data is preserved if node IDs match.
+        </div>
+        <input type="file" id="importSystemFile" accept=".json"
+          style="font-size:11px;width:100%"
+          onchange="importSystemJSON(this)">
+        <div id="importMsg" style="margin-top:6px;font-size:11px"></div>
+      </div>
+
     </div>
     <div style="margin-top:10px;padding:8px 10px;background:#F4F1EC;
                 border-radius:6px;font-size:10px;color:#888;line-height:1.6">
-      After saving JSON files, push them to your GitHub repo.<br>
-      Once a backend is connected, changes will save automatically.
+      After saving JSON files, push them to your GitHub repo under
+      <code>data/system.json</code> and <code>data/status.json</code>.<br>
+      The board reloads from those files on every page load.
     </div>`;
 }
 
 window.exportSystemJSON = function(){
+  // Prune any remaining orphaned edges before export
+  const cleanEdges = EDGES.filter(e=>STATE.nodes[e.from]&&STATE.nodes[e.to]);
   const out={
     nodes: Object.values(STATE.nodes).map(n=>({
       id:n.id, type:n.type, tier:n.tier, zone:n.zone,
@@ -823,13 +1179,98 @@ window.exportSystemJSON = function(){
       partNumber:n.partNumber||"—",
       notes:n.notes||""
     })),
-    edges: EDGES
+    edges: cleanEdges
   };
   const blob=new Blob([JSON.stringify(out,null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob);
   const a=document.createElement("a");
   a.href=url; a.download="system.json"; a.click();
   URL.revokeObjectURL(url);
+};
+
+// Phase 3 — Import system.json
+window.importSystemJSON = function(input){
+  const msg  = document.getElementById("importMsg");
+  const file = input.files[0];
+  if(!file){
+    msg.innerHTML=`<span style="color:#B00020">No file selected</span>`;
+    return;
+  }
+  if(!file.name.endsWith(".json")){
+    msg.innerHTML=`<span style="color:#B00020">File must be a .json file</span>`;
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try {
+      const data = JSON.parse(e.target.result);
+
+      // Validate structure
+      if(!data.nodes || !Array.isArray(data.nodes)){
+        msg.innerHTML=`<span style="color:#B00020">Invalid file — missing nodes array</span>`;
+        return;
+      }
+      if(!data.edges || !Array.isArray(data.edges)){
+        msg.innerHTML=`<span style="color:#B00020">Invalid file — missing edges array</span>`;
+        return;
+      }
+
+      // Snapshot existing status so we can preserve it for matching IDs
+      const prevStatus = { ...STATE.status };
+
+      // Replace STATE with imported data
+      STATE.nodes  = {};
+      data.nodes.forEach(n=>{
+        STATE.nodes[n.id] = {
+          ...n,
+          effectiveVoltage: 12,
+          inputVoltage:     0,
+          failed:           false
+        };
+        // Preserve status if node ID existed before, else default to planned
+        if(!STATE.status[n.id]){
+          STATE.status[n.id] = prevStatus[n.id] || { status: "planned" };
+        }
+      });
+
+      // Remove status entries for nodes that no longer exist
+      Object.keys(STATE.status).forEach(id=>{
+        if(!STATE.nodes[id]) delete STATE.status[id];
+      });
+
+      EDGES = data.edges;
+
+      // Check for orphaned edges and warn
+      const orphaned = EDGES.filter(e=>!STATE.nodes[e.from]||!STATE.nodes[e.to]);
+
+      renderAll();
+      renderComponentEditor();
+      renderEdgeEditor();
+      renderStatusEditor();
+      renderWiringSpec();
+      renderExportPanel();
+
+      const nodeCount = data.nodes.length;
+      const edgeCount = data.edges.length;
+      const orphanNote = orphaned.length
+        ? ` <span style="color:#E09B2D">⚠ ${orphaned.length} orphaned edge(s) detected — use Edge Editor → Prune Orphans to clean up.</span>`
+        : "";
+
+      document.getElementById("importMsg").innerHTML=
+        `<span style="color:#3E6B48">✓ Loaded ${nodeCount} nodes, ${edgeCount} edges from ${file.name}</span>${orphanNote}`;
+
+    } catch(err){
+      msg.innerHTML=`<span style="color:#B00020">Parse error: ${err.message}</span>`;
+    }
+  };
+  reader.onerror = function(){
+    msg.innerHTML=`<span style="color:#B00020">Failed to read file</span>`;
+  };
+  reader.readAsText(file);
+
+  // Reset file input so the same file can be re-imported if needed
+  input.value = "";
 };
 
 // -----------------------------
@@ -840,10 +1281,10 @@ function renderAll(){
   renderControls();
   renderPlaybackControls();
   renderLayout();
-  // only render tab 2 panels if visible
   if(document.getElementById("tab-manage").style.display!=="none"){
     renderStatusEditor();
     renderComponentEditor();
+    renderEdgeEditor();
     renderBOM();
     renderWiringSpec();
     renderExportPanel();
