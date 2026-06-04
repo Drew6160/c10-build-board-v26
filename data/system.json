@@ -156,8 +156,8 @@
           "gender": "female",
           "pinCount": 4,
           "pins": [
-            { "pin": 1, "label": "CAN_H",  "type": "CAN"    },
-            { "pin": 2, "label": "CAN_L",  "type": "CAN"    },
+            { "pin": 1, "label": "CAN_H",  "type": "SIGNAL"    },
+            { "pin": 2, "label": "CAN_L",  "type": "SIGNAL"    },
             { "pin": 3, "label": "PWR",    "type": "POWER"  },
             { "pin": 4, "label": "GND",    "type": "GROUND" }
           ]
@@ -597,7 +597,7 @@
     {
       "from": "battery", "to": "starter",
       "type": "POWER", "zone": "A", "loom": "charge_system",
-      "resistance": 0.004, "wireOverride": "2/0 AWG",
+      "resistance": 0.004, "wireOverride": "4/0 AWG",
       "color": "RD", "colorStripe": "",
       "fromConnector": "B_POS", "fromPin": 1,
       "toConnector": "S_MAIN", "toPin": 1,
@@ -786,7 +786,7 @@
     },
     {
       "from": "bim_efi1", "to": "dakota_hdx",
-      "type": "CAN", "zone": "B", "loom": "can_bus",
+      "type": "SIGNAL", "zone": "B", "loom": "can_bus",
       "resistance": 0.01,
       "color": "GY", "colorStripe": "",
       "fromConnector": "BIM_IO1", "fromPin": 1,
@@ -796,7 +796,7 @@
     },
     {
       "from": "bim_efi1", "to": "bim_04",
-      "type": "CAN", "zone": "B", "loom": "can_bus",
+      "type": "SIGNAL", "zone": "B", "loom": "can_bus",
       "resistance": 0.01,
       "color": "GY", "colorStripe": "",
       "fromConnector": "BIM_IO2", "fromPin": 1,
