@@ -1118,54 +1118,50 @@ function renderBOM(){
 function renderExportPanel(){
   const panel=document.getElementById("exportPanel");
   if(!panel) return;
-  panel.innerHTML=`
-    <h3 style="margin:0 0 8px;color:#C4622D;font-size:13px">Export / Import</h3>
-    <div style="display:flex;flex-direction:column;gap:6px">
 
+  // WireViz button — only active when a loom filter is selected
+  const yamlBtn = ACTIVE_LOOM
+    ? `<button onclick="downloadWireVizYAML('${ACTIVE_LOOM}')"
+        style="background:#7F77DD;text-align:left;padding:8px 12px">
+        ⬇ Export WireViz YAML — ${ACTIVE_LOOM.replace(/_/g," ")}
+        <span style="display:block;font-size:10px;opacity:0.8;font-weight:normal">
+          Run through WireViz locally to generate connector pinout diagram
+        </span>
+      </button>`
+    : `<div style="padding:8px 10px;background:#F4F1EC;border-radius:6px;
+                   font-size:10px;color:#AAA;border:1px solid #E0DBD4">
+        ⬇ WireViz YAML export — select a harness filter above to enable
+       </div>`;
+
+  panel.innerHTML=`
+    <h3 style="margin:0 0 8px;color:#C4622D;font-size:13px">Export</h3>
+    <div style="display:flex;flex-direction:column;gap:6px">
       <button onclick="downloadReport()" style="text-align:left;padding:8px 12px">
         ⬇ Export Wiring Report (PDF)
         <span style="display:block;font-size:10px;opacity:0.8;font-weight:normal">
-          Full report — component list, wiring spec, BOM
+          Full report — component list, wiring spec, BOM, DRC summary
         </span>
       </button>
-
       <button onclick="exportStatusJSON()"
         style="background:#3E6B48;text-align:left;padding:8px 12px">
         ⬇ Save status.json
         <span style="display:block;font-size:10px;opacity:0.8;font-weight:normal">
-          Download updated build status file — push to GitHub
+          Download updated build status file to push to GitHub
         </span>
       </button>
-
       <button onclick="exportSystemJSON()"
         style="background:#2D6C8C;text-align:left;padding:8px 12px">
         ⬇ Save system.json
         <span style="display:block;font-size:10px;opacity:0.8;font-weight:normal">
-          Download full system — nodes, edges, all component data
+          Download updated system file including any added components
         </span>
       </button>
-
-      <div style="border:2px dashed #D8D2C8;border-radius:6px;padding:8px 12px;
-                  background:#FAFAF8">
-        <div style="font-size:11px;font-weight:bold;color:#555;margin-bottom:4px">
-          ⬆ Import system.json
-        </div>
-        <div style="font-size:10px;color:#888;margin-bottom:6px">
-          Load a saved system file — replaces all nodes and edges with the file contents.
-          Status data is preserved if node IDs match.
-        </div>
-        <input type="file" id="importSystemFile" accept=".json"
-          style="font-size:11px;width:100%"
-          onchange="importSystemJSON(this)">
-        <div id="importMsg" style="margin-top:6px;font-size:11px"></div>
-      </div>
-
+      ${yamlBtn}
     </div>
     <div style="margin-top:10px;padding:8px 10px;background:#F4F1EC;
                 border-radius:6px;font-size:10px;color:#888;line-height:1.6">
-      After saving JSON files, push them to your GitHub repo under
-      <code>data/system.json</code> and <code>data/status.json</code>.<br>
-      The board reloads from those files on every page load.
+      After saving JSON files, push them to your GitHub repo.<br>
+      WireViz YAML: run <code>wireviz {loom}.yml</code> locally to generate SVG pinout diagrams.
     </div>`;
 }
 
