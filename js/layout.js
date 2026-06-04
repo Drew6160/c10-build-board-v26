@@ -36,7 +36,14 @@ const ROUTE_COLORS = {
 let ACTIVE_LOOM  = null;
 let ANIM_ENABLED = false;
 
+// =============================
+// LAYOUT_POS replacement block
+// Drop into layout.js replacing
+// the entire const LAYOUT_POS = { ... }
+// =============================
+
 const LAYOUT_POS = {
+
   // --- Zone A: Engine Bay ---
   alternator:           { x: 70,  y: 130 },
   ecm:                  { x: 220, y: 110 },
@@ -50,7 +57,8 @@ const LAYOUT_POS = {
   ac_compressor:        { x: 70,  y: 490 },
   starter:              { x: 200, y: 490 },
   fuel_pressure_sensor: { x: 160, y: 170 },
-  // Accuair front height sensors — lower engine bay corners
+
+  // --- Zone A: Accuair front height sensors ---
   accuair_sensor_lf:    { x: 80,  y: 560 },
   accuair_sensor_rf:    { x: 270, y: 560 },
 
@@ -60,37 +68,46 @@ const LAYOUT_POS = {
   bim_efi1:             { x: 640, y: 120 },
   bim_04:               { x: 720, y: 120 },
   fuse_panel:           { x: 480, y: 240 },
-  accuair_touchpad:     { x: 680, y: 240 },
-  vintage_air:          { x: 420, y: 350 },
-  radio:                { x: 540, y: 350 },
   power_block:          { x: 390, y: 240 },
   ground_block:         { x: 390, y: 340 },
   t56_disconnect:       { x: 490, y: 340 },
+  vintage_air:          { x: 420, y: 350 },
+  radio:                { x: 540, y: 350 },
   power_windows:        { x: 410, y: 450 },
   heated_seats:         { x: 500, y: 450 },
   alarm:                { x: 590, y: 450 },
   backup_cam:           { x: 680, y: 450 },
 
-  // --- Zone E: Rear Node ---
-  // Fuel system
+  // --- Zone B: Under-seat panel nodes (new Lane 1) ---
+  accuair_ctrl:         { x: 680, y: 240 }, // replaces accuair_touchpad
+  estopp:               { x: 590, y: 240 }, // E-Stopp module — new
+
+  // --- Zone C: Rear Node — Fuel system ---
   fuel_relay:           { x: 790, y: 110 },
   fuel_sender:          { x: 940, y: 110 },
   c102_ctrl:            { x: 790, y: 190 },
   dw440_pump:           { x: 940, y: 190 },
-  // Accuair rear cluster
-  accuair_ecu:          { x: 790, y: 290 },
+
+  // --- Zone C: Rear Node — Accuair cluster ---
+  accuair_ecu:          { x: 790, y: 290 }, // retained for legacy edges
   accuair_tank:         { x: 940, y: 290 },
-  accuair_vu4:          { x: 790, y: 370 },
+  accuair_vu4:          { x: 790, y: 370 }, // retained for legacy edges
   accuair_pressure:     { x: 940, y: 370 },
   accuair_relay_1:      { x: 790, y: 450 },
   accuair_relay_2:      { x: 870, y: 450 },
-  accuair_comp_1:       { x: 790, y: 530 },
+  accuair_comp_1:       { x: 790, y: 530 }, // retained for legacy edges
   accuair_comp_2:       { x: 870, y: 530 },
   accuair_sensor_lr:    { x: 940, y: 450 },
   accuair_sensor_rr:    { x: 940, y: 530 },
-  tail_lights:          { x: 870, y: 110 }
-};
 
+  // --- Zone C: Rear Node — Accuair consolidated (Lane 1 node IDs) ---
+  accuair_comp:         { x: 790, y: 530 }, // maps to accuair_comp_1 position
+  accuair_valves:       { x: 790, y: 370 }, // maps to accuair_vu4 position
+
+  // --- Zone C: Rear Node — Lighting ---
+  tail_lights:          { x: 870, y: 110 }
+
+};
 const ZONES = [
   { label:"ENGINE BAY", x:30,  y:70, w:320, h:550, color:"#FFF8F0" },
   { label:"CAB",        x:360, y:70, w:390, h:550, color:"#F0F4FF" },
