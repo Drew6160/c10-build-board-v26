@@ -65,7 +65,7 @@ const LAYOUT_POS = {
   ignition_sw:          { x: 420, y: 120 },
   ecm:                  { x: 680, y: 340 },
   dakota_hdx:           { x: 530, y: 120 },
-  bim_efi1:             { x: 640, y: 340 },
+  bim_efi1:             { x: 630, y: 340 },
   bim_04:               { x: 720, y: 120 },
   fuse_panel:           { x: 480, y: 240 },
   power_block:          { x: 390, y: 240 },
