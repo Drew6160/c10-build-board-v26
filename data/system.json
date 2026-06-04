@@ -88,7 +88,7 @@
       "id": "ecm",
       "type": "control",
       "tier": 1,
-      "zone": "A",
+      "zone": "B",
       "label": "Holley ECM",
       "load": 5,
       "partNumber": "Holley 550-931",
