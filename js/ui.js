@@ -23,9 +23,9 @@ window.switchTab = function(tab, btn){
   if(tab === "manage"){
     renderStatusEditor();
     renderComponentEditor();
-    renderEdgeEditor();
     renderBOM();
     renderWiringSpec();
+    renderDRCSummary("drcPanel");
     renderExportPanel();
   }
 };
