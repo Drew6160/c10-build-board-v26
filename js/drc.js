@@ -70,6 +70,9 @@ const COLOR_RULES = {
 function inrushMultiplier(node) {
   if (!node) return 1.5;
   const load = node.load || 0;
+  // Gear reduction starters have much lower inrush than direct-drive
+  // Powermaster 4.4:1 gear reduction — 1.1x is accurate for this hardware
+  if (node.type === "motor" && node.starterType === "gear_reduction") return 1.1;
   // Large motors (>50A base load) use 1.25x; small motors and others use 1.5x
   return (node.type === "motor" && load > 50) ? 1.25 : 1.5;
 }
