@@ -63,7 +63,7 @@ const LAYOUT_POS = {
 
   // --- Zone B: Cab ---
   ignition_sw:          { x: 420, y: 120 },
-  ecm:                  { x: 480, y: 340 },
+  ecm:                  { x: 680, y: 340 },
   dakota_hdx:           { x: 530, y: 120 },
   bim_efi1:             { x: 640, y: 120 },
   bim_04:               { x: 720, y: 120 },
