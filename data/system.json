@@ -55,16 +55,17 @@
       ]
     },
     {
-      "id": "starter",
-      "type": "motor",
-      "tier": 1,
-      "zone": "A",
-      "label": "Starter",
-      "load": 150,
-      "partNumber": "—",
-      "notes": "Powermaster Starter for LS from Level 7 Motorsports. 2.5kW / 3.4hp motor. 4.4:1 gear reduction.",
-      "connectors": [
-        {
+  "id": "starter",
+  "type": "motor",
+  "tier": 1,
+  "zone": "A",
+  "label": "Starter",
+  "load": 150,
+  "starterType": "gear_reduction",
+  "partNumber": "—",
+  "notes": "Powermaster Starter for LS from Level 7 Motorsports. 2.5kW / 3.4hp motor. 4.4:1 gear reduction.",
+  "connectors": [
+    {
           "designator": "S_MAIN",
           "body": "Bare Lug 3/8\"",
           "gender": "—",
