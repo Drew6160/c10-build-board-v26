@@ -349,16 +349,6 @@
       "load": 0.1,
       "partNumber": "Holley 554-102",
       "notes": "100 PSI stainless sensor in 1/8 NPT port on Radium DMR-RA. Wired to Terminator X Max harness fuel pressure input. Data broadcast via CAN to Dakota HDX through BIM-EFI-1."
-    },
-    {
-      "id": "fuel_level_sender",
-      "type": "fuel",
-      "tier": 2,
-      "zone": "E",
-      "label": "Fuel Level Sender",
-      "load": 0.3,
-      "partNumber": "Boyd FL-1",
-      "notes": "Updated Fuel Level Sensor from Boyd Welding. Replaces old lever style"
     }
   ],
   "edges": [
@@ -923,19 +913,8 @@
       "to": "fuel_sender",
       "type": "SIGNAL",
       "zone": "C",
-      "loom": "rear_trunk",
-      "resistance": 0.04,
-      "color": "GY",
-      "colorStripe": "",
-      "fromConnector": "",
-      "fromPin": 0,
-      "toConnector": "",
-      "toPin": 0,
-      "shield": false,
-      "twisted": false,
-      "drainGround": "",
-      "length": 0,
-      "notes": "Fuel level sender signal"
+      "loom": "fuel_system",
+      "resistance": 0.04
     },
     {
       "from": "fuse_panel",
@@ -1088,14 +1067,6 @@
       "drainGround": "",
       "length": 0,
       "notes": "E-Stopp module power — under-seat panel"
-    },
-    {
-      "from": "fuse_panel",
-      "to": "fuel_level_sender",
-      "type": "POWER",
-      "zone": "E",
-      "loom": "fuel_system",
-      "resistance": 0.03
     }
   ]
 }
