@@ -64,7 +64,7 @@
       "status": "ordered"
     },
     "fuel_sender": {
-      "status": "ordered"
+      "status": "installed"
     },
     "accuair_comp": {
       "status": "installed"
@@ -98,9 +98,6 @@
     },
     "fuel_pressure_sensor": {
       "status": "ordered"
-    },
-    "fuel_level_sender": {
-      "status": "installed"
     }
   }
 }
