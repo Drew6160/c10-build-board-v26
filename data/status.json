@@ -55,7 +55,7 @@
       "status": "planned"
     },
     "fuel_relay": {
-      "status": "planned"
+      "status": "ordered"
     },
     "c102_ctrl": {
       "status": "ordered"
@@ -88,7 +88,7 @@
       "status": "planned"
     },
     "t56_disconnect": {
-      "status": "planned"
+      "status": "ordered"
     },
     "ground_block": {
       "status": "ordered"
@@ -97,6 +97,12 @@
       "status": "ordered"
     },
     "fuel_pressure_sensor": {
+      "status": "ordered"
+    },
+    "bim_efi1": {
+      "status": "ordered"
+    },
+    "estopp": {
       "status": "ordered"
     }
   }
