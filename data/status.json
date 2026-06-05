@@ -1,0 +1,106 @@
+{
+  "nodes": {
+    "battery": {
+      "status": "installed"
+    },
+    "alternator": {
+      "status": "ordered"
+    },
+    "starter": {
+      "status": "planned"
+    },
+    "ecm": {
+      "status": "ordered"
+    },
+    "coils": {
+      "status": "installed"
+    },
+    "injectors": {
+      "status": "installed"
+    },
+    "throttle_body": {
+      "status": "installed"
+    },
+    "cooling_fan": {
+      "status": "planned"
+    },
+    "ac_compressor": {
+      "status": "planned"
+    },
+    "wideband_o2": {
+      "status": "ordered"
+    },
+    "map_sensor": {
+      "status": "ordered"
+    },
+    "fuse_panel": {
+      "status": "installed"
+    },
+    "ignition_sw": {
+      "status": "ordered"
+    },
+    "dakota_hdx": {
+      "status": "ordered"
+    },
+    "bim_04": {
+      "status": "ordered"
+    },
+    "accuair_ctrl": {
+      "status": "installed"
+    },
+    "vintage_air": {
+      "status": "planned"
+    },
+    "radio": {
+      "status": "planned"
+    },
+    "fuel_relay": {
+      "status": "planned"
+    },
+    "c102_ctrl": {
+      "status": "ordered"
+    },
+    "dw440_pump": {
+      "status": "ordered"
+    },
+    "fuel_sender": {
+      "status": "ordered"
+    },
+    "accuair_comp": {
+      "status": "installed"
+    },
+    "accuair_valves": {
+      "status": "installed"
+    },
+    "tail_lights": {
+      "status": "ordered"
+    },
+    "power_windows": {
+      "status": "planned"
+    },
+    "heated_seats": {
+      "status": "planned"
+    },
+    "alarm": {
+      "status": "planned"
+    },
+    "backup_cam": {
+      "status": "planned"
+    },
+    "t56_disconnect": {
+      "status": "planned"
+    },
+    "ground_block": {
+      "status": "ordered"
+    },
+    "power_block": {
+      "status": "ordered"
+    },
+    "fuel_pressure_sensor": {
+      "status": "ordered"
+    },
+    "fuel_level_sender": {
+      "status": "installed"
+    }
+  }
+}
