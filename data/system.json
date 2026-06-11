@@ -547,7 +547,6 @@
         }
       ]
     },
-       { "pin": 3, "label": "TRIG",     "type": "SIGNAL" },
       {
   "id": "c105_ctrl",
   "type": "control",
@@ -580,19 +579,9 @@
   "load": 22,
   "partNumber": "DW 9-811-C102-0900",
   "notes": "810lph brushless. Replaces DW440 — higher flow for boosted application. Custom hat on Boyd 6in cleanout plate. 10 AWG wiring per DW spec. Racetronix BCWS-001 bulkhead connector. C105 dual-speed controller — 68% low / 100% high.",
-  "connectors": [
+  "connectors": 
+    [
     {
-      "designator": "PUMP",
-      "body": "Deutsch DT 2-way",
-      "gender": "female",
-      "pinCount": 2,
-      "pins": [
-        { "pin": 1, "label": "PWR", "type": "POWER"  },
-        { "pin": 2, "label": "GND", "type": "GROUND" }
-      ]
-    }
-  ]
-}
           "designator": "PUMP",
           "body": "Deutsch DT 2-way",
           "gender": "female",
@@ -894,7 +883,7 @@
           ]
         }
       ]
-    }
+    },
 {
   "id": "mdb_battery",
   "type": "distribution",
@@ -917,7 +906,7 @@
       ]
     }
   ]
-}
+},
 {
   "id": "mdb_engine",
   "type": "distribution",
@@ -940,7 +929,7 @@
       ]
     }
   ]
-}
+},
 {
   "id": "mdb_rear",
   "type": "distribution",
@@ -1304,7 +1293,7 @@
    },
    { 
      "from": "mdb_rear",   
-     "to": "c102_ctrl",   
+     "to": "c105_ctrl",   
      "type": "POWER", 
      "zone": "C", 
      "loom": "fuel_system",  
