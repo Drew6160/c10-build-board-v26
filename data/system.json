@@ -531,7 +531,7 @@
       "label": "Fuel Relay",
       "load": 0.5,
       "partNumber": "30A relay",
-      "notes": "ECM J1A FP_TRIG triggers relay coil. Relay supplies power to C105 controller.",
+      "notes": "ECM triggers relay coil. Relay supplies power to C105 controller",
       "connectors": [
         {
           "designator": "RLY",
@@ -547,31 +547,31 @@
         }
       ]
     },
+       { "pin": 3, "label": "TRIG",     "type": "SIGNAL" },
+      {
+  "id": "c105_ctrl",
+  "type": "control",
+  "tier": 1,
+  "zone": "C",
+  "label": "DW C105 Controller",
+  "load": 1,
+  "partNumber": "DW C105",
+  "notes": "Dual speed controller. ECM ground-side trigger on J1B OUT_3 switches low/high speed. 68% duty cycle low / 100% high.",
+  "connectors": [
     {
-      "id": "c102_ctrl",
-      "type": "control",
-      "tier": 1,
-      "zone": "C",
-      "label": "DW C105 Controller",
-      "load": 1,
-      "partNumber": "DW C105",
-      "notes": "Dual speed controller. ECM ground-side trigger on J1B OUT_3 switches low/high speed. 68% duty cycle low / 100% high.",
-      "connectors": [
-        {
-          "designator": "C105",
-          "body": "Deutsch DT 4-way",
-          "gender": "female",
-          "pinCount": 4,
-          "pins": [
-            { "pin": 1, "label": "PWR_IN",   "type": "POWER"  },
-            { "pin": 2, "label": "GND",      "type": "GROUND" },
-            { "pin": 3, "label": "TRIG",     "type": "SIGNAL" },
-            { "pin": 4, "label": "PUMP_OUT", "type": "POWER"  }
-          ]
-        }
+      "designator": "C105",
+      "body": "Deutsch DT 4-way",
+      "gender": "female",
+      "pinCount": 4,
+      "pins": [
+        { "pin": 1, "label": "PWR_IN",   "type": "POWER"  },
+        { "pin": 2, "label": "GND",      "type": "GROUND" },
+        { "pin": 3, "label": "TRIG",     "type": "SIGNAL" },
+        { "pin": 4, "label": "PUMP_OUT", "type": "POWER"  }
       ]
-    },
-    {
+    }
+  ]
+}
   "id": "dw810_pump",
   "type": "motor",
   "tier": 1,
@@ -1122,14 +1122,14 @@
     },
     {
       "from": "fuel_relay",
-      "to": "c102_ctrl",
+      "to": "c105_ctrl",
       "type": "POWER",
       "zone": "C",
       "loom": "fuel_system",
       "resistance": 0.02
     },
     {
-      "from": "c102_ctrl",
+      "from": "c105_ctrl",
       "to": "dw810_pump",
       "type": "POWER",
       "zone": "C",
