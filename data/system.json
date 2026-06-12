@@ -184,9 +184,9 @@
           "gender": "female",
           "pinCount": 3,
           "pins": [
-            { "pin": 1, "label": "PWR",  "type": "POWER"  },
-            { "pin": 2, "label": "GND",  "type": "GROUND" },
-            { "pin": 3, "label": "EST",  "type": "SIGNAL" }
+            { "pin": 1, "label": "PWR", "type": "POWER"  },
+            { "pin": 2, "label": "GND", "type": "GROUND" },
+            { "pin": 3, "label": "EST", "type": "SIGNAL" }
           ]
         }
       ]
@@ -229,12 +229,12 @@
           "gender": "female",
           "pinCount": 6,
           "pins": [
-            { "pin": 1, "label": "MOT+",   "type": "POWER"  },
-            { "pin": 2, "label": "MOT-",   "type": "POWER"  },
-            { "pin": 3, "label": "TPS_1",  "type": "SIGNAL" },
-            { "pin": 4, "label": "TPS_2",  "type": "SIGNAL" },
-            { "pin": 5, "label": "DBW_5V", "type": "POWER"  },
-            { "pin": 6, "label": "DBW_GND","type": "GROUND" }
+            { "pin": 1, "label": "MOT+",    "type": "POWER"  },
+            { "pin": 2, "label": "MOT-",    "type": "POWER"  },
+            { "pin": 3, "label": "TPS_1",   "type": "SIGNAL" },
+            { "pin": 4, "label": "TPS_2",   "type": "SIGNAL" },
+            { "pin": 5, "label": "DBW_5V",  "type": "POWER"  },
+            { "pin": 6, "label": "DBW_GND", "type": "GROUND" }
           ]
         }
       ]
@@ -269,7 +269,7 @@
       "label": "A/C Compressor",
       "load": 10,
       "partNumber": "—",
-      "notes": "Vintage Air Gen 5 compressor integrated into Holley mid-mount brackets. Clutch relay controlled by ECM J1B OUT_4.",
+      "notes": "Vintage Air Gen 5 compressor. Clutch relay controlled by ECM J1B OUT_4.",
       "connectors": [
         {
           "designator": "AC",
@@ -299,11 +299,11 @@
           "gender": "female",
           "pinCount": 5,
           "pins": [
-            { "pin": 1, "label": "IP",    "type": "SIGNAL" },
-            { "pin": 2, "label": "VGND",  "type": "GROUND" },
-            { "pin": 3, "label": "HTR-",  "type": "GROUND" },
-            { "pin": 4, "label": "HTR+",  "type": "POWER"  },
-            { "pin": 5, "label": "PUMP",  "type": "SIGNAL" }
+            { "pin": 1, "label": "IP",   "type": "SIGNAL" },
+            { "pin": 2, "label": "VGND", "type": "GROUND" },
+            { "pin": 3, "label": "HTR-", "type": "GROUND" },
+            { "pin": 4, "label": "HTR+", "type": "POWER"  },
+            { "pin": 5, "label": "PUMP", "type": "SIGNAL" }
           ]
         }
       ]
@@ -347,26 +347,26 @@
           "gender": "male",
           "pinCount": 20,
           "pins": [
-            { "pin": 1,  "label": "IGN_SW",    "type": "POWER" },
-            { "pin": 2,  "label": "HDX_PWR",   "type": "POWER" },
-            { "pin": 3,  "label": "ACCUAIR",   "type": "POWER" },
-            { "pin": 4,  "label": "HVAC",      "type": "POWER" },
-            { "pin": 5,  "label": "RADIO",     "type": "POWER" },
-            { "pin": 6,  "label": "ECM_PWR",   "type": "POWER" },
-            { "pin": 7,  "label": "FAN",       "type": "POWER" },
-            { "pin": 8,  "label": "AC_COMP",   "type": "POWER" },
-            { "pin": 9,  "label": "FUEL_RLY",  "type": "POWER" },
-            { "pin": 10, "label": "ACCUAIR_C", "type": "POWER" },
-            { "pin": 11, "label": "TAIL_LT",   "type": "POWER" },
-            { "pin": 12, "label": "FUEL_SND",  "type": "SIGNAL"},
-            { "pin": 13, "label": "PWR_WIN",   "type": "POWER" },
-            { "pin": 14, "label": "HTD_SEAT",  "type": "POWER" },
-            { "pin": 15, "label": "ALARM",     "type": "POWER" },
-            { "pin": 16, "label": "BCK_CAM",   "type": "SIGNAL"},
-            { "pin": 17, "label": "BAT_FEED",  "type": "POWER" },
-            { "pin": 18, "label": "SPARE_1",   "type": "POWER" },
-            { "pin": 19, "label": "SPARE_2",   "type": "POWER" },
-            { "pin": 20, "label": "SPARE_3",   "type": "POWER" }
+            { "pin": 1,  "label": "IGN_SW",    "type": "POWER"  },
+            { "pin": 2,  "label": "HDX_PWR",   "type": "POWER"  },
+            { "pin": 3,  "label": "ACCUAIR",   "type": "POWER"  },
+            { "pin": 4,  "label": "HVAC",      "type": "POWER"  },
+            { "pin": 5,  "label": "RADIO",     "type": "POWER"  },
+            { "pin": 6,  "label": "ECM_PWR",   "type": "POWER"  },
+            { "pin": 7,  "label": "FAN",       "type": "POWER"  },
+            { "pin": 8,  "label": "AC_COMP",   "type": "POWER"  },
+            { "pin": 9,  "label": "FUEL_RLY",  "type": "POWER"  },
+            { "pin": 10, "label": "ACCUAIR_C", "type": "POWER"  },
+            { "pin": 11, "label": "TAIL_LT",   "type": "POWER"  },
+            { "pin": 12, "label": "FUEL_SND",  "type": "SIGNAL" },
+            { "pin": 13, "label": "PWR_WIN",   "type": "POWER"  },
+            { "pin": 14, "label": "HTD_SEAT",  "type": "POWER"  },
+            { "pin": 15, "label": "ALARM",     "type": "POWER"  },
+            { "pin": 16, "label": "BCK_CAM",   "type": "SIGNAL" },
+            { "pin": 17, "label": "BAT_FEED",  "type": "POWER"  },
+            { "pin": 18, "label": "SPARE_1",   "type": "POWER"  },
+            { "pin": 19, "label": "SPARE_2",   "type": "POWER"  },
+            { "pin": 20, "label": "SPARE_3",   "type": "POWER"  }
           ]
         }
       ]
@@ -387,10 +387,10 @@
           "gender": "female",
           "pinCount": 4,
           "pins": [
-            { "pin": 1, "label": "BAT",  "type": "POWER"  },
-            { "pin": 2, "label": "ACC",  "type": "POWER"  },
-            { "pin": 3, "label": "RUN",  "type": "POWER"  },
-            { "pin": 4, "label": "CRNK", "type": "POWER"  }
+            { "pin": 1, "label": "BAT",  "type": "POWER" },
+            { "pin": 2, "label": "ACC",  "type": "POWER" },
+            { "pin": 3, "label": "RUN",  "type": "POWER" },
+            { "pin": 4, "label": "CRNK", "type": "POWER" }
           ]
         }
       ]
@@ -489,12 +489,12 @@
           "gender": "female",
           "pinCount": 6,
           "pins": [
-            { "pin": 1, "label": "BAT_PWR",  "type": "POWER"  },
-            { "pin": 2, "label": "IGN_PWR",  "type": "POWER"  },
-            { "pin": 3, "label": "GND",      "type": "GROUND" },
-            { "pin": 4, "label": "BLOWER",   "type": "POWER"  },
-            { "pin": 5, "label": "AC_REQ",   "type": "SIGNAL" },
-            { "pin": 6, "label": "ILLUM",    "type": "POWER"  }
+            { "pin": 1, "label": "BAT_PWR", "type": "POWER"  },
+            { "pin": 2, "label": "IGN_PWR", "type": "POWER"  },
+            { "pin": 3, "label": "GND",     "type": "GROUND" },
+            { "pin": 4, "label": "BLOWER",  "type": "POWER"  },
+            { "pin": 5, "label": "AC_REQ",  "type": "SIGNAL" },
+            { "pin": 6, "label": "ILLUM",   "type": "POWER"  }
           ]
         }
       ]
@@ -531,7 +531,7 @@
       "label": "Fuel Relay",
       "load": 0.5,
       "partNumber": "30A relay",
-      "notes": "ECM triggers relay coil. Relay supplies power to C105 controller",
+      "notes": "ECM triggers relay coil. Relay supplies power to C105 controller.",
       "connectors": [
         {
           "designator": "RLY",
@@ -547,41 +547,41 @@
         }
       ]
     },
-      {
-  "id": "c105_ctrl",
-  "type": "control",
-  "tier": 1,
-  "zone": "C",
-  "label": "DW C105 Controller",
-  "load": 1,
-  "partNumber": "DW C105",
-  "notes": "Dual speed controller. ECM ground-side trigger on J1B OUT_3 switches low/high speed. 68% duty cycle low / 100% high.",
-  "connectors": [
     {
-      "designator": "C105",
-      "body": "Deutsch DT 4-way",
-      "gender": "female",
-      "pinCount": 4,
-      "pins": [
-        { "pin": 1, "label": "PWR_IN",   "type": "POWER"  },
-        { "pin": 2, "label": "GND",      "type": "GROUND" },
-        { "pin": 3, "label": "TRIG",     "type": "SIGNAL" },
-        { "pin": 4, "label": "PUMP_OUT", "type": "POWER"  }
+      "id": "c105_ctrl",
+      "type": "control",
+      "tier": 1,
+      "zone": "C",
+      "label": "DW C105 Controller",
+      "load": 1,
+      "partNumber": "DW C105",
+      "notes": "Dual speed controller. ECM ground-side trigger on J1B OUT_3 switches low/high speed. 68% duty cycle low / 100% high.",
+      "connectors": [
+        {
+          "designator": "C105",
+          "body": "Deutsch DT 4-way",
+          "gender": "female",
+          "pinCount": 4,
+          "pins": [
+            { "pin": 1, "label": "PWR_IN",   "type": "POWER"  },
+            { "pin": 2, "label": "GND",      "type": "GROUND" },
+            { "pin": 3, "label": "TRIG",     "type": "SIGNAL" },
+            { "pin": 4, "label": "PUMP_OUT", "type": "POWER"  }
+          ]
+        }
       ]
-    }
-  ]
-}
-  "id": "dw810_pump",
-  "type": "motor",
-  "tier": 1,
-  "zone": "C",
-  "label": "DW810 Fuel Pump",
-  "load": 22,
-  "partNumber": "DW 9-811-C102-0900",
-  "notes": "810lph brushless. Replaces DW440 — higher flow for boosted application. Custom hat on Boyd 6in cleanout plate. 10 AWG wiring per DW spec. Racetronix BCWS-001 bulkhead connector. C105 dual-speed controller — 68% low / 100% high.",
-  "connectors": 
-    [
+    },
     {
+      "id": "dw810_pump",
+      "type": "motor",
+      "tier": 1,
+      "zone": "C",
+      "label": "DW810 Fuel Pump",
+      "load": 22,
+      "partNumber": "DW 9-811-C102-0900",
+      "notes": "810lph brushless. Replaces DW440 — higher flow for boosted application. Custom hat on Boyd 6in cleanout plate. 10 AWG wiring per DW spec. Racetronix BCWS-001 bulkhead connector. C105 dual-speed controller — 68% low / 100% high.",
+      "connectors": [
+        {
           "designator": "PUMP",
           "body": "Deutsch DT 2-way",
           "gender": "female",
@@ -703,10 +703,10 @@
           "gender": "female",
           "pinCount": 4,
           "pins": [
-            { "pin": 1, "label": "PWR",   "type": "POWER"  },
-            { "pin": 2, "label": "GND",   "type": "GROUND" },
-            { "pin": 3, "label": "UP",    "type": "SIGNAL" },
-            { "pin": 4, "label": "DOWN",  "type": "SIGNAL" }
+            { "pin": 1, "label": "PWR",  "type": "POWER"  },
+            { "pin": 2, "label": "GND",  "type": "GROUND" },
+            { "pin": 3, "label": "UP",   "type": "SIGNAL" },
+            { "pin": 4, "label": "DOWN", "type": "SIGNAL" }
           ]
         }
       ]
@@ -727,10 +727,10 @@
           "gender": "female",
           "pinCount": 4,
           "pins": [
-            { "pin": 1, "label": "PWR_D",  "type": "POWER"  },
-            { "pin": 2, "label": "PWR_P",  "type": "POWER"  },
-            { "pin": 3, "label": "GND_D",  "type": "GROUND" },
-            { "pin": 4, "label": "GND_P",  "type": "GROUND" }
+            { "pin": 1, "label": "PWR_D", "type": "POWER"  },
+            { "pin": 2, "label": "PWR_P", "type": "POWER"  },
+            { "pin": 3, "label": "GND_D", "type": "GROUND" },
+            { "pin": 4, "label": "GND_P", "type": "GROUND" }
           ]
         }
       ]
@@ -825,12 +825,12 @@
           "gender": "male",
           "pinCount": 6,
           "pins": [
-            { "pin": 1, "label": "BAT_NEG",  "type": "GROUND" },
-            { "pin": 2, "label": "ENG_GND",  "type": "GROUND" },
-            { "pin": 3, "label": "FRAME",    "type": "GROUND" },
-            { "pin": 4, "label": "BODY",     "type": "GROUND" },
-            { "pin": 5, "label": "ECM_GND",  "type": "GROUND" },
-            { "pin": 6, "label": "SPARE",    "type": "GROUND" }
+            { "pin": 1, "label": "BAT_NEG", "type": "GROUND" },
+            { "pin": 2, "label": "ENG_GND", "type": "GROUND" },
+            { "pin": 3, "label": "FRAME",   "type": "GROUND" },
+            { "pin": 4, "label": "BODY",    "type": "GROUND" },
+            { "pin": 5, "label": "ECM_GND", "type": "GROUND" },
+            { "pin": 6, "label": "SPARE",   "type": "GROUND" }
           ]
         }
       ]
@@ -851,12 +851,12 @@
           "gender": "male",
           "pinCount": 6,
           "pins": [
-            { "pin": 1, "label": "BAT_IN",   "type": "POWER" },
-            { "pin": 2, "label": "FSE_PANEL","type": "POWER" },
-            { "pin": 3, "label": "ECM_FEED", "type": "POWER" },
-            { "pin": 4, "label": "REAR_RUN", "type": "POWER" },
-            { "pin": 5, "label": "AUX_1",    "type": "POWER" },
-            { "pin": 6, "label": "SPARE",    "type": "POWER" }
+            { "pin": 1, "label": "BAT_IN",    "type": "POWER" },
+            { "pin": 2, "label": "FSE_PANEL", "type": "POWER" },
+            { "pin": 3, "label": "ECM_FEED",  "type": "POWER" },
+            { "pin": 4, "label": "REAR_RUN",  "type": "POWER" },
+            { "pin": 5, "label": "AUX_1",     "type": "POWER" },
+            { "pin": 6, "label": "SPARE",     "type": "POWER" }
           ]
         }
       ]
@@ -884,76 +884,76 @@
         }
       ]
     },
-{
-  "id": "mdb_battery",
-  "type": "distribution",
-  "tier": 1,
-  "zone": "B",
-  "label": "MDB Fuse Block — Battery",
-  "load": 0,
-  "partNumber": "Littelfuse 04980933.X",
-  "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted near behind-the-cab battery on passenger side. Internally bussed 4 AWG input. Pole 1: ECM direct feed 40A. Pole 2: Heated seat relay 30A. Pole 3: Bowler T56 module 20A.",
-  "connectors": [
     {
-      "designator": "MDB1",
-      "body": "Anderson SB175",
-      "gender": "male",
-      "pinCount": 3,
-      "pins": [
-        { "pin": 1, "label": "ECM_40A",   "type": "POWER" },
-        { "pin": 2, "label": "SEAT_30A",  "type": "POWER" },
-        { "pin": 3, "label": "T56_20A",   "type": "POWER" }
+      "id": "mdb_battery",
+      "type": "distribution",
+      "tier": 1,
+      "zone": "B",
+      "label": "MDB Fuse Block — Battery",
+      "load": 0,
+      "partNumber": "Littelfuse 04980933.X",
+      "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted near behind-the-cab battery on passenger side. Internally bussed 4 AWG input. Pole 1: ECM direct feed 40A. Pole 2: Heated seat relay 30A. Pole 3: Bowler T56 module 20A.",
+      "connectors": [
+        {
+          "designator": "MDB1",
+          "body": "Anderson SB175",
+          "gender": "male",
+          "pinCount": 3,
+          "pins": [
+            { "pin": 1, "label": "ECM_40A",  "type": "POWER" },
+            { "pin": 2, "label": "SEAT_30A", "type": "POWER" },
+            { "pin": 3, "label": "T56_20A",  "type": "POWER" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mdb_engine",
+      "type": "distribution",
+      "tier": 1,
+      "zone": "A",
+      "label": "MDB Fuse Block — Engine Bay",
+      "load": 0,
+      "partNumber": "Littelfuse 04980933.X",
+      "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on inner fender apron. Fed via 4 AWG from mid-ship power block. Pole 1: Dual brushless fans 80A. Pole 2: Vintage Air HVAC 40A. Pole 3: Radio/Kenwood constant feed 30A.",
+      "connectors": [
+        {
+          "designator": "MDB2",
+          "body": "Anderson SB175",
+          "gender": "male",
+          "pinCount": 3,
+          "pins": [
+            { "pin": 1, "label": "FANS_80A",  "type": "POWER" },
+            { "pin": 2, "label": "HVAC_40A",  "type": "POWER" },
+            { "pin": 3, "label": "RADIO_30A", "type": "POWER" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mdb_rear",
+      "type": "distribution",
+      "tier": 1,
+      "zone": "C",
+      "label": "MDB Fuse Block — Rear",
+      "load": 0,
+      "partNumber": "Littelfuse 04980933.X",
+      "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on rear electronics plate adjacent to C105 controller. Fed via 4 AWG short run from behind-the-cab battery. Pole 1: Accuair ENDO CVT 50A. Pole 2: DW810 fuel pump controller 30A. Pole 3: Spare — sealed with cavity plug for future expansion.",
+      "connectors": [
+        {
+          "designator": "MDB3",
+          "body": "Anderson SB175",
+          "gender": "male",
+          "pinCount": 3,
+          "pins": [
+            { "pin": 1, "label": "CVT_50A",  "type": "POWER" },
+            { "pin": 2, "label": "PUMP_30A", "type": "POWER" },
+            { "pin": 3, "label": "SPARE",    "type": "POWER" }
+          ]
+        }
       ]
     }
-  ]
-},
-{
-  "id": "mdb_engine",
-  "type": "distribution",
-  "tier": 1,
-  "zone": "A",
-  "label": "MDB Fuse Block — Engine Bay",
-  "load": 0,
-  "partNumber": "Littelfuse 04980933.X",
-  "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on inner fender apron. Fed via 4 AWG from mid-ship power block. Pole 1: Dual brushless fans 80A. Pole 2: Vintage Air HVAC 40A. Pole 3: Radio/Kenwood constant feed 30A.",
-  "connectors": [
-    {
-      "designator": "MDB2",
-      "body": "Anderson SB175",
-      "gender": "male",
-      "pinCount": 3,
-      "pins": [
-        { "pin": 1, "label": "FANS_80A",  "type": "POWER" },
-        { "pin": 2, "label": "HVAC_40A",  "type": "POWER" },
-        { "pin": 3, "label": "RADIO_30A", "type": "POWER" }
-      ]
-    }
-  ]
-},
-{
-  "id": "mdb_rear",
-  "type": "distribution",
-  "tier": 1,
-  "zone": "C",
-  "label": "MDB Fuse Block — Rear",
-  "load": 0,
-  "partNumber": "Littelfuse 04980933.X",
-  "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on rear electronics plate adjacent to C105 controller. Fed via 4 AWG short run from behind-the-cab battery. Pole 1: Accuair ENDO CVT 50A. Pole 2: DW810 fuel pump controller 30A. Pole 3: Spare — sealed with cavity plug for future expansion.",
-  "connectors": [
-    {
-      "designator": "MDB3",
-      "body": "Anderson SB175",
-      "gender": "male",
-      "pinCount": 3,
-      "pins": [
-        { "pin": 1, "label": "CVT_50A",   "type": "POWER" },
-        { "pin": 2, "label": "PUMP_30A",  "type": "POWER" },
-        { "pin": 3, "label": "SPARE",     "type": "POWER" }
-      ]
-    }
-  ]
-}
-],
+  ],
   "edges": [
     {
       "from": "alternator",
@@ -1248,56 +1248,59 @@
       "resistance": 0.004,
       "wireOverride": "4/0 AWG"
     },
-   { 
-      "from": "battery",    
-      "to": "mdb_battery", 
-      "type": "POWER", 
-      "zone": "B", 
-      "loom": "charge_system", 
-      "resistance": 0.005, 
+    {
+      "from": "battery",
+      "to": "mdb_battery",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "charge_system",
+      "resistance": 0.005,
       "wireOverride": "4 AWG"
-   },
-   { 
-      "from": "mdb_battery","to": "ecm",
-      "type": "POWER", 
-      "zone": "B", 
-      "loom": "charge_system", 
-      "resistance": 0.01,  
-      "wireOverride": "10 AWG" 
-   },
-   { 
-      "from": "power_block","to": "mdb_engine",  
-      "type": "POWER", 
-      "zone": "A", 
+    },
+    {
+      "from": "mdb_battery",
+      "to": "ecm",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "charge_system",
+      "resistance": 0.01,
+      "wireOverride": "10 AWG"
+    },
+    {
+      "from": "power_block",
+      "to": "mdb_engine",
+      "type": "POWER",
+      "zone": "A",
       "loom": "engine_harness",
-      "resistance": 0.01,  
-     "wireOverride": "4 AWG"
-   },
-   { 
-      "from": "mdb_engine", 
-      "to": "cooling_fan", 
-      "type": "POWER", 
-      "zone": "A", 
+      "resistance": 0.01,
+      "wireOverride": "4 AWG"
+    },
+    {
+      "from": "mdb_engine",
+      "to": "cooling_fan",
+      "type": "POWER",
+      "zone": "A",
       "loom": "engine_harness",
-      "resistance": 0.02,  
-      "wireOverride": "8 AWG" 
-   },
-   { 
-     "from": "battery",    
-     "to": "mdb_rear",    
-     "type": "POWER", 
-     "zone": "C", 
-     "loom": "rear_trunk",    
-     "resistance": 0.005, 
-     "wireOverride": "4 AWG"
-   },
-   { 
-     "from": "mdb_rear",   
-     "to": "c105_ctrl",   
-     "type": "POWER", 
-     "zone": "C", 
-     "loom": "fuel_system",  
-     "resistance": 0.02,  
-     "wireOverride": "10 AWG" 
-   }
-  ], 
+      "resistance": 0.02,
+      "wireOverride": "8 AWG"
+    },
+    {
+      "from": "battery",
+      "to": "mdb_rear",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "rear_trunk",
+      "resistance": 0.005,
+      "wireOverride": "4 AWG"
+    },
+    {
+      "from": "mdb_rear",
+      "to": "c105_ctrl",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "fuel_system",
+      "resistance": 0.02,
+      "wireOverride": "10 AWG"
+    }
+  ]
+}
