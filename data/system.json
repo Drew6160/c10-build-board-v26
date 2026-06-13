@@ -952,7 +952,53 @@
           ]
         }
       ]
+    },
+    {
+  "id": "estopp_pwr_disconnect",
+  "type": "connector",
+  "tier": 1,
+  "zone": "B",
+  "label": "E-Stopp Power Disconnect",
+  "load": 0,
+  "partNumber": "Deutsch DT 2-way",
+  "notes": "Service disconnect at battery junction — de-powers E-Stopp module without disturbing panel wiring. DT 2-way — power and ground.",
+  "connectors": [
+    {
+      "designator": "ES_PWR_DC",
+      "body": "Deutsch DT 2-way",
+      "gender": "male",
+      "pinCount": 2,
+      "pins": [
+        { "pin": 1, "label": "PWR", "type": "POWER"  },
+        { "pin": 2, "label": "GND", "type": "GROUND" }
+      ]
     }
+  ]
+},
+{
+  "id": "estopp_mod_disconnect",
+  "type": "connector",
+  "tier": 1,
+  "zone": "B",
+  "label": "E-Stopp Module Disconnect",
+  "load": 0,
+  "partNumber": "Deutsch DT 4-way",
+  "notes": "Service disconnect at panel — allows E-Stopp module removal without disturbing panel wiring. DT 4-way — power, ground, button signal, button ground.",
+  "connectors": [
+    {
+      "designator": "ES_MOD_DC",
+      "body": "Deutsch DT 4-way",
+      "gender": "female",
+      "pinCount": 4,
+      "pins": [
+        { "pin": 1, "label": "PWR",       "type": "POWER"  },
+        { "pin": 2, "label": "GND",       "type": "GROUND" },
+        { "pin": 3, "label": "BTN_SIG",   "type": "SIGNAL" },
+        { "pin": 4, "label": "BTN_GND",   "type": "GROUND" }
+      ]
+    }
+  ]
+}
   ],
   "edges": [
     {
@@ -1301,6 +1347,82 @@
       "loom": "fuel_system",
       "resistance": 0.02,
       "wireOverride": "10 AWG"
-    }
+    },
+    {
+  "from": "power_block",
+  "to": "estopp_pwr_disconnect",
+  "type": "POWER",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "RD",
+  "colorStripe": "",
+  "fromConnector": "",
+  "fromPin": 0,
+  "toConnector": "ES_PWR_DC",
+  "toPin": 1,
+  "shield": false,
+  "twisted": false,
+  "drainGround": "",
+  "length": 0,
+  "notes": "Power feed to E-Stopp power disconnect at battery junction — keep isolated from ECU power path"
+},
+{
+  "from": "estopp_pwr_disconnect",
+  "to": "estopp_mod_disconnect",
+  "type": "POWER",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "RD",
+  "colorStripe": "",
+  "fromConnector": "ES_PWR_DC",
+  "fromPin": 1,
+  "toConnector": "ES_MOD_DC",
+  "toPin": 1,
+  "shield": false,
+  "twisted": false,
+  "drainGround": "",
+  "length": 0,
+  "notes": "Power run from junction disconnect to module disconnect on panel"
+},
+{
+  "from": "estopp_mod_disconnect",
+  "to": "estopp",
+  "type": "POWER",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "RD",
+  "colorStripe": "",
+  "fromConnector": "ES_MOD_DC",
+  "fromPin": 1,
+  "toConnector": "ES_PWR",
+  "toPin": 1,
+  "shield": false,
+  "twisted": false,
+  "drainGround": "",
+  "length": 0,
+  "notes": "Final power feed into E-Stopp module from panel disconnect"
+},
+{
+  "from": "estopp_mod_disconnect",
+  "to": "estopp",
+  "type": "SIGNAL",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "GY",
+  "colorStripe": "",
+  "fromConnector": "ES_MOD_DC",
+  "fromPin": 3,
+  "toConnector": "ES_PWR",
+  "toPin": 3,
+  "shield": false,
+  "twisted": false,
+  "drainGround": "",
+  "length": 0,
+  "notes": "Button signal through module disconnect — routes forward to console or dash button"
+}
   ]
 }
