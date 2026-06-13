@@ -82,7 +82,7 @@ const LAYOUT_POS = {
   accuair_ctrl:         { x: 680, y: 240 }, // replaces accuair_touchpad
   estopp:               { x: 540, y: 520 }, // E-Stopp module — new
   estopp_pwr_disconnect: { x: 480, y: 520 }, // battery junction area
-  estopp_mod_disconnect: { x: 560, y: 520 }, // panel edge, beside E-Stopp
+  estopp_mod_disconnect: { x: 640, y: 520 }, // panel edge, beside E-Stopp
 
   // --- Zone C: Rear Node — Fuel system ---
   fuel_relay:           { x: 790, y: 110 },
