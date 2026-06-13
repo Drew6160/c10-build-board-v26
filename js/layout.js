@@ -80,7 +80,7 @@ const LAYOUT_POS = {
 
   // --- Zone B: Under-seat panel nodes (new Lane 1) ---
   accuair_ctrl:         { x: 680, y: 240 }, // replaces accuair_touchpad
-  estopp:               { x: 590, y: 240 }, // E-Stopp module — new
+  estopp:               { x: 790, y: 200 }, // E-Stopp module — new
   estopp_pwr_disconnect: { x: 480, y: 440 }, // battery junction area
   estopp_mod_disconnect: { x: 560, y: 440 }, // panel edge, beside E-Stopp
 
