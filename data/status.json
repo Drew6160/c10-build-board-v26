@@ -7,7 +7,7 @@
       "status": "ordered"
     },
     "starter": {
-      "status": "planned"
+      "status": "ordered"
     },
     "ecm": {
       "status": "ordered"
@@ -79,7 +79,7 @@
       "status": "planned"
     },
     "heated_seats": {
-      "status": "planned"
+      "status": "ordered"
     },
     "alarm": {
       "status": "planned"
@@ -103,6 +103,27 @@
       "status": "ordered"
     },
     "estopp": {
+      "status": "ordered"
+    },
+    "mdb_engine": {
+      "status": "ordered"
+    },
+    "mdb_battery": {
+      "status": "ordered"
+    },
+    "estopp_pwr_disconnect": {
+      "status": "ordered"
+    },
+    "estopp_mod_disconnect": {
+      "status": "ordered"
+    },
+    "c105_ctrl": {
+      "status": "ordered"
+    },
+    "dw810_pump": {
+      "status": "ordered"
+    },
+    "mdb_rear": {
       "status": "ordered"
     }
   }
