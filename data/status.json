@@ -117,12 +117,6 @@
     "estopp_mod_disconnect": {
       "status": "ordered"
     },
-    "c105_ctrl": {
-      "status": "ordered"
-    },
-    "dw810_pump": {
-      "status": "ordered"
-    },
     "mdb_rear": {
       "status": "ordered"
     }
