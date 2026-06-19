@@ -301,7 +301,7 @@
       "notes": "ECM triggers relay coil. Relay supplies power to C105 controller. Mounted on C105 mounting plate at frame rail near tank."
     },
     {
-      "id": "c102_ctrl",
+      "id": "c105_ctrl",
       "type": "control",
       "tier": 1,
       "zone": "E",
@@ -311,7 +311,7 @@
       "notes": "Dual speed controller. 68% low / 100% high duty cycle. ECM ground-side trigger switches low/high speed. Mounted on custom aluminum plate at frame rail near tank."
     },
     {
-      "id": "dw440_pump",
+      "id": "dw810_pump",
       "type": "motor",
       "tier": 1,
       "zone": "E",
