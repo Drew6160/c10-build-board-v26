@@ -308,17 +308,17 @@
       "label": "DW C105 Controller",
       "load": 1,
       "partNumber": "DW C105",
-      "notes": "Dual speed controller. 68% low / 100% high duty cycle. ECM ground-side trigger switches low/high speed. Mounted on custom aluminum plate at frame rail near tank."
+      "notes": "Dual speed controller. 55% low / 100% high duty cycle. ECM ground-side trigger switches low/high speed. Mounted on custom aluminum plate at frame rail near tank."
     },
     {
       "id": "dw810_pump",
       "type": "motor",
       "tier": 1,
       "zone": "E",
-      "label": "DW440 Fuel Pump",
+      "label": "DW810 Fuel Pump",
       "load": 15,
-      "partNumber": "DW 9-441-C102-0910",
-      "notes": "440lph brushless. Custom hat on Boyd 6in cleanout plate. 10 AWG wiring. Racetronix BCWS-001 4-wire bulkhead connector through hat."
+      "partNumber": "DW 9-811
+      "notes": "810lph brushless. Custom hat on Boyd 6in cleanout plate. 10 AWG wiring. Racetronix BCWS-001 4-wire bulkhead connector through hat."
     },
     {
       "id": "fuel_sender",
@@ -701,15 +701,15 @@
     },
     {
       "from": "fuel_relay",
-      "to": "c102_ctrl",
+      "to": "c105_ctrl",
       "type": "POWER",
       "zone": "E",
       "loom": "fuel_system",
       "resistance": 0.02
     },
     {
-      "from": "c102_ctrl",
-      "to": "dw440_pump",
+      "from": "c105_ctrl",
+      "to": "dw810_pump",
       "type": "POWER",
       "zone": "E",
       "loom": "fuel_system",
