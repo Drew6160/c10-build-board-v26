@@ -87,7 +87,7 @@ const LAYOUT_POS = {
   // --- Zone C: Rear Node — Fuel system ---
   fuel_relay:           { x: 790, y: 110 },
   fuel_sender:          { x: 940, y: 110 },
-  c106_ctrl:            { x: 760, y: 260 },
+  c105_ctrl:            { x: 760, y: 260 },
   dw810_pump:           { x: 940, y: 190 },
 
   // --- Zone C: Rear Node — Accuair cluster ---
