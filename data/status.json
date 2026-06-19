@@ -57,10 +57,10 @@
     "fuel_relay": {
       "status": "ordered"
     },
-    "c102_ctrl": {
+    "c105_ctrl": {
       "status": "ordered"
     },
-    "dw440_pump": {
+    "dw810_pump": {
       "status": "ordered"
     },
     "fuel_sender": {
