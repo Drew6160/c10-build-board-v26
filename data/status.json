@@ -7,7 +7,7 @@
       "status": "ordered"
     },
     "starter": {
-      "status": "ordered"
+      "status": "planned"
     },
     "ecm": {
       "status": "ordered"
@@ -51,20 +51,26 @@
     "vintage_air": {
       "status": "planned"
     },
+    "center_dash_disconnect_radio": {
+      "status": "planned"
+    },
+    "center_dash_disconnect_hvac": {
+      "status": "planned"
+    },
     "radio": {
       "status": "planned"
     },
     "fuel_relay": {
+      "status": "planned"
+    },
+    "c102_ctrl": {
       "status": "ordered"
     },
-    "c105_ctrl": {
-      "status": "ordered"
-    },
-    "dw810_pump": {
+    "dw440_pump": {
       "status": "ordered"
     },
     "fuel_sender": {
-      "status": "installed"
+      "status": "ordered"
     },
     "accuair_comp": {
       "status": "installed"
@@ -79,7 +85,7 @@
       "status": "planned"
     },
     "heated_seats": {
-      "status": "ordered"
+      "status": "planned"
     },
     "alarm": {
       "status": "planned"
@@ -88,7 +94,7 @@
       "status": "planned"
     },
     "t56_disconnect": {
-      "status": "ordered"
+      "status": "planned"
     },
     "ground_block": {
       "status": "ordered"
@@ -97,27 +103,6 @@
       "status": "ordered"
     },
     "fuel_pressure_sensor": {
-      "status": "ordered"
-    },
-    "bim_efi1": {
-      "status": "ordered"
-    },
-    "estopp": {
-      "status": "ordered"
-    },
-    "mdb_engine": {
-      "status": "ordered"
-    },
-    "mdb_battery": {
-      "status": "ordered"
-    },
-    "estopp_pwr_disconnect": {
-      "status": "ordered"
-    },
-    "estopp_mod_disconnect": {
-      "status": "ordered"
-    },
-    "mdb_rear": {
       "status": "ordered"
     }
   }
