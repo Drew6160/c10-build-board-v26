@@ -5,19 +5,17 @@
   --text:   #2E2A26;
   --line:   #D8D2C8;
 }
-
 * { box-sizing: border-box; }
-
 body {
   font-family: Inter, system-ui, sans-serif;
   background: var(--bg);
   margin: 0;
+  padding-bottom: 56px; /* clears the fixed bottom nav */
 }
-
-/* ---- Header ---- */
+/* ---- Header (now title-only) ---- */
 header.card {
   margin: 10px;
-  padding: 10px 16px;
+  padding: 8px 16px;
 }
 header h2 {
   margin: 0;
@@ -25,8 +23,124 @@ header h2 {
   font-size: 1.1rem;
   letter-spacing: 0.02em;
 }
-
-/* ---- Tab bar ---- */
+/* ---- Bottom nav (replaces old header tab-bar) ---- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  align-items: center;
+  z-index: 50;
+}
+.bottom-nav .tab-btn {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 12px;
+  padding: 6px 18px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.bottom-nav .tab-btn .tab-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+.bottom-nav .tab-btn.active {
+  color: var(--accent);
+  background: #FFF3EC;
+}
+.bottom-nav .tab-btn:hover:not(.active) {
+  background: #EAE6DF;
+  color: var(--text);
+}
+/* ---- Tab 1: Diagram — full-width canvas + collapsible rail ---- */
+.diagram-shell {
+  display: grid;
+  grid-template-columns: 1fr 0px;
+  gap: 0px;
+  padding: 10px;
+  align-items: start;
+  transition: grid-template-columns 0.22s ease, gap 0.22s ease;
+}
+.diagram-shell.rail-open {
+  grid-template-columns: 1fr 320px;
+  gap: 10px;
+}
+.diagram-main {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.diagram-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  min-width: 0;
+}
+.diagram-shell:not(.rail-open) .diagram-rail {
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.diagram-shell.rail-open .diagram-rail {
+  width: 320px;
+  opacity: 1;
+}
+#layoutPanel      { min-height: 70vh; }
+#layoutSVG {
+  display: block;
+  width: 100%;
+  height: 74vh;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.diagram-rail #graphPanel {
+  max-height: 260px;
+}
+.diagram-rail #analysisPanel {
+  min-height: 140px;
+}
+.diagram-rail #statusEditorPanel,
+.diagram-rail #bomPanel,
+.diagram-rail #wiringSpecPanel {
+  max-height: 280px;
+}
+/* ---- Loom strip: filter row + export + rail toggle ---- */
+.loom-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.loom-strip-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.loom-export-btn {
+  background: #3E6B48;
+}
+.rail-toggle-btn {
+  background: #F4F1EC;
+  color: #555;
+  border: 1px solid var(--line);
+}
+.rail-toggle-btn:hover { opacity: 1; background: #EAE6DF; }
+/* ---- Tab bar (legacy class kept for Build Mgmt internal use if needed) ---- */
 .tab-bar {
   display: flex;
   gap: 6px;
@@ -49,7 +163,6 @@ header h2 {
 .tab-btn:hover:not(.active) {
   background: #EAE6DF;
 }
-
 /* ---- Cards ---- */
 .card {
   background: var(--card);
@@ -57,26 +170,6 @@ header h2 {
   padding: 12px;
   border-radius: 10px;
 }
-
-/* ---- Tab 1: Diagram grid ---- */
-.grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 10px;
-  padding: 10px;
-  align-items: start;
-}
-.stack-left {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
 /* ---- Tab 2: Manage grid ---- */
 .manage-grid {
   display: grid;
@@ -85,17 +178,8 @@ header h2 {
   padding: 10px;
   align-items: start;
 }
-
-/* ---- Panel sizing ---- */
+/* ---- Panel sizing (Build Mgmt + non-rail contexts) ---- */
 #loomPanel        { padding: 10px 12px; }
-#layoutPanel      { min-height: 560px; }
-#layoutSVG {
-  display: block;
-  width: 100%;
-  height: 620px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-}
 #graphPanel {
   overflow-y: auto;
   max-height: 380px;
@@ -117,7 +201,6 @@ header h2 {
 #componentEditorPanel {
   min-height: 500px;
 }
-
 /* ---- Buttons ---- */
 button {
   background: var(--accent);
@@ -131,7 +214,6 @@ button {
   transition: opacity 0.15s;
 }
 button:hover { opacity: 0.85; }
-
 /* ---- Forms ---- */
 input, select, textarea {
   width: 100%;
@@ -167,7 +249,6 @@ label {
   grid-template-columns: 1fr 1fr 1fr;
   gap: 8px;
 }
-
 pre {
   margin: 0;
   white-space: pre-wrap;
@@ -179,7 +260,6 @@ pre {
     overflow: auto; /* This forces both vertical and horizontal scrollbars */
     border: 1px solid #ccc; /* Optional: adds a nice border around your viewer */
 }
-
 #viewer-container svg {
     max-width: none; /* Prevents the browser from squishing the diagram */
     display: block;
