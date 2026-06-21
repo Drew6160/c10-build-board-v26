@@ -1,0 +1,39 @@
+const uploadedHarnesses = {};
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const upload = document.getElementById("wirevizUpload");
+  const select = document.getElementById("wirevizSelect");
+  const frame = document.getElementById("wirevizFrame");
+
+  if (!upload) return;
+
+  upload.addEventListener("change", (event) => {
+
+    [...event.target.files].forEach(file => {
+
+      const url = URL.createObjectURL(file);
+
+      uploadedHarnesses[file.name] = url;
+
+      const option = document.createElement("option");
+
+      option.value = file.name;
+      option.textContent = file.name;
+
+      select.appendChild(option);
+    });
+
+  });
+
+  select.addEventListener("change", () => {
+
+    const selected = select.value;
+
+    if (!selected) return;
+
+    frame.src = uploadedHarnesses[selected];
+
+  });
+
+});
