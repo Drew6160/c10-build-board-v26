@@ -173,3 +173,14 @@ pre {
   white-space: pre-wrap;
   word-break: break-word;
 }
+/* Replace #viewer-container with the actual ID of your WireViz tab or div */
+#viewer-container {
+    width: 100%;
+    overflow: auto; /* This forces both vertical and horizontal scrollbars */
+    border: 1px solid #ccc; /* Optional: adds a nice border around your viewer */
+}
+
+#viewer-container svg {
+    max-width: none; /* Prevents the browser from squishing the diagram */
+    display: block;
+}
