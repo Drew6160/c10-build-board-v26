@@ -57,6 +57,9 @@
     "center_dash_disconnect_hvac": {
       "status": "planned"
     },
+    "estopp": {
+      "status": "planned"
+    },
     "radio": {
       "status": "planned"
     },
