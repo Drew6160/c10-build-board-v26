@@ -1,4 +1,4 @@
-//console.log("layout.js LOADED");
+console.log("layout.js LOADED");
 // =============================
 // Layout + Routing Engine v28.1
 // Directional current flow layer
@@ -35,85 +35,53 @@ const ROUTE_COLORS = {
 
 let ACTIVE_LOOM  = null;
 let ANIM_ENABLED = false;
-
-// =============================
-// LAYOUT_POS replacement block
-// Drop into layout.js replacing
-// the entire const LAYOUT_POS = { ... }
-// =============================
+let RAIL_OPEN    = false;
 
 const LAYOUT_POS = {
+  alternator:    { x: 70,  y: 130 },
+  ecm:           { x: 220, y: 110 },
+  coils:         { x: 100, y: 210 },
+  throttle_body: { x: 230, y: 210 },
+  injectors:     { x: 100, y: 310 },
+  wideband_o2:   { x: 230, y: 310 },
+  cooling_fan:   { x: 150, y: 390 },
+  battery:       { x: 60,  y: 430 },
+  map_sensor:    { x: 280, y: 390 },
+  ac_compressor: { x: 70,  y: 490 },
+  starter:       { x: 200, y: 490 },
+  ignition_sw:   { x: 420, y: 120 },
+  dakota_hdx:    { x: 530, y: 120 },
+  bim_04:        { x: 640, y: 120 },
+  fuse_panel:    { x: 480, y: 260 },
+  accuair_ctrl:  { x: 620, y: 260 },
+  vintage_air:   { x: 430, y: 370 },
+  radio:         { x: 560, y: 370 },
+  power_windows: { x: 420, y: 460 },
+  heated_seats:  { x: 510, y: 460 },
+  alarm:         { x: 600, y: 460 },
+  backup_cam:    { x: 690, y: 460 },
+  // fuel system additions
+  radium_dmr:       { x: 160, y: 170 },
+  fuel_pressure_sensor: { x: 160, y: 250 },
+  // power/ground distribution
+  power_block:      { x: 400, y: 320 },
+  ground_block:     { x: 400, y: 410 },
+  // T56 service disconnect
+  t56_disconnect:   { x: 500, y: 340 },
 
-  // --- Zone A: Engine Bay ---
-  alternator:           { x: 70,  y: 130 },
-  coils:                { x: 100, y: 210 },
-  throttle_body:        { x: 230, y: 210 },
-  injectors:            { x: 100, y: 310 },
-  wideband_o2:          { x: 230, y: 310 },
-  cooling_fan:          { x: 150, y: 390 },
-  battery:              { x: 60,  y: 430 },
-  map_sensor:           { x: 280, y: 390 },
-  ac_compressor:        { x: 70,  y: 490 },
-  starter:              { x: 200, y: 490 },
-  fuel_pressure_sensor: { x: 160, y: 170 },
-
-  // --- Zone A: Accuair front height sensors ---
-  accuair_sensor_lf:    { x: 80,  y: 560 },
-  accuair_sensor_rf:    { x: 270, y: 560 },
-
-  // --- Zone B: Cab ---
-  ignition_sw:          { x: 420, y: 120 },
-  ecm:                  { x: 680, y: 340 },
-  dakota_hdx:           { x: 530, y: 120 },
-  bim_efi1:             { x: 630, y: 340 },
-  bim_04:               { x: 720, y: 120 },
-  fuse_panel:           { x: 480, y: 240 },
-  power_block:          { x: 390, y: 240 },
-  ground_block:         { x: 390, y: 340 },
-  t56_disconnect:       { x: 490, y: 340 },
-  vintage_air:          { x: 420, y: 350 },
-  radio:                { x: 540, y: 350 },
-  power_windows:        { x: 410, y: 450 },
-  heated_seats:         { x: 500, y: 450 },
-  alarm:                { x: 590, y: 450 },
-  backup_cam:           { x: 680, y: 450 },
-
-  // --- Zone B: Under-seat panel nodes (new Lane 1) ---
-  accuair_ctrl:         { x: 680, y: 240 }, // replaces accuair_touchpad
-  estopp:               { x: 560, y: 520 }, // E-Stopp module — new
-  estopp_pwr_disconnect: { x: 480, y: 520 }, // battery junction area
-  estopp_mod_disconnect: { x: 630, y: 520 }, // panel edge, beside E-Stopp
-
-  // --- Zone C: Rear Node — Fuel system ---
-  fuel_relay:           { x: 790, y: 110 },
-  fuel_sender:          { x: 940, y: 110 },
-  c105_ctrl:            { x: 760, y: 260 },
-  dw810_pump:           { x: 940, y: 190 },
-
-  // --- Zone C: Rear Node — Accuair cluster ---
-  accuair_ecu:          { x: 790, y: 290 }, // retained for legacy edges
-  accuair_tank:         { x: 940, y: 290 },
-  accuair_vu4:          { x: 790, y: 370 }, // retained for legacy edges
-  accuair_pressure:     { x: 940, y: 370 },
-  accuair_relay_1:      { x: 790, y: 450 },
-  accuair_relay_2:      { x: 870, y: 450 },
-  accuair_comp_1:       { x: 790, y: 530 }, // retained for legacy edges
-  accuair_comp_2:       { x: 870, y: 530 },
-  accuair_sensor_lr:    { x: 940, y: 450 },
-  accuair_sensor_rr:    { x: 940, y: 530 },
-
-  // --- Zone C: Rear Node — Accuair consolidated (Lane 1 node IDs) ---
-  accuair_comp:         { x: 790, y: 530 }, // maps to accuair_comp_1 position
-  accuair_valves:       { x: 790, y: 370 }, // maps to accuair_vu4 position
-
-  // --- Zone C: Rear Node — Lighting ---
-  tail_lights:          { x: 870, y: 110 }
-
+  fuel_relay:    { x: 760, y: 140 },
+  fuel_sender:   { x: 930, y: 140 },
+  c102_ctrl:     { x: 760, y: 260 },
+  dw440_pump:    { x: 920, y: 260 },
+  accuair_valves:{ x: 760, y: 370 },
+  accuair_comp:  { x: 920, y: 370 },
+  tail_lights:   { x: 840, y: 460 }
 };
+
 const ZONES = [
-  { label:"ENGINE BAY", x:30,  y:70, w:320, h:550, color:"#FFF8F0" },
-  { label:"CAB",        x:360, y:70, w:390, h:550, color:"#F0F4FF" },
-  { label:"REAR NODE",  x:760, y:70, w:220, h:550, color:"#F0FFF4" }
+  { label:"ENGINE BAY", x:30,  y:70, w:320, h:490, color:"#FFF8F0" },
+  { label:"CAB",        x:370, y:70, w:370, h:490, color:"#F0F4FF" },
+  { label:"REAR NODE",  x:760, y:70, w:210, h:490, color:"#F0FFF4" }
 ];
 
 // -----------------------------
@@ -397,13 +365,20 @@ window.toggleAnimation = function(){
   renderLoomButtons();
 };
 
+window.toggleRail = function(){
+  RAIL_OPEN = !RAIL_OPEN;
+  const shell = document.getElementById("diagramShell");
+  if(shell) shell.classList.toggle("rail-open", RAIL_OPEN);
+  renderLoomButtons();
+};
+
 function renderLoomButtons(){
   const panel = document.getElementById("loomPanel");
   if(!panel) return;
   const looms = [...new Set(EDGES.map(e=>e.loom).filter(Boolean))];
 
   panel.innerHTML=`
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <div class="loom-strip">
       <span style="font-size:10px;font-weight:bold;color:#AAA;
                    letter-spacing:1px;white-space:nowrap">
         HARNESS FILTER
@@ -439,16 +414,36 @@ function renderLoomButtons(){
           </button>`:""}
       </div>
 
-      <!-- Flow animation toggle -->
-      <button onclick="toggleAnimation()"
-        style="background:${ANIM_ENABLED?"#1A8C6E":"#F4F1EC"};
-               color:${ANIM_ENABLED?"white":"#555"};
-               border:1px solid ${ANIM_ENABLED?"#1A8C6E":"#D8D2C8"};
-               padding:3px 12px;border-radius:4px;
-               font-size:10px;cursor:pointer;
-               transition:all 0.2s;white-space:nowrap">
-        ⚡ Flow ${ANIM_ENABLED?"ON ●":"OFF ○"}
-      </button>
+      <div class="loom-strip-actions">
+        <!-- Flow animation toggle -->
+        <button onclick="toggleAnimation()"
+          style="background:${ANIM_ENABLED?"#1A8C6E":"#F4F1EC"};
+                 color:${ANIM_ENABLED?"white":"#555"};
+                 border:1px solid ${ANIM_ENABLED?"#1A8C6E":"#D8D2C8"};
+                 padding:3px 12px;border-radius:4px;
+                 font-size:10px;cursor:pointer;
+                 transition:all 0.2s;white-space:nowrap">
+          ⚡ Flow ${ANIM_ENABLED?"ON ●":"OFF ○"}
+        </button>
+
+        <!-- Export current loom to WireViz YAML, no tab switch needed -->
+        <button onclick="downloadWireVizYAML(ACTIVE_LOOM)"
+          class="loom-export-btn"
+          ${ACTIVE_LOOM?"":"disabled"}
+          title="${ACTIVE_LOOM?`Export ${ACTIVE_LOOM.replace(/_/g," ")} as WireViz YAML`:"Select a harness filter first"}"
+          style="${ACTIVE_LOOM?"":"opacity:0.4;cursor:not-allowed"};
+                 padding:3px 12px;border-radius:4px;
+                 font-size:10px;white-space:nowrap">
+          ⬇ Export YAML
+        </button>
+
+        <!-- Collapse/expand the right-hand diagnostics rail -->
+        <button onclick="toggleRail()" class="rail-toggle-btn"
+          style="padding:3px 12px;border-radius:4px;
+                 font-size:10px;white-space:nowrap">
+          ${RAIL_OPEN ? "▸ Hide panel" : "◂ Show panel"}
+        </button>
+      </div>
     </div>
     ${ACTIVE_LOOM?`
       <div style="margin-top:5px;font-size:10px;color:#888">
@@ -478,7 +473,7 @@ function renderLoomButtons(){
 function renderLayout(){
   const svg = document.getElementById("layoutSVG");
   if(!svg) return;
-  svg.setAttribute("viewBox","0 0 1000 680");
+  svg.setAttribute("viewBox","0 0 990 615");
 
   if(!ANIM_ENABLED || !svg.querySelector(".trace-line")){
     // Full redraw — safe when animation is off or first load
