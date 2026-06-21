@@ -8,38 +8,23 @@
 <body>
 
 <header class="card">
-  <div style="display:flex;align-items:center;justify-content:space-between">
-    <h2>1967 C10 — Electrical Build Board</h2>
-    <div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('diagram',this)">
-    ⚡ Diagram
-  </button>
-
-  <button class="tab-btn" onclick="switchTab('manage',this)">
-    🔧 Build Management
-  </button>
-
-  <button class="tab-btn" onclick="switchTab('wireviz',this)">
-    📐 Harness Viewer
-  </button>
-</div>
-  </div>
+  <h2>1967 C10 — Electrical Build Board</h2>
 </header>
 
 <!-- TAB 1: DIAGRAM -->
 <div id="tab-diagram" class="tab-content">
-  <div class="grid">
+  <div class="diagram-shell" id="diagramShell">
 
-    <!-- LEFT: loom filter + diagram -->
-    <div class="stack-left">
+    <!-- MAIN: loom strip + diagram canvas -->
+    <div class="diagram-main">
       <div class="card" id="loomPanel"></div>
       <div class="card" id="layoutPanel">
         <svg id="layoutSVG" viewBox="0 0 1000 680"></svg>
       </div>
     </div>
 
-    <!-- RIGHT: controls / playback / status / analysis -->
-    <div class="stack">
+    <!-- RAIL: controls / playback / status / analysis — collapsible -->
+    <div class="diagram-rail">
       <div class="card" id="controlsPanel"></div>
       <div class="card" id="playbackPanel"></div>
       <div class="card" id="graphPanel"></div>
@@ -101,7 +86,20 @@
 
   </div>
 
-</div>  
+</div>
+
+<!-- BOTTOM NAV: primary tab switcher -->
+<nav class="bottom-nav">
+  <button class="tab-btn active" onclick="switchTab('diagram',this)">
+    <span class="tab-icon">⚡</span>Diagram
+  </button>
+  <button class="tab-btn" onclick="switchTab('manage',this)">
+    <span class="tab-icon">🔧</span>Build Mgmt
+  </button>
+  <button class="tab-btn" onclick="switchTab('wireviz',this)">
+    <span class="tab-icon">📐</span>Harness Viewer
+  </button>
+</nav>
 
 <script src="js/data.js"></script>
 <script src="js/core.js"></script>
@@ -110,11 +108,10 @@
 <script src="js/optimize.js"></script>
 <script src="js/wiring.js"></script>
 <script src="js/bom.js"></script>
-<script src="js/drc.js"></script>                          
+<script src="js/drc.js"></script>
 <script src="js/report.js"></script>
 <script src="js/layout.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/wireviz-viewer.js"></script>
-<script src="js/ui.js"></script>
 </body>
 </html>
