@@ -218,7 +218,16 @@
       "label": "DW C105 Controller",
       "load": 1,
       "partNumber": "DW C105",
-      "notes": "Dual speed controller. ECM ground-side trigger on J1B OUT_3 switches low/high speed. 68% duty cycle low / 100% high."
+      "notes": "Dual speed controller. White trigger wire on controller, ground-side trigger on J1B OUT_3 switches low/high speed. 55% duty cycle low / 100% high.",
+      "connectorBody": "Deutsch DTP 4-way",
+      "connectorSubtype": "male",
+      "pincount": 4,
+      "pinlabels": [
+        "PWR",
+        "GND",
+        "SIG",
+        "SPARE"
+      ]
     },
     {
       "id": "dw810_pump",
@@ -228,7 +237,7 @@
       "label": "DW810 Fuel Pump",
       "load": 22,
       "partNumber": "DW 9-811-C102-0900",
-      "notes": "810lph brushless. Replaces DW440 — higher flow for boosted application. Custom hat on Boyd 6in cleanout plate. 10 AWG wiring per DW spec. Racetronix BCWS-001 bulkhead connector. C105 dual-speed controller — 68% low / 100% high."
+      "notes": "810lph brushless — higher flow for boosted application. Custom hat on Boyd 6in cleanout plate. 10 AWG wiring per DW spec. Racetronix BCWS-001 bulkhead connector. C105 dual-speed controller — 68% low / 100% high."
     },
     {
       "id": "fuel_sender",
