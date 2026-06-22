@@ -270,14 +270,22 @@
       "notes": "VU4 manifold — internal to ENDO CVT. Signal from e+ Connect ECU via M8 connector."
     },
     {
-      "id": "tail_lights",
+     "id": "tail_lights",
       "type": "lighting",
       "tier": 1,
       "zone": "C",
       "label": "Tail/Brake Lights",
       "load": 8,
       "partNumber": "—",
-      "notes": "Rear trunk loom. LED recommended for reduced load."
+      "notes": "Rear trunk loom. LED recommended for reduced load.",
+      "connectorBody": "Deutsch DT 4-way",
+      "pincount": 4,
+      "pinlabels": [
+        "PWR",
+        "GND",
+        "LHTURN",
+        "RHTURN"
+      ]
     },
     {
       "id": "power_windows",
