@@ -862,6 +862,17 @@
       "color": "GY",
       "fromPin": 3,
       "toPin": 3
+     },
+    {
+      "from": "dakota_hdx",
+      "to": "fuel_sender",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "fuel_system",
+      "resistance": 0.02,
+      "color": "BU",
+      "toPin": 4,
+      "length": 96 
     }
   ]
 }
