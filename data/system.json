@@ -670,7 +670,10 @@
       "type": "POWER",
       "zone": "C",
       "loom": "rear_trunk",
-      "resistance": 0.04
+      "resistance": 0.04,
+      "color": "BN",
+      "fromPin": 23,
+      "toPin": 1
     },
     {
       "from": "fuse_panel",
