@@ -71,8 +71,8 @@ const LAYOUT_POS = {
 
   fuel_relay:    { x: 760, y: 140 },
   fuel_sender:   { x: 930, y: 140 },
-  c102_ctrl:     { x: 760, y: 260 },
-  dw440_pump:    { x: 920, y: 260 },
+  c105_ctrl:     { x: 760, y: 260 },
+  dw810_pump:    { x: 920, y: 260 },
   accuair_valves:{ x: 760, y: 370 },
   accuair_comp:  { x: 920, y: 370 },
   tail_lights:   { x: 840, y: 460 }
