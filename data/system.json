@@ -1,0 +1,2693 @@
+{
+  "nodes": [
+    {
+      "id": "battery",
+      "type": "source",
+      "tier": 1,
+      "zone": "A",
+      "label": "Battery",
+      "load": 0,
+      "partNumber": "\u2014",
+      "notes": "Group 34/78 minimum for full accessory load",
+      "connectors": [
+        {
+          "designator": "BAT",
+          "body": "Bare Lug 3/8\"",
+          "gender": "female",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "POS",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "NEG",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alternator",
+      "type": "source",
+      "tier": 1,
+      "zone": "A",
+      "label": "Alternator",
+      "load": 0,
+      "partNumber": "Level 7 Motorsports",
+      "notes": "Powermaster-based unit for Holley mid-mount. No assigned part number \u2014 contact Level 7 directly. Includes external ground lug and corrected 3in pulley ratio. Self-exciting \u2014 no exciter wire needed.",
+      "connectors": [
+        {
+          "designator": "ALT",
+          "body": "Bare Lug 3/8\"",
+          "gender": "male",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "B+",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "starter",
+      "type": "motor",
+      "tier": 1,
+      "zone": "A",
+      "label": "Starter",
+      "load": 150,
+      "partNumber": "\u2014",
+      "notes": "Powermaster Starter for LS from Level 7 Motorsports. 2.5kW / 3.4hp motor. 4.4:1 gear reduction. Inrush multiplier 1.1x (gear reduction).",
+      "connectors": [
+        {
+          "designator": "STR",
+          "body": "Bare Lug 3/8\"",
+          "gender": "male",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BAT",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "S",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ecm",
+      "type": "control",
+      "tier": 1,
+      "zone": "B",
+      "label": "Holley ECM",
+      "load": 5,
+      "partNumber": "Holley 550-931",
+      "notes": "Terminator X Max. Flat mounted under passenger seat \u2014 LED face toward door opening. Requires external 2-bar MAP: GM 12592525 + adapter 558-416.",
+      "connectors": [
+        {
+          "designator": "J1A",
+          "body": "Holley 34-way",
+          "gender": "female",
+          "pinCount": 26,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "TACH",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 2,
+              "label": "FP_TRIG",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "IN_2",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "IN_4",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 5,
+              "label": "TPS",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 6,
+              "label": "IGN_OUT",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 7,
+              "label": "O2_COMP2",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 8,
+              "label": "O2_SHIELD",
+              "type": "GROUND"
+            },
+            {
+              "pin": 9,
+              "label": "O2_HTR-",
+              "type": "GROUND"
+            },
+            {
+              "pin": 10,
+              "label": "SW_12V",
+              "type": "POWER"
+            },
+            {
+              "pin": 11,
+              "label": "MAT",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 12,
+              "label": "IN_1",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 13,
+              "label": "IN_3",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 14,
+              "label": "CAM",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 15,
+              "label": "KNK_1",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 16,
+              "label": "KNK_2",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 17,
+              "label": "CTS",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 18,
+              "label": "SEN_GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 19,
+              "label": "CRK",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 20,
+              "label": "O2_PUMP",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 21,
+              "label": "O2_VGND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 22,
+              "label": "O2_HTR+",
+              "type": "POWER"
+            },
+            {
+              "pin": 23,
+              "label": "MAP_SIG",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 24,
+              "label": "OIL_P",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 25,
+              "label": "FUEL_P",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 26,
+              "label": "5V_REF",
+              "type": "POWER"
+            }
+          ]
+        },
+        {
+          "designator": "J1B",
+          "body": "Holley 34-way",
+          "gender": "female",
+          "pinCount": 26,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "IAC_AL",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 2,
+              "label": "IAC_AH",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 3,
+              "label": "OUT_4",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "INJ_F",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 5,
+              "label": "INJ_G",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 6,
+              "label": "INJ_H",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 7,
+              "label": "INJ_E",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 8,
+              "label": "IAC_BL",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 9,
+              "label": "IAC_BH",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 10,
+              "label": "OUT_3",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 11,
+              "label": "OUT_2",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 12,
+              "label": "OUT_1",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 13,
+              "label": "INJ_A",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 14,
+              "label": "INJ_B",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 15,
+              "label": "INJ_C",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 16,
+              "label": "INJ_D",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 17,
+              "label": "COIL_GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 18,
+              "label": "EST_A",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 19,
+              "label": "EST_B",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 20,
+              "label": "EST_C",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 21,
+              "label": "EST_D",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 22,
+              "label": "EST_E",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 23,
+              "label": "EST_F",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 24,
+              "label": "EST_G",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 25,
+              "label": "EST_H",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 26,
+              "label": "MAIN_GND",
+              "type": "GROUND"
+            }
+          ]
+        },
+        {
+          "designator": "J3",
+          "body": "Holley CAN 4-way",
+          "gender": "female",
+          "pinCount": 14,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PED_5V_A",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "PED_GND_A",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "PED_SIG1",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "PED_5V_B",
+              "type": "POWER"
+            },
+            {
+              "pin": 5,
+              "label": "PED_GND_B",
+              "type": "GROUND"
+            },
+            {
+              "pin": 6,
+              "label": "PED_SIG2",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 7,
+              "label": "TB_MOT+",
+              "type": "POWER"
+            },
+            {
+              "pin": 8,
+              "label": "TB_MOT-",
+              "type": "POWER"
+            },
+            {
+              "pin": 9,
+              "label": "TPS_1",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 10,
+              "label": "TPS_2",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 11,
+              "label": "DBW_5V",
+              "type": "POWER"
+            },
+            {
+              "pin": 12,
+              "label": "DBW_GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 13,
+              "label": "CAN_H",
+              "type": "CAN"
+            },
+            {
+              "pin": 14,
+              "label": "CAN_L",
+              "type": "CAN"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coils",
+      "type": "ignition",
+      "tier": 1,
+      "zone": "A",
+      "label": "LS3 Coils (x8)",
+      "load": 8,
+      "partNumber": "OEM LS3",
+      "notes": "Factory LS3 coil packs \u2014 retained from crate engine",
+      "connectors": [
+        {
+          "designator": "COIL",
+          "body": "Metri-Pack 150 4-way",
+          "gender": "female",
+          "pinCount": 3,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "EST",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "injectors",
+      "type": "fuel",
+      "tier": 1,
+      "zone": "A",
+      "label": "Injectors (x8)",
+      "load": 4,
+      "partNumber": "EV6 style",
+      "notes": "Size to be confirmed after blower selection. EV6 2-pin connector per injector.",
+      "connectors": [
+        {
+          "designator": "INJ",
+          "body": "Metri-Pack 150 2-way",
+          "gender": "female",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "DRV",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "throttle_body",
+      "type": "control",
+      "tier": 1,
+      "zone": "A",
+      "label": "DBW Throttle",
+      "load": 2,
+      "partNumber": "GM 12570790",
+      "notes": "Drive-by-wire TB. Pedal: GM 10379038. 6-pin connector.",
+      "connectors": [
+        {
+          "designator": "TB",
+          "body": "Weatherpack 6-way",
+          "gender": "female",
+          "pinCount": 6,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "MOT+",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "MOT-",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "TPS_1",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "TPS_2",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 5,
+              "label": "DBW_5V",
+              "type": "POWER"
+            },
+            {
+              "pin": 6,
+              "label": "DBW_GND",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cooling_fan",
+      "type": "motor",
+      "tier": 1,
+      "zone": "A",
+      "label": "Cooling Fan",
+      "load": 20,
+      "partNumber": "\u2014",
+      "notes": "ECM-controlled via PWM output. Fan-on threshold set in Holley software.",
+      "connectors": [
+        {
+          "designator": "FAN",
+          "body": "Deutsch DT 2-way",
+          "gender": "female",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "PWM",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ac_compressor",
+      "type": "motor",
+      "tier": 1,
+      "zone": "A",
+      "label": "A/C Compressor",
+      "load": 10,
+      "partNumber": "\u2014",
+      "notes": "Vintage Air Gen 5 compressor. Clutch relay controlled by ECM J1B OUT_4.",
+      "connectors": [
+        {
+          "designator": "AC",
+          "body": "Weatherpack 2-way",
+          "gender": "female",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "CLUTCH+",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "CLUTCH-",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wideband_o2",
+      "type": "sensor",
+      "tier": 1,
+      "zone": "A",
+      "label": "Wideband O2",
+      "load": 1,
+      "partNumber": "Bosch LSU 4.9",
+      "notes": "Included with Holley 550-931 kit. 5-wire Bosch connector.",
+      "connectors": [
+        {
+          "designator": "O2",
+          "body": "Weatherpack 6-way",
+          "gender": "female",
+          "pinCount": 5,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "IP",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 2,
+              "label": "VGND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "HTR-",
+              "type": "GROUND"
+            },
+            {
+              "pin": 4,
+              "label": "HTR+",
+              "type": "POWER"
+            },
+            {
+              "pin": 5,
+              "label": "PUMP",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "map_sensor",
+      "type": "sensor",
+      "tier": 1,
+      "zone": "A",
+      "label": "MAP Sensor",
+      "load": 0.1,
+      "partNumber": "GM 12592525",
+      "notes": "External 2-bar MAP required for boost. Adapter: Holley 558-416. 3-pin Metri-Pack.",
+      "connectors": [
+        {
+          "designator": "MAP",
+          "body": "Metri-Pack 150 4-way",
+          "gender": "female",
+          "pinCount": 3,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "5V_REF",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "SIG",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fuse_panel",
+      "type": "distribution",
+      "tier": 1,
+      "zone": "B",
+      "label": "AAW Fuse Panel",
+      "load": 0,
+      "partNumber": "AAW 510333",
+      "notes": "Classic Update Series \u2014 First Design. Add 150A mega fuse on charge cable. 20 fused circuits.",
+      "connectors": [
+        {
+          "designator": "AAW",
+          "body": "Holley 34-way",
+          "gender": "male",
+          "pinCount": 20,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "IGN_SW",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "HDX_PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "ACCUAIR",
+              "type": "POWER"
+            },
+            {
+              "pin": 4,
+              "label": "HVAC",
+              "type": "POWER"
+            },
+            {
+              "pin": 5,
+              "label": "RADIO",
+              "type": "POWER"
+            },
+            {
+              "pin": 6,
+              "label": "ECM_PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 7,
+              "label": "FAN",
+              "type": "POWER"
+            },
+            {
+              "pin": 8,
+              "label": "AC_COMP",
+              "type": "POWER"
+            },
+            {
+              "pin": 9,
+              "label": "FUEL_RLY",
+              "type": "POWER"
+            },
+            {
+              "pin": 10,
+              "label": "ACCUAIR_C",
+              "type": "POWER"
+            },
+            {
+              "pin": 11,
+              "label": "TAIL_LT",
+              "type": "POWER"
+            },
+            {
+              "pin": 12,
+              "label": "FUEL_SND",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 13,
+              "label": "PWR_WIN",
+              "type": "POWER"
+            },
+            {
+              "pin": 14,
+              "label": "HTD_SEAT",
+              "type": "POWER"
+            },
+            {
+              "pin": 15,
+              "label": "ALARM",
+              "type": "POWER"
+            },
+            {
+              "pin": 16,
+              "label": "BCK_CAM",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 17,
+              "label": "BAT_FEED",
+              "type": "POWER"
+            },
+            {
+              "pin": 18,
+              "label": "SPARE_1",
+              "type": "POWER"
+            },
+            {
+              "pin": 19,
+              "label": "SPARE_2",
+              "type": "POWER"
+            },
+            {
+              "pin": 20,
+              "label": "SPARE_3",
+              "type": "POWER"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ignition_sw",
+      "type": "control",
+      "tier": 1,
+      "zone": "B",
+      "label": "Ignition Switch",
+      "load": 1,
+      "partNumber": "OEM style",
+      "notes": "Routes through AAW harness. CRNK output feeds clutch_safety_sw before reaching starter -- T56/Bowler has no neutral safety circuit, clutch pedal switch is the start-safety interlock for this manual transmission build.",
+      "connectors": [
+        {
+          "designator": "IGN",
+          "body": "Weatherpack 4-way",
+          "gender": "female",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BAT",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "ACC",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "RUN",
+              "type": "POWER"
+            },
+            {
+              "pin": 4,
+              "label": "CRNK",
+              "type": "POWER"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dakota_hdx",
+      "type": "display",
+      "tier": 1,
+      "zone": "B",
+      "label": "Dakota HDX",
+      "load": 3,
+      "partNumber": "Dakota Digital HDX",
+      "notes": "CAN bus via BIM-EFI-1 under seat. BIM daisy-chain runs up to HDX control box here. Set Holley CAN to Racepak in software.",
+      "connectors": [
+        {
+          "designator": "HDX",
+          "body": "Deutsch DT 8-way",
+          "gender": "female",
+          "pinCount": 8,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "IGN",
+              "type": "POWER"
+            },
+            {
+              "pin": 4,
+              "label": "BIM_IN",
+              "type": "CAN"
+            },
+            {
+              "pin": 5,
+              "label": "BIM_OUT",
+              "type": "CAN"
+            },
+            {
+              "pin": 6,
+              "label": "ILLUM",
+              "type": "POWER"
+            },
+            {
+              "pin": 7,
+              "label": "ESTOPP_STATUS",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 8,
+              "label": "FUEL_LEVEL",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bim_04",
+      "type": "sensor",
+      "tier": 1,
+      "zone": "B",
+      "label": "BIM-04-2 Temps",
+      "load": 1,
+      "partNumber": "Dakota BIM-04-2",
+      "notes": "3x modules under passenger seat panel. Oil temp, trans temp, diff temp. Sensor: SEN-04-5 x3. Daisy-chained from BIM-EFI-1. Each needs unique ID assigned.",
+      "connectors": [
+        {
+          "designator": "BIM04",
+          "body": "Dakota 3.5mm BIM",
+          "gender": "female",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BUS_IN",
+              "type": "CAN"
+            },
+            {
+              "pin": 2,
+              "label": "BUS_OUT",
+              "type": "CAN"
+            },
+            {
+              "pin": 3,
+              "label": "SEN_SIG",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "SEN_GND",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "accuair_ctrl",
+      "type": "control",
+      "tier": 1,
+      "zone": "B",
+      "label": "Accuair e+ ECU",
+      "load": 3,
+      "partNumber": "Accuair e+ Connect",
+      "notes": "Under passenger seat panel. USB/M8 interface to ENDO CVT. TouchPad+ controller connects here.",
+      "connectors": [
+        {
+          "designator": "ECTL",
+          "body": "Deutsch DT 6-way",
+          "gender": "female",
+          "pinCount": 6,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "IGN",
+              "type": "POWER"
+            },
+            {
+              "pin": 4,
+              "label": "M8_OUT",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 5,
+              "label": "HT_F",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 6,
+              "label": "HT_R",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "vintage_air",
+      "type": "motor",
+      "tier": 1,
+      "zone": "B",
+      "label": "Vintage Air HVAC",
+      "load": 15,
+      "partNumber": "Vintage Air Gen 5",
+      "notes": "491210-RUA ProLine 3-knob horizontal control. Requires 246404 ECU. Refrigerant lines route under fender \u2014 not through firewall. Mounted in anodized black billet center dash bezel \u2014 see center_dash_disconnect_hvac for service connector.",
+      "connectors": [
+        {
+          "designator": "HVAC",
+          "body": "Weatherpack 6-way",
+          "gender": "female",
+          "pinCount": 6,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BAT_PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "IGN_PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 4,
+              "label": "BLOWER",
+              "type": "POWER"
+            },
+            {
+              "pin": 5,
+              "label": "AC_REQ",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 6,
+              "label": "ILLUM",
+              "type": "POWER"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "center_dash_disconnect_radio",
+      "type": "connector",
+      "tier": 1,
+      "zone": "B",
+      "label": "Center Dash Disconnect \u2014 Radio",
+      "load": 0,
+      "partNumber": "Deutsch DT 8-pin",
+      "notes": "Service disconnect at base of center dash sub-frame, in the 5in service pocket behind the bezel. Covers Kenwood DMX958XR power/ground/illum/VSS only \u2014 separate from HVAC disconnect so radio can be pulled without disturbing A/C wiring. Allows full bezel removal without cutting cab wiring.",
+      "connectors": [
+        {
+          "designator": "CDDR",
+          "body": "Deutsch DT 8-way",
+          "gender": "female",
+          "pinCount": 8,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BAT+",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "ACC",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 4,
+              "label": "ILLUM",
+              "type": "POWER"
+            },
+            {
+              "pin": 5,
+              "label": "VSS_SIG",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 6,
+              "label": "VSS_GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 7,
+              "label": "SPARE_1",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 8,
+              "label": "SPARE_2",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "center_dash_disconnect_hvac",
+      "type": "connector",
+      "tier": 1,
+      "zone": "B",
+      "label": "Center Dash Disconnect \u2014 HVAC",
+      "load": 0,
+      "partNumber": "Deutsch DT 6-pin",
+      "notes": "Service disconnect at base of center dash sub-frame, in the 5in service pocket behind the bezel. Covers Vintage Air 491210-RUA control head only \u2014 separate from radio disconnect for independent serviceability. Allows full bezel removal without cutting cab wiring.",
+      "connectors": [
+        {
+          "designator": "CDDH",
+          "body": "Deutsch DT 6-way",
+          "gender": "female",
+          "pinCount": 6,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BAT_PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "IGN_PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 4,
+              "label": "BLOWER",
+              "type": "POWER"
+            },
+            {
+              "pin": 5,
+              "label": "AC_REQ",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 6,
+              "label": "ILLUM",
+              "type": "POWER"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "radio",
+      "type": "accessory",
+      "tier": 1,
+      "zone": "B",
+      "label": "Kenwood DMX958XR",
+      "load": 5,
+      "partNumber": "Kenwood DMX958XR",
+      "notes": "Wireless CarPlay/Android Auto. 6-ch 5V preouts. USB-C. HDMI input. 720p HD screen, LDAC, HD camera support. Same 3.3in chassis depth as DMX908S \u2014 no fitment change. Pink VSS input wired to second independent Bowler speed output for dead-reckoning nav when GPS signal is poor. Mounted in anodized black billet center dash bezel \u2014 see center_dash_disconnect for service connector.",
+      "connectors": [
+        {
+          "designator": "RADIO",
+          "body": "Weatherpack 4-way",
+          "gender": "female",
+          "pinCount": 5,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BAT+",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "ACC",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 4,
+              "label": "ILLUM",
+              "type": "POWER"
+            },
+            {
+              "pin": 5,
+              "label": "VSS_SIG",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fuel_relay",
+      "type": "relay",
+      "tier": 1,
+      "zone": "C",
+      "label": "Fuel Relay",
+      "load": 0.5,
+      "partNumber": "30A relay",
+      "notes": "ECM triggers relay coil. Relay supplies power to C105 controller.",
+      "connectors": [
+        {
+          "designator": "RLY",
+          "body": "Weatherpack 4-way",
+          "gender": "male",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "85_COIL-",
+              "type": "GROUND"
+            },
+            {
+              "pin": 2,
+              "label": "86_COIL+",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "30_COM",
+              "type": "POWER"
+            },
+            {
+              "pin": 4,
+              "label": "87_NO",
+              "type": "POWER"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c105_ctrl",
+      "type": "control",
+      "tier": 1,
+      "zone": "C",
+      "label": "DW C105 Controller",
+      "load": 1,
+      "partNumber": "DW C105",
+      "notes": "Dual speed controller. White trigger wire on controller, ground-side trigger on J1B OUT_3 switches low/high speed. 55% duty cycle low / 100% high.",
+      "connectors": [
+        {
+          "designator": "C105",
+          "body": "Deutsch DTP 4-way",
+          "gender": "male",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "SIG",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "SPARE",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dw810_pump",
+      "type": "motor",
+      "tier": 1,
+      "zone": "C",
+      "label": "DW810 Fuel Pump",
+      "load": 22,
+      "partNumber": "DW 9-811-C102-0900",
+      "notes": "810lph brushless \u2014 higher flow for boosted application. Custom hat on Boyd 6in cleanout plate. 10 AWG wiring per DW spec. Racetronix BCWS-001 bulkhead connector. C105 dual-speed controller \u2014 68% low / 100% high.",
+      "connectors": [
+        {
+          "designator": "PUMP",
+          "body": "Deutsch DT 2-way",
+          "gender": "female",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fuel_sender",
+      "type": "sensor",
+      "tier": 1,
+      "zone": "C",
+      "label": "Boyd Fuel Sender",
+      "load": 0.1,
+      "partNumber": "Boyd Welding",
+      "notes": "Updated Boyd sender for 10in tank depth. Racetronix BCWS-001 4-way bulkhead wiring connector through hat plate.",
+      "connectors": [
+        {
+          "designator": "SNDR",
+          "body": "Deutsch DTM 2-way",
+          "gender": "female",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "SIG",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "accuair_comp",
+      "type": "motor",
+      "tier": 1,
+      "zone": "C",
+      "label": "Accuair ENDO CVT",
+      "load": 23,
+      "partNumber": "Accuair ENDO CVT",
+      "notes": "All-in-one compressor/valve/tank unit. Proprietary Accuair harness. Dedicated 8 AWG feed from rear power block. M8 connector to e+ Connect ECU. Blue tandem wire unused in single-compressor config.",
+      "connectors": [
+        {
+          "designator": "CVT",
+          "body": "Deutsch DT 4-way",
+          "gender": "female",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "IGN",
+              "type": "POWER"
+            },
+            {
+              "pin": 4,
+              "label": "M8_CTL",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "accuair_valves",
+      "type": "control",
+      "tier": 1,
+      "zone": "C",
+      "label": "Accuair Valves",
+      "load": 2,
+      "partNumber": "Accuair VU4",
+      "notes": "VU4 manifold \u2014 internal to ENDO CVT. Signal from e+ Connect ECU via M8 connector.",
+      "connectors": [
+        {
+          "designator": "VU4",
+          "body": "Deutsch DT 4-way",
+          "gender": "female",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "SIG_F",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "SIG_R",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tail_lights",
+      "type": "lighting",
+      "tier": 1,
+      "zone": "C",
+      "label": "Tail/Brake Lights",
+      "load": 8,
+      "partNumber": "\u2014",
+      "notes": "Rear trunk loom. LED recommended for reduced load.",
+      "connectors": [
+        {
+          "designator": "TAIL",
+          "body": "Deutsch DT 4-way",
+          "gender": "female",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "LHTURN",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "RHTURN",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "power_windows",
+      "type": "accessory",
+      "tier": 2,
+      "zone": "B",
+      "label": "Power Windows",
+      "load": 20,
+      "partNumber": "\u2014",
+      "notes": "Tier 2 accessory \u2014 planned",
+      "connectors": [
+        {
+          "designator": "PWIN",
+          "body": "Deutsch DT 4-way",
+          "gender": "female",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "UP",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "DOWN",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "heated_seats",
+      "type": "accessory",
+      "tier": 2,
+      "zone": "B",
+      "label": "Heated Seats",
+      "load": 8,
+      "partNumber": "\u2014",
+      "notes": "Tier 2 accessory \u2014 planned. Relay-switched ignition-keyed power. Do not ground to ECU ground block.",
+      "connectors": [
+        {
+          "designator": "SEAT",
+          "body": "Deutsch DT 4-way",
+          "gender": "female",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR_D",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "PWR_P",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "GND_D",
+              "type": "GROUND"
+            },
+            {
+              "pin": 4,
+              "label": "GND_P",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alarm",
+      "type": "accessory",
+      "tier": 2,
+      "zone": "B",
+      "label": "Alarm System",
+      "load": 2,
+      "partNumber": "\u2014",
+      "notes": "Tier 2 accessory \u2014 planned",
+      "connectors": [
+        {
+          "designator": "ALRM",
+          "body": "Deutsch DTM 4-way",
+          "gender": "female",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "TRIG",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "STATUS",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backup_cam",
+      "type": "accessory",
+      "tier": 2,
+      "zone": "B",
+      "label": "Backup Camera",
+      "load": 1,
+      "partNumber": "\u2014",
+      "notes": "Tier 2 \u2014 integrate with Kenwood DMX908S rear camera input. Power from Bowler reverse output.",
+      "connectors": [
+        {
+          "designator": "CAM",
+          "body": "Deutsch DTM 2-way",
+          "gender": "female",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "t56_disconnect",
+      "type": "connector",
+      "tier": 1,
+      "zone": "B",
+      "label": "T56 Service Disconnect",
+      "load": 0,
+      "partNumber": "Deutsch DT 8-pin",
+      "notes": "Mid-vehicle bulkhead connector at trans crossmember. Allows trans removal without cutting cab wiring. VSS, reverse signal, and lockout solenoid pass through here. No neutral safety circuit -- not applicable to T56/Bowler (manual transmission); see clutch_safety_sw for the actual start-safety interlock used on this build.",
+      "connectors": [
+        {
+          "designator": "T56",
+          "body": "Deutsch DT 8-way",
+          "gender": "male",
+          "pinCount": 8,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "VSS+",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 2,
+              "label": "VSS-",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 3,
+              "label": "REV_SIG",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "LCK_PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 5,
+              "label": "LCK_GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 6,
+              "label": "SPARE_3",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 7,
+              "label": "SPARE_1",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 8,
+              "label": "SPARE_2",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ground_block",
+      "type": "distribution",
+      "tier": 1,
+      "zone": "B",
+      "label": "Ground Block (Marine)",
+      "load": 0,
+      "partNumber": "Marine grade",
+      "notes": "Star ground point \u2014 engine to frame, frame to body, battery negative. Critical for Dakota HDX and ECM sensor accuracy. All sensor grounds terminate here.",
+      "connectors": [
+        {
+          "designator": "SGND",
+          "body": "Bare Lug 3/8\"",
+          "gender": "male",
+          "pinCount": 6,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BAT_NEG",
+              "type": "GROUND"
+            },
+            {
+              "pin": 2,
+              "label": "ENG_GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "FRAME",
+              "type": "GROUND"
+            },
+            {
+              "pin": 4,
+              "label": "BODY",
+              "type": "GROUND"
+            },
+            {
+              "pin": 5,
+              "label": "ECM_GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 6,
+              "label": "SPARE",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "power_block",
+      "type": "distribution",
+      "tier": 1,
+      "zone": "B",
+      "label": "Power Block (Marine)",
+      "load": 0,
+      "partNumber": "Marine grade",
+      "notes": "Positive distribution block. Feeds fuse panel, ECM power feed, and accessory circuits from battery via 4/0 AWG main feed. Mounted near mid-ship battery location.",
+      "connectors": [
+        {
+          "designator": "SPWR",
+          "body": "Bare Lug 3/8\"",
+          "gender": "male",
+          "pinCount": 6,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BAT_IN",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "FSE_PANEL",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "ECM_FEED",
+              "type": "POWER"
+            },
+            {
+              "pin": 4,
+              "label": "REAR_RUN",
+              "type": "POWER"
+            },
+            {
+              "pin": 5,
+              "label": "AUX_1",
+              "type": "POWER"
+            },
+            {
+              "pin": 6,
+              "label": "SPARE",
+              "type": "POWER"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fuel_pressure_sensor",
+      "type": "sensor",
+      "tier": 1,
+      "zone": "A",
+      "label": "Fuel Pressure Sensor",
+      "load": 0.1,
+      "partNumber": "Holley 554-102",
+      "notes": "100 PSI stainless sensor in 1/8 NPT port on Radium DMR-RA regulator. Wired to Terminator X Max J1A pin 25 (FUEL_P). Data broadcast via CAN to Dakota HDX through BIM-EFI-1.",
+      "connectors": [
+        {
+          "designator": "FPS",
+          "body": "Deutsch DTM 4-way",
+          "gender": "female",
+          "pinCount": 3,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "5V_REF",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "SIG",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mdb_battery",
+      "type": "distribution",
+      "tier": 1,
+      "zone": "B",
+      "label": "MDB Fuse Block \u2014 Battery",
+      "load": 0,
+      "partNumber": "Littelfuse 04980933.X",
+      "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted near behind-the-cab battery on passenger side. Internally bussed 4 AWG input. Pole 1: ECM direct feed 40A. Pole 2: Heated seat relay 30A. Pole 3: Bowler T56 module 20A.",
+      "connectors": [
+        {
+          "designator": "MDB1",
+          "body": "Anderson SB175",
+          "gender": "male",
+          "pinCount": 3,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "ECM_40A",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "SEAT_30A",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "T56_20A",
+              "type": "POWER"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mdb_engine",
+      "type": "distribution",
+      "tier": 1,
+      "zone": "A",
+      "label": "MDB Fuse Block \u2014 Engine Bay",
+      "load": 0,
+      "partNumber": "Littelfuse 04980933.X",
+      "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on inner fender apron. Fed via 4 AWG from mid-ship power block. Pole 1: Dual brushless fans 80A. Pole 2: Vintage Air HVAC 40A. Pole 3: Radio/Kenwood constant feed 30A.",
+      "connectors": [
+        {
+          "designator": "MDB2",
+          "body": "Anderson SB175",
+          "gender": "male",
+          "pinCount": 3,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "FANS_80A",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "HVAC_40A",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "RADIO_30A",
+              "type": "POWER"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mdb_rear",
+      "type": "distribution",
+      "tier": 1,
+      "zone": "C",
+      "label": "MDB Fuse Block \u2014 Rear",
+      "load": 0,
+      "partNumber": "Littelfuse 04980933.X",
+      "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on rear electronics plate adjacent to C105 controller. Fed via 4 AWG short run from behind-the-cab battery. Pole 1: Accuair ENDO CVT 50A. Pole 2: DW810 fuel pump controller 30A. Pole 3: Spare \u2014 sealed with cavity plug for future expansion.",
+      "connectors": [
+        {
+          "designator": "MDB3",
+          "body": "Anderson SB175",
+          "gender": "male",
+          "pinCount": 3,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "CVT_50A",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "PUMP_30A",
+              "type": "POWER"
+            },
+            {
+              "pin": 3,
+              "label": "SPARE",
+              "type": "POWER"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "estopp_pwr_disconnect",
+      "type": "connector",
+      "tier": 1,
+      "zone": "B",
+      "label": "E-Stopp Power Disconnect",
+      "load": 0,
+      "partNumber": "Deutsch DT 2-way",
+      "notes": "Service disconnect at battery junction \u2014 de-powers E-Stopp module without disturbing panel wiring. DT 2-way \u2014 power and ground.",
+      "connectors": [
+        {
+          "designator": "ES_PWR_DC",
+          "body": "Deutsch DT 2-way",
+          "gender": "male",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "estopp_mod_disconnect",
+      "type": "connector",
+      "tier": 1,
+      "zone": "B",
+      "label": "E-Stopp Module Disconnect",
+      "load": 0,
+      "partNumber": "Deutsch DT 2-way",
+      "notes": "Service disconnect at panel for E-Stopp button harness \u2014 allows button/switch wiring service without disturbing control box. Carries only the conductors in use: switch NO + COM (fail-safe wiring). LED ring and piezo speaker circuits omitted \u2014 not in use on this build.",
+      "connectors": [
+        {
+          "designator": "ES_MOD_DC",
+          "body": "Deutsch DT 2-way",
+          "gender": "female",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BTN_NO",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 2,
+              "label": "BTN_COM",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "estopp",
+      "type": "control",
+      "tier": 1,
+      "zone": "B",
+      "label": "E-Stopp Module",
+      "load": 5,
+      "partNumber": "E-Stopp",
+      "notes": "Electric parking brake control box (E-Stopp ESK1). Mounted under-seat panel, passenger side front zone. Electrical only \u2014 no hydraulic fittings on module. Power: RED +12V (10A fuse recommended, min 10A source), BLACK ground \u2014 manual explicitly prohibits chassis grounding, dedicated return required, do not tie to star ground block. Ignition safety: BLUE wire to ignition switch RUN \u2014 optional but manual strongly recommends, disables engagement while vehicle is running. Status output: GREEN switched ground (max 25mA) active while engaged, routed to Dakota HDX spare input for dash indicator. Actuator: RED/BLACK control box wires connect to BROWN/BLUE actuator wires respectively \u2014 16 AWG min, 15ft max extension. Button harness (LED ring + SPDT switch + piezo) is a separate factory pigtail \u2014 switch wired NO+COM (fail-safe). Manual explicitly prohibits coupling E-Stopp wiring with other circuits \u2014 isolated from Holley ECU power path. Exact button switch location still TBD, separate from Ring Brothers dash bezel switch panel. Retained as a module node (not just disconnect connectors) due to ENDO CVT reliability history that may require future rewiring.",
+      "connectors": [
+        {
+          "designator": "ES_PWR",
+          "body": "Bare Wire",
+          "gender": "n/a",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "PWR",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "IGN_SAFETY",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 4,
+              "label": "STATUS_OUT",
+              "type": "SIGNAL"
+            }
+          ]
+        },
+        {
+          "designator": "ES_ACT",
+          "body": "Bare Wire",
+          "gender": "n/a",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "ACT_A",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "ACT_B",
+              "type": "POWER"
+            }
+          ]
+        },
+        {
+          "designator": "ES_BTN",
+          "body": "Molex 2-way (factory pigtail)",
+          "gender": "female",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BTN_NO",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 2,
+              "label": "BTN_COM",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "estopp_actuator",
+      "type": "motor",
+      "tier": 1,
+      "zone": "C",
+      "label": "E-Stopp Actuator",
+      "load": 8,
+      "partNumber": "E-Stopp ESK1 Actuator",
+      "notes": "Physical actuator mounted at e-brake cable. Direct-wired from estopp control box \u2014 no service disconnect, not something routinely unbolted. Control box RED to actuator BROWN, control box BLACK to actuator BLUE. 16 AWG minimum, 15ft max wire run per manual. Properly adjusted unit takes 2-3 seconds to engage/disengage.",
+      "connectors": [
+        {
+          "designator": "ACT",
+          "body": "Bare Wire",
+          "gender": "n/a",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BRN",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "BLU",
+              "type": "POWER"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "clutch_safety_sw",
+      "type": "control",
+      "tier": 1,
+      "zone": "B",
+      "label": "Clutch Safety Switch",
+      "load": 0.1,
+      "partNumber": "\u2014",
+      "notes": "Clutch pedal start interlock \u2014 normally-open switch, closes only when clutch pedal is fully depressed. Wired in series between ignition_sw CRNK output and starter S (signal) trigger pin, so starter solenoid only energizes when both key is in CRANK and clutch is depressed. T56/Bowler harness has no neutral safety circuit (not applicable to manual transmission) -- this switch is the actual start-safety interlock for this build. Mount location: clutch pedal bracket, lever or plunger actuated.",
+      "connectors": [
+        {
+          "designator": "CSW",
+          "body": "Weatherpack 2-way",
+          "gender": "female",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "IN",
+              "type": "SIGNAL"
+            },
+            {
+              "pin": 2,
+              "label": "OUT",
+              "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "alternator",
+      "to": "battery",
+      "type": "POWER",
+      "zone": "A",
+      "loom": "charge_system",
+      "resistance": 0.003,
+      "wireOverride": "2/0 AWG"
+    },
+    {
+      "from": "battery",
+      "to": "starter",
+      "type": "POWER",
+      "zone": "A",
+      "loom": "charge_system",
+      "resistance": 0.004,
+      "wireOverride": "2/0 AWG"
+    },
+    {
+      "from": "fuse_panel",
+      "to": "ignition_sw",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "fuse_panel",
+      "to": "dakota_hdx",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "fuse_panel",
+      "to": "accuair_ctrl",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.03
+    },
+    {
+      "from": "fuse_panel",
+      "to": "center_dash_disconnect_hvac",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.03
+    },
+    {
+      "from": "center_dash_disconnect_hvac",
+      "to": "vintage_air",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.01
+    },
+    {
+      "from": "fuse_panel",
+      "to": "center_dash_disconnect_radio",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "center_dash_disconnect_radio",
+      "to": "radio",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.01
+    },
+    {
+      "from": "t56_disconnect",
+      "to": "center_dash_disconnect_radio",
+      "type": "SIGNAL",
+      "zone": "B",
+      "loom": "t56_harness",
+      "resistance": 0.02,
+      "color": "PK",
+      "fromPin": 1,
+      "toPin": 5,
+      "twisted": true,
+      "shield": true,
+      "drainGround": "source"
+    },
+    {
+      "from": "center_dash_disconnect_radio",
+      "to": "radio",
+      "type": "SIGNAL",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.01,
+      "color": "PK",
+      "fromPin": 5,
+      "toPin": 5,
+      "twisted": true,
+      "shield": true,
+      "drainGround": "source"
+    },
+    {
+      "from": "fuse_panel",
+      "to": "ecm",
+      "type": "POWER",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "fuse_panel",
+      "to": "cooling_fan",
+      "type": "POWER",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.03
+    },
+    {
+      "from": "fuse_panel",
+      "to": "ac_compressor",
+      "type": "POWER",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.03
+    },
+    {
+      "from": "ecm",
+      "to": "coils",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "ecm",
+      "to": "injectors",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "ecm",
+      "to": "throttle_body",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "ecm",
+      "to": "wideband_o2",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "ecm",
+      "to": "map_sensor",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "ecm",
+      "to": "fuel_relay",
+      "type": "SIGNAL",
+      "zone": "C",
+      "loom": "t56_harness",
+      "resistance": 0.05
+    },
+    {
+      "from": "ecm",
+      "to": "dakota_hdx",
+      "type": "CAN",
+      "zone": "B",
+      "loom": "can_bus",
+      "resistance": 0.01
+    },
+    {
+      "from": "dakota_hdx",
+      "to": "bim_04",
+      "type": "CAN",
+      "zone": "B",
+      "loom": "can_bus",
+      "resistance": 0.01
+    },
+    {
+      "from": "fuse_panel",
+      "to": "fuel_relay",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "rear_trunk",
+      "resistance": 0.05,
+      "fromPin": 9
+    },
+    {
+      "from": "fuel_relay",
+      "to": "c105_ctrl",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "fuel_system",
+      "resistance": 0.02
+    },
+    {
+      "from": "c105_ctrl",
+      "to": "dw810_pump",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "fuel_system",
+      "resistance": 0.02
+    },
+    {
+      "from": "fuse_panel",
+      "to": "accuair_comp",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "rear_trunk",
+      "resistance": 0.05,
+      "wireOverride": "18 AWG",
+      "color": "OG",
+      "fromPin": 3,
+      "toPin": 1,
+      "length": 48
+    },
+    {
+      "from": "accuair_ctrl",
+      "to": "accuair_valves",
+      "type": "SIGNAL",
+      "zone": "C",
+      "loom": "accuair_system",
+      "resistance": 0.03
+    },
+    {
+      "from": "fuse_panel",
+      "to": "tail_lights",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "rear_trunk",
+      "resistance": 0.04,
+      "color": "BN",
+      "fromPin": 11,
+      "toPin": 1
+    },
+    {
+      "from": "fuse_panel",
+      "to": "power_windows",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.03
+    },
+    {
+      "from": "fuse_panel",
+      "to": "heated_seats",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.03
+    },
+    {
+      "from": "fuse_panel",
+      "to": "alarm",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "fuse_panel",
+      "to": "backup_cam",
+      "type": "SIGNAL",
+      "zone": "C",
+      "loom": "rear_trunk",
+      "resistance": 0.03,
+      "fromPin": 16
+    },
+    {
+      "from": "fuel_pressure_sensor",
+      "to": "ecm",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.01
+    },
+    {
+      "from": "ecm",
+      "to": "t56_disconnect",
+      "type": "SIGNAL",
+      "zone": "B",
+      "loom": "t56_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "t56_disconnect",
+      "to": "fuel_relay",
+      "type": "SIGNAL",
+      "zone": "C",
+      "loom": "t56_harness",
+      "resistance": 0.02
+    },
+    {
+      "from": "battery",
+      "to": "ground_block",
+      "type": "GROUND",
+      "zone": "B",
+      "loom": "charge_system",
+      "resistance": 0.01,
+      "wireOverride": "2/0 AWG"
+    },
+    {
+      "from": "battery",
+      "to": "power_block",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "charge_system",
+      "resistance": 0.01,
+      "wireOverride": "4/0 AWG"
+    },
+    {
+      "from": "power_block",
+      "to": "fuse_panel",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "charge_system",
+      "resistance": 0.004,
+      "wireOverride": "4/0 AWG"
+    },
+    {
+      "from": "battery",
+      "to": "mdb_battery",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "charge_system",
+      "resistance": 0.005,
+      "wireOverride": "4 AWG"
+    },
+    {
+      "from": "mdb_battery",
+      "to": "ecm",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "charge_system",
+      "resistance": 0.01,
+      "wireOverride": "10 AWG"
+    },
+    {
+      "from": "power_block",
+      "to": "mdb_engine",
+      "type": "POWER",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.01,
+      "wireOverride": "4 AWG"
+    },
+    {
+      "from": "mdb_engine",
+      "to": "cooling_fan",
+      "type": "POWER",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.02,
+      "wireOverride": "8 AWG"
+    },
+    {
+      "from": "battery",
+      "to": "mdb_rear",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "rear_trunk",
+      "resistance": 0.005,
+      "wireOverride": "4 AWG"
+    },
+    {
+      "from": "mdb_rear",
+      "to": "c105_ctrl",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "fuel_system",
+      "resistance": 0.02,
+      "wireOverride": "10 AWG"
+    },
+    {
+      "from": "fuel_sender",
+      "to": "dakota_hdx",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "fuel_system",
+      "resistance": 0.02,
+      "color": "BU",
+      "toPin": 8,
+      "length": 96,
+      "fromPin": 1,
+      "notes": "Fuel level signal from Boyd sender to Dakota HDX gauge input."
+    },
+    {
+      "from": "power_block",
+      "to": "estopp_pwr_disconnect",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02,
+      "color": "RD",
+      "toPin": 1,
+      "wireOverride": "16 AWG",
+      "notes": "Manual recommends 10A fuse inline. 10A minimum source capacity. Dedicated return required -- do not ground to chassis.",
+      "fromConnector": "SPWR",
+      "toConnector": "ES_PWR_DC"
+    },
+    {
+      "from": "estopp_pwr_disconnect",
+      "to": "estopp",
+      "type": "POWER",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02,
+      "color": "RD",
+      "fromPin": 1,
+      "toPin": 1,
+      "wireOverride": "16 AWG",
+      "fromConnector": "ES_PWR_DC",
+      "toConnector": "ES_PWR"
+    },
+    {
+      "from": "estopp_pwr_disconnect",
+      "to": "estopp",
+      "type": "GROUND",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02,
+      "color": "BK",
+      "fromPin": 2,
+      "toPin": 2,
+      "wireOverride": "16 AWG",
+      "notes": "Dedicated ground return -- manual explicitly prohibits chassis grounding for this circuit.",
+      "fromConnector": "ES_PWR_DC",
+      "toConnector": "ES_PWR"
+    },
+    {
+      "from": "ignition_sw",
+      "to": "estopp",
+      "type": "SIGNAL",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02,
+      "color": "BU",
+      "fromPin": 3,
+      "toPin": 3,
+      "notes": "Ignition safety sense -- disables E-Stopp engagement while vehicle is running. Optional per manual but strongly recommended.",
+      "fromConnector": "IGN",
+      "toConnector": "ES_PWR"
+    },
+    {
+      "from": "estopp",
+      "to": "dakota_hdx",
+      "type": "SIGNAL",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02,
+      "color": "GN",
+      "fromPin": 4,
+      "toPin": 7,
+      "notes": "Switched ground status output, active while E-Stopp engaged, max 25mA. Lands on Dakota HDX spare input (relabeled ESTOPP_STATUS).",
+      "fromConnector": "ES_PWR",
+      "toConnector": "HDX"
+    },
+    {
+      "from": "estopp",
+      "to": "estopp_actuator",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "cab_harness",
+      "resistance": 0.02,
+      "color": "RD",
+      "fromPin": 1,
+      "toPin": 1,
+      "wireOverride": "16 AWG",
+      "notes": "Control box RED to actuator BROWN. 16 AWG min, 15ft max per manual.",
+      "fromConnector": "ES_ACT",
+      "toConnector": "ACT"
+    },
+    {
+      "from": "estopp",
+      "to": "estopp_actuator",
+      "type": "GROUND",
+      "zone": "C",
+      "loom": "cab_harness",
+      "resistance": 0.02,
+      "color": "BK",
+      "fromPin": 2,
+      "toPin": 2,
+      "wireOverride": "16 AWG",
+      "notes": "Control box BLACK to actuator BLUE. 16 AWG min, 15ft max per manual.",
+      "fromConnector": "ES_ACT",
+      "toConnector": "ACT"
+    },
+    {
+      "from": "estopp_mod_disconnect",
+      "to": "estopp",
+      "type": "SIGNAL",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02,
+      "color": "GY",
+      "fromPin": 1,
+      "toPin": 1,
+      "notes": "Button NO contact, wired fail-safe (NO+COM).",
+      "fromConnector": "ES_MOD_DC",
+      "toConnector": "ES_BTN"
+    },
+    {
+      "from": "estopp_mod_disconnect",
+      "to": "estopp",
+      "type": "SIGNAL",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02,
+      "color": "WH",
+      "fromPin": 2,
+      "toPin": 2,
+      "notes": "Button COM contact.",
+      "fromConnector": "ES_MOD_DC",
+      "toConnector": "ES_BTN"
+    },
+    {
+      "from": "ignition_sw",
+      "to": "clutch_safety_sw",
+      "type": "SIGNAL",
+      "zone": "B",
+      "loom": "cab_harness",
+      "resistance": 0.02,
+      "color": "PK",
+      "fromConnector": "IGN",
+      "fromPin": 4,
+      "toConnector": "CSW",
+      "toPin": 1,
+      "notes": "Crank trigger from ignition switch CRNK position to clutch safety switch input."
+    },
+    {
+      "from": "clutch_safety_sw",
+      "to": "starter",
+      "type": "SIGNAL",
+      "zone": "A",
+      "loom": "engine_harness",
+      "resistance": 0.02,
+      "color": "PK",
+      "fromConnector": "CSW",
+      "fromPin": 2,
+      "toConnector": "STR",
+      "toPin": 2,
+      "notes": "Crank trigger continues to starter solenoid S pin only when clutch switch closed (pedal depressed)."
+    }
+  ]
+}
