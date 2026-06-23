@@ -61,7 +61,6 @@ const LAYOUT_POS = {
   alarm:         { x: 600, y: 460 },
   backup_cam:    { x: 690, y: 460 },
   // fuel system additions
-  radium_dmr:       { x: 160, y: 170 },
   fuel_pressure_sensor: { x: 160, y: 250 },
   // power/ground distribution
   power_block:      { x: 400, y: 320 },
