@@ -499,7 +499,7 @@ function generateWireVizYAML(loom) {
     const flat = flatPinsByNode[id];
     if (flat && flat.labels.length > 0) {
       yaml += `    pincount: ${flat.labels.length}\n`;
-   //   yaml += `    pinlabels: [${flat.labels.join(", ")}]\n`;
+      yaml += `    pinlabels: [${flat.labels.join(", ")}]\n`;
     }
     yaml += `\n`;
   });
