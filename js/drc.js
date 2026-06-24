@@ -488,8 +488,8 @@ function generateWireVizYAML(loom) {
     if (!node) return;
     const label = (node.label || id).replace(/[^a-zA-Z0-9_]/g, "_");
     yaml += `  ${label}:\n`;
-    yaml += `    type: ${node.partNumber || "—"}\n`;
-    yaml += `    notes: "${escapeYamlNote(node.notes)}"\n`;
+    // yaml += `    type: ${node.partNumber || "—"}\n`;
+    // yaml += `    notes: "${escapeYamlNote(node.notes)}"\n`;
 
     // Pin labels — flattened across all connector groups (nested schema)
     // or read directly from the legacy flat pincount/pinlabels schema.
