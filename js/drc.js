@@ -517,12 +517,19 @@ function generateWireVizYAML(loom) {
     yaml += `    colors: [${colorStr}]\n`;
     yaml += `    wirecount: 1\n`;
     if (edge.shield) {
-      yaml += `    shield: true\n`;
-      yaml += `    shieldcolor: GN\n`;
+      // WireViz 0.4.1 Cable.shield accepts a single value: bool OR a color
+      // string. There is no separate shieldcolor key -- emitting one
+      // crashes the parser with "unexpected keyword argument 'shieldcolor'".
+      const shieldColor = (typeof edge.shield === "string") ? edge.shield : "GN";
+      yaml += `    shield: ${shieldColor}\n`;
     }
-    if (edge.twisted) yaml += `    twisted: true\n`;
+    // WireViz 0.4.1 has no "twisted" Cable field at all -- fold the intent
+    // into the notes text below rather than emit an invalid key.
+    const noteParts = [];
+    if (edge.notes) noteParts.push(edge.notes);
+    if (edge.twisted) noteParts.push("Twisted pair.");
     if (edge.length)  yaml += `    length: ${edge.length} in\n`;
-    if (edge.notes)   yaml += `    notes: "${escapeYamlNote(edge.notes)}"\n`;
+    if (noteParts.length) yaml += `    notes: "${escapeYamlNote(noteParts.join(" "))}"\n`;
     yaml += `\n`;
   });
 
