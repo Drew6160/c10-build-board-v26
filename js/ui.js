@@ -1,10 +1,122 @@
 // =============================
-// UI v29 — Four-Phase Architecture Update
+// UI v30 — Connector Group Editor + Edge Creation Upgrade
 // Phase 1: system.json cleaned (done in JSON file)
 // Phase 2: Hardened deleteNode with orphan cleanup + confirmation summary
 // Phase 3: Import system.json — full state reload from file
 // Phase 4: Edge Editor — add / edit / delete edges in UI
+// Phase 5: Full connector-group editor — add/edit/remove connector groups
+//          per node (designator/body/gender), add/remove pins per group
+//          (label + type), backed by a working draft so in-progress edits
+//          don't touch STATE until Save is clicked
+// Phase 6: Edge creation upgraded everywhere an edge gets created —
+//          type/color/pin selection, replacing the old hardcoded
+//          POWER-only "Connect from" stub on Add New. Pin pickers are
+//          connector-aware: when a node has documented connector pins,
+//          you pick from a labeled list (capturing both the connector
+//          designator and pin number) instead of typing a bare number.
 // =============================
+
+// -----------------------------
+// Shared constants for pin types
+// and wire colors, used by both
+// the Component Editor's connector
+// groups and the Edge Editor
+// -----------------------------
+const PIN_TYPES = ["POWER", "SIGNAL", "GROUND", "CAN"];
+const WIRE_COLOR_OPTIONS = [
+  ["BK","Black"],["BN","Brown"],["RD","Red"],["OG","Orange"],
+  ["YE","Yellow"],["GN","Green"],["BU","Blue"],["VT","Violet"],
+  ["GY","Grey"],["WH","White"],["PK","Pink"],["TQ","Turquoise"]
+];
+
+// Deep-clone helper for working drafts — keeps in-progress edits
+// isolated from STATE until Save is clicked
+function cloneDeep(obj){
+  return obj === undefined ? obj : JSON.parse(JSON.stringify(obj));
+}
+
+// Flatten a node's connectors[] (groups of pins) into pickable options.
+// value encodes both halves ("<designator>::<pin>") so an edge can store
+// fromConnector/fromPin (or toConnector/toPin) together, not just a bare
+// pin number that could collide across two different connector groups.
+function pinOptionsFromConnectors(connectors){
+  if(!Array.isArray(connectors)) return [];
+  const out = [];
+  connectors.forEach(grp=>{
+    (grp.pins||[]).forEach(p=>{
+      out.push({
+        value: `${grp.designator}::${p.pin}`,
+        label: `${grp.designator||"?"} · pin ${p.pin} — ${p.label||"?"} (${p.type||"?"})`,
+        type:  p.type
+      });
+    });
+  });
+  return out;
+}
+
+// Renders a pin picker for the given connectors array. Falls back to a
+// plain number input when nothing is documented yet, so the field is
+// always usable even before connector data exists for that node.
+// selectHandler/manualHandler are optional JS function-name strings
+// invoked on change/input — used by the Add-Node form to keep a working
+// draft in sync across re-renders; left blank by the Edge Editor, which
+// reads the DOM directly at save time instead.
+function renderPinField(fieldId, connectors, selectedConnector, selectedPin, selectHandler, manualHandler){
+  const opts = pinOptionsFromConnectors(connectors);
+  const selectedValue = (selectedConnector && selectedPin)
+    ? `${selectedConnector}::${selectedPin}` : "";
+  const isManualFallback = !selectedValue && selectedPin;
+
+  if(opts.length){
+    const onchangeParts = [`toggleManualPin('${fieldId}')`];
+    if(selectHandler) onchangeParts.push(`${selectHandler}(this.value)`);
+    const manualOninput = manualHandler ? ` oninput="${manualHandler}(this.value)"` : "";
+    return `
+      <select id="${fieldId}" onchange="${onchangeParts.join('; ')}">
+        <option value="">— select pin —</option>
+        ${opts.map(o=>`<option value="${o.value}"
+          ${selectedValue===o.value?"selected":""}>${o.label}</option>`).join("")}
+        <option value="__manual__" ${isManualFallback?"selected":""}>— manual / not documented —</option>
+      </select>
+      <input id="${fieldId}_manual" type="number" min="1" step="1"
+        value="${isManualFallback?selectedPin:""}"
+        placeholder="pin #"${manualOninput}
+        style="display:${isManualFallback?"block":"none"};margin-top:4px;width:100%">
+    `;
+  }
+  const plainOninput = manualHandler ? ` oninput="${manualHandler}(this.value)"` : "";
+  return `<input id="${fieldId}" type="number" min="1" step="1"
+    value="${selectedPin||""}" placeholder="pin # (no connectors documented)"${plainOninput}>`;
+}
+
+window.toggleManualPin = function(fieldId){
+  const sel    = document.getElementById(fieldId);
+  const manual = document.getElementById(`${fieldId}_manual`);
+  if(!sel || !manual) return;
+  manual.style.display = sel.value === "__manual__" ? "block" : "none";
+};
+
+// Reads back whatever renderPinField produced for a given field id —
+// returns { connector, pin }, either of which may be undefined.
+function readPinField(fieldId){
+  const el = document.getElementById(fieldId);
+  if(!el) return { connector: undefined, pin: undefined };
+  if(el.tagName === "SELECT"){
+    if(el.value === "__manual__"){
+      const manual = document.getElementById(`${fieldId}_manual`);
+      const n = manual?.value ? parseInt(manual.value) : undefined;
+      return { connector: undefined, pin: n };
+    }
+    if(el.value){
+      const [designator, pin] = el.value.split("::");
+      return { connector: designator, pin: parseInt(pin) };
+    }
+    return { connector: undefined, pin: undefined };
+  }
+  // plain manual-only input (no documented connectors for that node)
+  const n = el.value ? parseInt(el.value) : undefined;
+  return { connector: undefined, pin: n };
+}
 
 // -----------------------------
 // Tab switching
@@ -333,8 +445,19 @@ function renderGraph(){
 // TAB 2 — BUILD MANAGEMENT
 // ==============================
 
-let EDITOR_MODE = "edit"; // "edit" | "add"
-let EDITOR_NODE = null;
+let EDITOR_MODE  = "edit"; // "edit" | "add"
+let EDITOR_NODE  = null;
+let EDITOR_DRAFT = null;   // working copy of the node being added/edited,
+                           // including its connectors[] groups + pins.
+                           // Nothing touches STATE until Save is clicked.
+
+function freshDraft(){
+  return {
+    id: "", zone: "A", tier: 1, type: "accessory",
+    label: "", partNumber: "", load: 0, notes: "",
+    status: "planned", connectors: []
+  };
+}
 
 // -------------------------------------------------------
 // PHASE 2 — Hardened deleteNode
@@ -368,13 +491,17 @@ window.deleteNode = function(id){
   // Remove all orphaned edges
   EDGES = EDGES.filter(e => e.from !== id && e.to !== id);
 
-  EDITOR_NODE = null;
+  EDITOR_NODE  = null;
+  EDITOR_DRAFT = null;
   renderAll();
   renderComponentEditor();
   renderEdgeEditor();
   renderStatusEditor();
 };
 
+// -------------------------------------------------------
+// PHASE 5 — Component Editor (draft-backed)
+// -------------------------------------------------------
 function renderComponentEditor(){
   const nodes = Object.values(STATE.nodes);
   const zones = ["A","B","C","D","E"];
@@ -389,7 +516,16 @@ function renderComponentEditor(){
     </option>`
   ).join("");
 
-  const sel = EDITOR_NODE ? STATE.nodes[EDITOR_NODE] : null;
+  const draft = EDITOR_DRAFT;
+  const sel   = (EDITOR_MODE === "edit") ? STATE.nodes[EDITOR_NODE] : null;
+
+  // Keep visually-defaulted selects (loom/type) in sync with the draft so
+  // Save never disagrees with what's on screen even if the user never
+  // touched those particular controls.
+  if(draft){
+    if(!draft._edgeLoom) draft._edgeLoom = looms[0] || "cab_harness";
+    if(!draft._edgeType) draft._edgeType = "POWER";
+  }
 
   // For edit mode, show connected edges as a mini-summary
   const connectedEdges = sel
@@ -408,6 +544,75 @@ function renderComponentEditor(){
         </div>`).join("")}
       <div style="margin-top:4px;font-size:9px;color:#AAA">
         Use Edge Editor to add or remove connections
+      </div>
+    </div>` : "";
+
+  // "From" choices for the inline edge-creation block exclude the node
+  // currently being edited (no self-loops from this shortcut)
+  const fromNodeChoices = nodes.filter(n => n.id !== EDITOR_NODE);
+
+  const connectHTML = draft ? `
+    <div style="margin-top:10px;border-top:1px solid #D8D2C8;padding-top:8px">
+      <div style="font-size:10px;font-weight:bold;color:#2D6C8C;
+                  letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px">
+        🔗 Connect To Another Node (optional)
+      </div>
+      <div class="form-row">
+        <div>
+          <label>From Node</label>
+          <select id="ef_from" onchange="updateAddEdgeFrom(this.value)">
+            <option value="">— none / wire up later in Edge Editor —</option>
+            ${fromNodeChoices.map(n=>`<option value="${n.id}"
+              ${draft._edgeFrom===n.id?"selected":""}>${n.label||n.id}</option>`).join("")}
+          </select>
+        </div>
+        <div>
+          <label>Loom</label>
+          <select id="ef_loom" onchange="updateDraftField('_edgeLoom', this.value)">
+            ${looms.map(l=>`<option value="${l}"
+              ${draft._edgeLoom===l?"selected":""}>${l.replace(/_/g," ")}</option>`).join("")}
+            ${!looms.includes("cab_harness")?`<option value="cab_harness"
+              ${draft._edgeLoom==="cab_harness"?"selected":""}>cab harness</option>`:""}
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div>
+          <label>Edge Type</label>
+          <select id="ef_edge_type"
+            onchange="updateDraftField('_edgeType', this.value); suggestAddEdgeColor(this.value)">
+            ${PIN_TYPES.map(t=>`<option value="${t}"
+              ${draft._edgeType===t?"selected":""}>${t}</option>`).join("")}
+          </select>
+        </div>
+        <div>
+          <label>Wire Color</label>
+          <select id="ef_edge_color" onchange="updateDraftField('_edgeColor', this.value)">
+            <option value="">— unspecified —</option>
+            ${WIRE_COLOR_OPTIONS.map(([code,name])=>`<option value="${code}"
+              ${draft._edgeColor===code?"selected":""}>${code} — ${name}</option>`).join("")}
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div>
+          <label>From Pin ${draft._edgeFrom?`(on ${STATE.nodes[draft._edgeFrom]?.label||draft._edgeFrom})`:""}</label>
+          ${renderPinField("ef_from_pin", STATE.nodes[draft._edgeFrom]?.connectors,
+              draft._edgeFromConnector, draft._edgeFromPin,
+              "syncAddEdgeFromPinSelect", "syncAddEdgeFromPinManual")}
+        </div>
+        <div>
+          <label>To Pin (on this component)</label>
+          ${renderPinField("ef_to_pin", draft.connectors,
+              draft._edgeToConnector, draft._edgeToPin,
+              "syncAddEdgeToPinSelect", "syncAddEdgeToPinManual")}
+        </div>
+      </div>
+      <div style="font-size:9px;color:#AAA;margin-top:2px">
+        To Pin options come from the Connector Groups above — add a group
+        and its pins first if you want to pick a specific one here,
+        otherwise enter it manually. Leave "From Node" blank to skip
+        creating an edge — you can always wire it up later in the Edge Editor.
       </div>
     </div>` : "";
 
@@ -440,19 +645,21 @@ function renderComponentEditor(){
       </select>
     </div>` : ""}
 
-    ${EDITOR_MODE==="add" || sel ? `
+    ${draft ? `
     <div id="editorForm">
 
       ${EDITOR_MODE==="add" ? `
       <div class="form-row">
         <div>
           <label>Node ID (no spaces)</label>
-          <input id="ef_id" type="text" placeholder="e.g. horn_relay" value="">
+          <input id="ef_id" type="text" placeholder="e.g. horn_relay"
+            value="${draft.id||""}"
+            oninput="updateDraftField('id', this.value)">
         </div>
         <div>
           <label>Zone</label>
-          <select id="ef_zone">
-            ${zones.map(z=>`<option value="${z}">Zone ${z}${
+          <select id="ef_zone" onchange="updateDraftField('zone', this.value)">
+            ${zones.map(z=>`<option value="${z}" ${draft.zone===z?"selected":""}>Zone ${z}${
               z==="A"?" — Engine Bay":z==="B"?" — Cab":
               z==="C"?" — Trans Mid":z==="D"?" — Trans Rear":
               z==="E"?" — Rear Node":""}</option>`).join("")}
@@ -463,62 +670,68 @@ function renderComponentEditor(){
       <div class="form-row">
         <div>
           <label>Label / Display Name</label>
-          <input id="ef_label" type="text"
-            value="${sel?.label||""}" placeholder="e.g. Horn Relay">
+          <input id="ef_label" type="text" value="${draft.label||""}"
+            placeholder="e.g. Horn Relay"
+            oninput="updateDraftField('label', this.value)">
         </div>
         <div>
           <label>Part Number</label>
-          <input id="ef_part" type="text"
-            value="${sel?.partNumber||""}" placeholder="e.g. Bosch 0332">
+          <input id="ef_part" type="text" value="${draft.partNumber||""}"
+            placeholder="e.g. Bosch 0332"
+            oninput="updateDraftField('partNumber', this.value)">
         </div>
       </div>
 
       <div class="form-row-3">
         <div>
           <label>Type</label>
-          <select id="ef_type">
+          <select id="ef_type" onchange="updateDraftField('type', this.value)">
             ${types.map(t=>`<option value="${t}"
-              ${sel?.type===t?"selected":""}>${t}</option>`).join("")}
+              ${draft.type===t?"selected":""}>${t}</option>`).join("")}
           </select>
         </div>
         <div>
           <label>Tier</label>
-          <select id="ef_tier">
+          <select id="ef_tier" onchange="updateDraftField('tier', parseInt(this.value))">
             ${tiers.map(t=>`<option value="${t}"
-              ${sel?.tier===t?"selected":""}>${t===1?"1 — Core":"2 — Accessory"}</option>`).join("")}
+              ${draft.tier===t?"selected":""}>${t===1?"1 — Core":"2 — Accessory"}</option>`).join("")}
           </select>
         </div>
         <div>
           <label>Load (amps)</label>
           <input id="ef_load" type="number" min="0" step="0.1"
-            value="${sel?.load||0}" placeholder="0">
+            value="${draft.load||0}" placeholder="0"
+            oninput="updateDraftField('load', parseFloat(this.value)||0)">
         </div>
       </div>
 
-      ${EDITOR_MODE==="add" ? `
-      <div class="form-row">
-        <div>
-          <label>Connect from (optional)</label>
-          <select id="ef_from">
-            <option value="">— none / add edge later —</option>
-            ${nodes.map(n=>`<option value="${n.id}">${n.label||n.id}</option>`).join("")}
-          </select>
+      <!-- Connector Groups Editor -->
+      <div style="margin-top:10px;border-top:1px solid #D8D2C8;padding-top:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:10px;font-weight:bold;color:#2D6C8C;
+                       letter-spacing:0.5px;text-transform:uppercase">
+            🔌 Connector Groups (${draft.connectors.length})
+          </span>
+          <button onclick="addConnectorGroup()"
+            style="font-size:9px;padding:2px 8px;background:#3E6B48;color:white;border:none;border-radius:3px">
+            + Add Group
+          </button>
         </div>
-        <div>
-          <label>Loom</label>
-          <select id="ef_loom">
-            ${looms.map(l=>`<option value="${l}">${l.replace(/_/g," ")}</option>`).join("")}
-          </select>
-        </div>
-      </div>` : ""}
+        ${draft.connectors.length === 0 ? `
+          <div style="font-size:10px;color:#AAA;padding:8px 0">
+            No connector groups defined yet. Click "+ Add Group" to document
+            a physical connector (e.g. J1A, ES_PWR) and its pins.
+          </div>` : draft.connectors.map((grp,gi)=>renderConnectorGroup(grp,gi)).join("")}
+      </div>
 
-      <div>
+      ${connectHTML}
+
+      <div style="margin-top:10px">
         <label>Build Status</label>
-        <select id="ef_status">
+        <select id="ef_status" onchange="updateDraftField('status', this.value)">
           ${["planned","ordered","installed","tested"].map(s=>
             `<option value="${s}"
-              ${(STATE.status?.[EDITOR_NODE]?.status||"planned")===s?"selected":""}
-              >${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
+              ${draft.status===s?"selected":""}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`
           ).join("")}
         </select>
       </div>
@@ -527,63 +740,12 @@ function renderComponentEditor(){
         <label>Notes</label>
         <textarea id="ef_notes" rows="3"
           placeholder="Part notes, install tips, cross-references..."
-          >${sel?.notes||""}</textarea>
-      </div>
-
-      <!-- Connector Detail Section -->
-      <div style="margin-top:10px;border-top:1px solid #D8D2C8;padding-top:8px">
-        <div style="display:flex;align-items:center;justify-content:space-between;
-                    margin-bottom:6px;cursor:pointer"
-             onclick="toggleSection('connectorDetail')">
-          <span style="font-size:10px;font-weight:bold;color:#2D6C8C;
-                       letter-spacing:0.5px;text-transform:uppercase">
-            🔌 Connector Detail
-          </span>
-          <span id="connectorDetailToggle" style="font-size:10px;color:#AAA">▼</span>
-        </div>
-        <div id="connectorDetail" style="display:${sel?.connectorBody?'block':'none'}">
-          <div class="form-row">
-            <div>
-              <label>Connector Body</label>
-              <select id="ef_connector_body">
-                <option value="">— none / not applicable —</option>
-                ${Object.keys(CONNECTOR_LIBRARY||{}).map(k=>
-                  `<option value="${k}" ${sel?.connectorBody===k?"selected":""}>${k}</option>`
-                ).join("")}
-              </select>
-            </div>
-            <div>
-              <label>Subtype</label>
-              <select id="ef_connector_sub">
-                <option value="" ${!sel?.connectorSubtype?"selected":""}>— unspecified —</option>
-                <option value="male" ${sel?.connectorSubtype==="male"?"selected":""}>Male</option>
-                <option value="female" ${sel?.connectorSubtype==="female"?"selected":""}>Female</option>
-                <option value="inline" ${sel?.connectorSubtype==="inline"?"selected":""}>Inline</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <div>
-              <label>Pin Count</label>
-              <input id="ef_pincount" type="number" min="1" step="1"
-                value="${sel?.pincount||""}" placeholder="e.g. 4">
-            </div>
-            <div>
-              <label>Pin Labels (comma separated)</label>
-              <input id="ef_pinlabels" type="text"
-                value="${sel?.pinlabels ? sel.pinlabels.join(", ") : ""}"
-                placeholder="e.g. PWR, GND, SIG, SPARE">
-            </div>
-          </div>
-          <div style="font-size:9px;color:#AAA;margin-top:2px">
-            Pin labels must match pin count — used in WireViz connector diagrams
-          </div>
-        </div>
+          oninput="updateDraftField('notes', this.value)">${draft.notes||""}</textarea>
       </div>
 
       ${edgeSummaryHTML}
 
-      <div style="display:flex;gap:6px;margin-top:4px">
+      <div style="display:flex;gap:6px;margin-top:10px">
         <button onclick="saveEditorForm()"
           style="background:#3E6B48;flex:1">
           ${EDITOR_MODE==="add"?"＋ Add Component":"✓ Save Changes"}
@@ -605,103 +767,371 @@ function renderComponentEditor(){
   `;
 }
 
+// -----------------------------
+// Connector group rendering
+// -----------------------------
+function renderConnectorGroup(grp, gi){
+  const bodyOptions = Object.keys(CONNECTOR_LIBRARY||{});
+  const pins = grp.pins || [];
+  return `
+    <div style="margin:8px 0;padding:8px;background:#FAFAF8;
+                border:1px solid #E0DBD4;border-radius:6px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:10px;font-weight:bold;color:#C4622D">
+          Group ${gi+1}${grp.designator?` — ${grp.designator}`:""}
+        </span>
+        <button onclick="removeConnectorGroup(${gi})"
+          style="font-size:9px;padding:1px 6px;background:#B00020;color:white;border:none;border-radius:3px">
+          ✕ Remove Group
+        </button>
+      </div>
+
+      <div class="form-row-3">
+        <div>
+          <label style="font-size:9px">Designator</label>
+          <input type="text" value="${grp.designator||""}" placeholder="e.g. J1A"
+            oninput="updateConnectorGroupField(${gi},'designator',this.value)">
+        </div>
+        <div>
+          <label style="font-size:9px">Body</label>
+          <input type="text" list="connectorBodyOptions_${gi}" value="${grp.body||""}"
+            placeholder="e.g. Deutsch DT 4-way"
+            oninput="updateConnectorGroupField(${gi},'body',this.value)">
+          <datalist id="connectorBodyOptions_${gi}">
+            ${bodyOptions.map(b=>`<option value="${b}">`).join("")}
+          </datalist>
+        </div>
+        <div>
+          <label style="font-size:9px">Gender</label>
+          <select onchange="updateConnectorGroupField(${gi},'gender',this.value)">
+            ${["male","female","n/a"].map(g=>`<option value="${g}"
+              ${grp.gender===g?"selected":""}>${g}</option>`).join("")}
+          </select>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:8px;margin:6px 0 4px">
+        <label style="font-size:9px;margin:0">Pin Count</label>
+        <input type="number" min="0" step="1" value="${grp.pinCount||0}"
+          style="width:60px"
+          oninput="updateConnectorGroupField(${gi},'pinCount',parseInt(this.value)||0)">
+        <span style="font-size:9px;color:#AAA">
+          (${pins.length} pin${pins.length===1?"":"s"} documented below)
+        </span>
+        <button onclick="addConnectorPin(${gi})"
+          style="margin-left:auto;font-size:9px;padding:2px 8px;background:#2D6C8C;color:white;border:none;border-radius:3px">
+          + Add Pin
+        </button>
+      </div>
+
+      <table style="width:100%;border-collapse:collapse;font-size:10px">
+        <thead>
+          <tr style="color:#AAA">
+            <th style="text-align:left;padding:2px 4px;width:50px">Pin#</th>
+            <th style="text-align:left;padding:2px 4px">Label</th>
+            <th style="text-align:left;padding:2px 4px;width:90px">Type</th>
+            <th style="width:24px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${pins.map((p,pi)=>`
+            <tr>
+              <td style="padding:2px 4px">
+                <input type="number" min="1" step="1" value="${p.pin}"
+                  style="width:46px"
+                  onchange="updateConnectorPinField(${gi},${pi},'pin',parseInt(this.value)||0,true)">
+              </td>
+              <td style="padding:2px 4px">
+                <input type="text" value="${p.label||""}" placeholder="e.g. TACH"
+                  style="width:100%"
+                  oninput="updateConnectorPinField(${gi},${pi},'label',this.value,false)">
+              </td>
+              <td style="padding:2px 4px">
+                <select onchange="updateConnectorPinField(${gi},${pi},'type',this.value,true)">
+                  ${PIN_TYPES.map(t=>`<option value="${t}"
+                    ${p.type===t?"selected":""}>${t}</option>`).join("")}
+                </select>
+              </td>
+              <td style="padding:2px 4px;text-align:center">
+                <button onclick="removeConnectorPin(${gi},${pi})"
+                  style="font-size:9px;padding:0 5px;background:#F4F1EC;color:#B00020;border:1px solid #D8D2C8">
+                  ✕
+                </button>
+              </td>
+            </tr>`).join("")}
+        </tbody>
+      </table>
+      ${pins.length===0?`<div style="font-size:9px;color:#AAA;padding:4px 0">No pins yet</div>`:""}
+    </div>
+  `;
+}
+
+// -----------------------------
+// Connector group / pin CRUD —
+// all operate on EDITOR_DRAFT.connectors
+// -----------------------------
+window.addConnectorGroup = function(){
+  if(!EDITOR_DRAFT) return;
+  EDITOR_DRAFT.connectors.push({ designator:"", body:"", gender:"female", pinCount:0, pins:[] });
+  renderComponentEditor();
+};
+
+window.removeConnectorGroup = function(gi){
+  if(!EDITOR_DRAFT) return;
+  const grp = EDITOR_DRAFT.connectors[gi];
+  if(!confirm(`Remove connector group "${grp.designator||"(unnamed)"}" and its ${(grp.pins||[]).length} pin(s)?`)) return;
+  EDITOR_DRAFT.connectors.splice(gi,1);
+  renderComponentEditor();
+};
+
+window.updateConnectorGroupField = function(gi, field, value){
+  if(!EDITOR_DRAFT) return;
+  EDITOR_DRAFT.connectors[gi][field] = value;
+  // text/number/select fields here don't affect any other part of the
+  // form, so no re-render needed — keeps typing smooth
+};
+
+window.addConnectorPin = function(gi){
+  if(!EDITOR_DRAFT) return;
+  const grp = EDITOR_DRAFT.connectors[gi];
+  grp.pins = grp.pins || [];
+  const nextPin = grp.pins.length
+    ? Math.max(...grp.pins.map(p=>p.pin)) + 1
+    : 1;
+  grp.pins.push({ pin: nextPin, label:"", type:"SIGNAL" });
+  grp.pinCount = Math.max(grp.pinCount||0, grp.pins.length);
+  renderComponentEditor();
+};
+
+window.removeConnectorPin = function(gi, pi){
+  if(!EDITOR_DRAFT) return;
+  EDITOR_DRAFT.connectors[gi].pins.splice(pi,1);
+  renderComponentEditor();
+};
+
+window.updateConnectorPinField = function(gi, pi, field, value, rerender){
+  if(!EDITOR_DRAFT) return;
+  EDITOR_DRAFT.connectors[gi].pins[pi][field] = value;
+  // Pin number / type changes affect the From/To pin pickers elsewhere
+  // in the form, so refresh; label is free-typed and left alone to avoid
+  // disrupting the cursor on every keystroke.
+  if(rerender) renderComponentEditor();
+};
+
+// -----------------------------
+// Generic draft field updater —
+// used for plain text/number/select
+// inputs that don't need a re-render
+// -----------------------------
+window.updateDraftField = function(field, value){
+  if(!EDITOR_DRAFT) return;
+  EDITOR_DRAFT[field] = value;
+};
+
+// -----------------------------
+// Inline edge-creation helpers
+// (Component Editor "Connect To
+// Another Node" block)
+// -----------------------------
+window.updateAddEdgeFrom = function(value){
+  if(!EDITOR_DRAFT) return;
+  EDITOR_DRAFT._edgeFrom            = value || undefined;
+  EDITOR_DRAFT._edgeFromConnector   = undefined;
+  EDITOR_DRAFT._edgeFromPin         = undefined;
+  renderComponentEditor(); // From Pin options depend on the chosen node
+};
+
+window.suggestAddEdgeColor = function(type){
+  if(!EDITOR_DRAFT || EDITOR_DRAFT._edgeColor) return; // don't override a choice
+  const allowed = (COLOR_RULES||{})[type];
+  if(allowed && allowed.length){
+    EDITOR_DRAFT._edgeColor = allowed[0];
+    const colorSel = document.getElementById("ef_edge_color");
+    if(colorSel) colorSel.value = allowed[0];
+  }
+};
+
+window.syncAddEdgeFromPinSelect = function(value){
+  if(!EDITOR_DRAFT) return;
+  if(value === "__manual__" || value === ""){
+    EDITOR_DRAFT._edgeFromConnector = undefined;
+    if(value === "") EDITOR_DRAFT._edgeFromPin = undefined;
+    return;
+  }
+  const [d,p] = value.split("::");
+  EDITOR_DRAFT._edgeFromConnector = d;
+  EDITOR_DRAFT._edgeFromPin = parseInt(p);
+};
+window.syncAddEdgeFromPinManual = function(value){
+  if(!EDITOR_DRAFT) return;
+  EDITOR_DRAFT._edgeFromConnector = undefined;
+  EDITOR_DRAFT._edgeFromPin = value ? parseInt(value) : undefined;
+};
+window.syncAddEdgeToPinSelect = function(value){
+  if(!EDITOR_DRAFT) return;
+  if(value === "__manual__" || value === ""){
+    EDITOR_DRAFT._edgeToConnector = undefined;
+    if(value === "") EDITOR_DRAFT._edgeToPin = undefined;
+    return;
+  }
+  const [d,p] = value.split("::");
+  EDITOR_DRAFT._edgeToConnector = d;
+  EDITOR_DRAFT._edgeToPin = parseInt(p);
+};
+window.syncAddEdgeToPinManual = function(value){
+  if(!EDITOR_DRAFT) return;
+  EDITOR_DRAFT._edgeToConnector = undefined;
+  EDITOR_DRAFT._edgeToPin = value ? parseInt(value) : undefined;
+};
+
+// -----------------------------
+// Mode / selection handlers
+// -----------------------------
 window.setEditorMode = function(mode){
-  EDITOR_MODE = mode;
-  EDITOR_NODE = null;
+  EDITOR_MODE  = mode;
+  EDITOR_NODE  = null;
+  EDITOR_DRAFT = (mode === "add") ? freshDraft() : null;
   renderComponentEditor();
 };
 
 window.selectEditorNode = function(id){
   EDITOR_NODE = id || null;
+  if(id && STATE.nodes[id]){
+    const n = STATE.nodes[id];
+    EDITOR_DRAFT = cloneDeep({
+      id: n.id, zone: n.zone, tier: n.tier, type: n.type,
+      label: n.label, partNumber: n.partNumber, load: n.load,
+      notes: n.notes, connectors: n.connectors || []
+    });
+    EDITOR_DRAFT.status = STATE.status?.[id]?.status || "planned";
+  } else {
+    EDITOR_DRAFT = null;
+  }
   renderComponentEditor();
 };
 
 window.scrollToNode = function(id){
   EDITOR_MODE = "edit";
-  EDITOR_NODE = id;
-  renderComponentEditor();
+  selectEditorNode(id);
   renderStatusEditor();
 };
 
+// -----------------------------
+// Save — commits EDITOR_DRAFT to
+// STATE, including connectors[],
+// and creates the optional edge
+// (now type/color/pin aware
+// instead of a hardcoded POWER
+// stub)
+// -----------------------------
+function commitOptionalEdge(toId, zoneForEdge){
+  if(!EDITOR_DRAFT || !EDITOR_DRAFT._edgeFrom) return;
+  const edge = {
+    from: EDITOR_DRAFT._edgeFrom,
+    to: toId,
+    type: EDITOR_DRAFT._edgeType || "POWER",
+    zone: zoneForEdge,
+    loom: EDITOR_DRAFT._edgeLoom || "cab_harness",
+    resistance: 0.03
+  };
+  if(EDITOR_DRAFT._edgeColor)          edge.color         = EDITOR_DRAFT._edgeColor;
+  if(EDITOR_DRAFT._edgeFromConnector)  edge.fromConnector = EDITOR_DRAFT._edgeFromConnector;
+  if(EDITOR_DRAFT._edgeFromPin)        edge.fromPin       = EDITOR_DRAFT._edgeFromPin;
+  if(EDITOR_DRAFT._edgeToConnector)    edge.toConnector   = EDITOR_DRAFT._edgeToConnector;
+  if(EDITOR_DRAFT._edgeToPin)          edge.toPin         = EDITOR_DRAFT._edgeToPin;
+  EDGES.push(edge);
+
+  // clear transient edge-creation fields so a second Save doesn't duplicate it
+  EDITOR_DRAFT._edgeFrom          = undefined;
+  EDITOR_DRAFT._edgeFromConnector = undefined;
+  EDITOR_DRAFT._edgeFromPin       = undefined;
+  EDITOR_DRAFT._edgeToConnector   = undefined;
+  EDITOR_DRAFT._edgeToPin         = undefined;
+}
+
 window.saveEditorForm = function(){
   const msg = document.getElementById("editorMsg");
+  if(!EDITOR_DRAFT){
+    if(msg) msg.innerHTML = `<span style="color:#B00020">Nothing to save</span>`;
+    return;
+  }
+
+  for(const grp of EDITOR_DRAFT.connectors){
+    if(!grp.designator){
+      msg.innerHTML = `<span style="color:#B00020">Every connector group needs a designator (e.g. J1A)</span>`;
+      return;
+    }
+  }
+
+  let successMsg = "";
 
   if(EDITOR_MODE === "add"){
-    const id    = document.getElementById("ef_id")?.value.trim().replace(/\s+/g,"_");
-    const zone  = document.getElementById("ef_zone")?.value;
-    const from  = document.getElementById("ef_from")?.value;
-    const loom  = document.getElementById("ef_loom")?.value;
-
-    if(!id){ msg.innerHTML=`<span style="color:#B00020">Node ID is required</span>`; return; }
-    if(STATE.nodes[id]){ msg.innerHTML=`<span style="color:#B00020">ID already exists — choose a unique ID</span>`; return; }
+    const id = (EDITOR_DRAFT.id||"").trim().replace(/\s+/g,"_");
+    if(!id){
+      msg.innerHTML = `<span style="color:#B00020">Node ID is required</span>`;
+      return;
+    }
+    if(STATE.nodes[id]){
+      msg.innerHTML = `<span style="color:#B00020">ID already exists — choose a unique ID</span>`;
+      return;
+    }
 
     STATE.nodes[id] = {
       id,
-      zone,
-      tier:           parseInt(document.getElementById("ef_tier")?.value||1),
-      type:           document.getElementById("ef_type")?.value||"accessory",
-      label:          document.getElementById("ef_label")?.value.trim()||id,
-      partNumber:     document.getElementById("ef_part")?.value.trim()||"—",
-      load:           parseFloat(document.getElementById("ef_load")?.value||0),
-      notes:          document.getElementById("ef_notes")?.value.trim()||"",
-      connectorBody:  document.getElementById("ef_connector_body")?.value||undefined,
-      connectorSubtype: document.getElementById("ef_connector_sub")?.value||undefined,
-      pincount:       parseInt(document.getElementById("ef_pincount")?.value)||undefined,
-      pinlabels:      document.getElementById("ef_pinlabels")?.value
-                        ? document.getElementById("ef_pinlabels").value.split(",").map(s=>s.trim()).filter(Boolean)
-                        : undefined,
-      effectiveVoltage:12, inputVoltage:0, failed:false
+      zone: EDITOR_DRAFT.zone,
+      tier: EDITOR_DRAFT.tier,
+      type: EDITOR_DRAFT.type,
+      label: (EDITOR_DRAFT.label||"").trim() || id,
+      partNumber: (EDITOR_DRAFT.partNumber||"").trim() || "—",
+      load: EDITOR_DRAFT.load || 0,
+      notes: (EDITOR_DRAFT.notes||"").trim(),
+      connectors: cloneDeep(EDITOR_DRAFT.connectors || []),
+      effectiveVoltage: 12, inputVoltage: 0, failed: false
     };
+    STATE.status[id] = { status: EDITOR_DRAFT.status || "planned" };
 
-    STATE.status[id] = {
-      status: document.getElementById("ef_status")?.value||"planned"
-    };
-
-    if(from && loom){
-      EDGES.push({
-        from, to:id,
-        type:"POWER", zone,
-        loom: loom||"cab_harness",
-        resistance:0.03
-      });
-    }
+    commitOptionalEdge(id, EDITOR_DRAFT.zone);
 
     EDITOR_NODE = id;
     EDITOR_MODE = "edit";
-    msg.innerHTML=`<span style="color:#3E6B48">✓ ${STATE.nodes[id].label} added</span>`;
+    successMsg = `✓ ${STATE.nodes[id].label} added`;
 
   } else if(EDITOR_NODE){
     const n = STATE.nodes[EDITOR_NODE];
-    if(!n){ msg.innerHTML=`<span style="color:#B00020">Node not found</span>`; return; }
+    if(!n){
+      msg.innerHTML = `<span style="color:#B00020">Node not found</span>`;
+      return;
+    }
+    n.label       = (EDITOR_DRAFT.label||"").trim() || n.label;
+    n.partNumber  = (EDITOR_DRAFT.partNumber||"").trim() || n.partNumber;
+    n.type        = EDITOR_DRAFT.type;
+    n.tier        = EDITOR_DRAFT.tier;
+    n.load        = EDITOR_DRAFT.load;
+    n.notes       = (EDITOR_DRAFT.notes||"").trim();
+    n.connectors  = cloneDeep(EDITOR_DRAFT.connectors || []);
 
-    n.label       = document.getElementById("ef_label")?.value.trim()||n.label;
-    n.partNumber  = document.getElementById("ef_part")?.value.trim()||n.partNumber;
-    n.type        = document.getElementById("ef_type")?.value||n.type;
-    n.tier        = parseInt(document.getElementById("ef_tier")?.value||n.tier);
-    n.load        = parseFloat(document.getElementById("ef_load")?.value||n.load);
-    n.notes       = document.getElementById("ef_notes")?.value.trim()||"";
-    // Connector detail fields
-    const cbody   = document.getElementById("ef_connector_body")?.value;
-    const csub    = document.getElementById("ef_connector_sub")?.value;
-    const cpins   = document.getElementById("ef_pincount")?.value;
-    const clabels = document.getElementById("ef_pinlabels")?.value;
-    if(cbody)   n.connectorBody     = cbody; else delete n.connectorBody;
-    if(csub)    n.connectorSubtype  = csub;  else delete n.connectorSubtype;
-    if(cpins)   n.pincount          = parseInt(cpins); else delete n.pincount;
-    if(clabels) n.pinlabels         = clabels.split(",").map(s=>s.trim()).filter(Boolean);
-    else        delete n.pinlabels;
+    if(!STATE.status[EDITOR_NODE]) STATE.status[EDITOR_NODE] = {};
+    STATE.status[EDITOR_NODE].status = EDITOR_DRAFT.status || "planned";
 
-    if(!STATE.status[EDITOR_NODE]) STATE.status[EDITOR_NODE]={};
-    STATE.status[EDITOR_NODE].status =
-      document.getElementById("ef_status")?.value||"planned";
+    commitOptionalEdge(EDITOR_NODE, n.zone);
 
-    msg.innerHTML=`<span style="color:#3E6B48">✓ ${n.label} saved</span>`;
+    successMsg = `✓ ${n.label} saved`;
+  } else {
+    if(msg) msg.innerHTML = `<span style="color:#B00020">Nothing selected to save</span>`;
+    return;
   }
+
+  // Refresh the draft from the now-committed state so the form reflects
+  // exactly what was saved (and clears any stale transient edge fields)
+  if(EDITOR_NODE) selectEditorNode(EDITOR_NODE);
 
   renderAll();
   renderStatusEditor();
   renderEdgeEditor();
   renderWiringSpec();
+
+  const msgEl = document.getElementById("editorMsg");
+  if(msgEl) msgEl.innerHTML = `<span style="color:#3E6B48">${successMsg}</span>`;
 };
 
 // -------------------------------------------------------
@@ -822,14 +1252,14 @@ function renderEdgeEditor(){
       <div class="form-row">
         <div>
           <label>From Node</label>
-          <select id="ee_from">
+          <select id="ee_from" onchange="refreshEdgePinField('from')">
             ${nodes.map(n=>`<option value="${n.id}"
               ${sel?.from===n.id?"selected":""}>${n.label||n.id}</option>`).join("")}
           </select>
         </div>
         <div>
           <label>To Node</label>
-          <select id="ee_to">
+          <select id="ee_to" onchange="refreshEdgePinField('to')">
             ${nodes.map(n=>`<option value="${n.id}"
               ${sel?.to===n.id?"selected":""}>${n.label||n.id}</option>`).join("")}
           </select>
@@ -839,7 +1269,7 @@ function renderEdgeEditor(){
       <div class="form-row">
         <div>
           <label>Type</label>
-          <select id="ee_type">
+          <select id="ee_type" onchange="updateEdgeTypeColorSuggestion(this.value)">
             ${edgeTypes.map(t=>`<option value="${t}"
               ${sel?.type===t?"selected":""}>${t}</option>`).join("")}
           </select>
@@ -921,14 +1351,16 @@ function renderEdgeEditor(){
           </div>
           <div class="form-row">
             <div>
-              <label>From Pin #</label>
-              <input id="ee_from_pin" type="number" min="1" step="1"
-                value="${sel?.fromPin||""}" placeholder="e.g. 1">
+              <label>From Pin</label>
+              <div id="ee_from_pin_wrap">
+                ${renderPinField("ee_from_pin", STATE.nodes[sel?.from]?.connectors, sel?.fromConnector, sel?.fromPin)}
+              </div>
             </div>
             <div>
-              <label>To Pin #</label>
-              <input id="ee_to_pin" type="number" min="1" step="1"
-                value="${sel?.toPin||""}" placeholder="e.g. 3">
+              <label>To Pin</label>
+              <div id="ee_to_pin_wrap">
+                ${renderPinField("ee_to_pin", STATE.nodes[sel?.to]?.connectors, sel?.toConnector, sel?.toPin)}
+              </div>
             </div>
           </div>
           <div class="form-row">
@@ -963,6 +1395,12 @@ function renderEdgeEditor(){
             These fields populate WireViz YAML export — leave blank for circuits not yet fully spec'd
           </div>
         </div>
+      </div>
+
+      <div style="margin-top:8px">
+        <label>Notes</label>
+        <textarea id="ee_notes" rows="2"
+          placeholder="Install notes, cross-references...">${sel?.notes||""}</textarea>
       </div>
 
       <div style="display:flex;gap:6px;margin-top:10px">
@@ -1018,6 +1456,25 @@ function renderEdgeEditor(){
     });
   }
 }
+
+// Re-renders just the from/to pin picker (not the whole form) when the
+// From Node or To Node select changes, so other in-progress field values
+// in the Edge Editor form are left untouched.
+window.refreshEdgePinField = function(which){
+  const nodeSel = document.getElementById(which === "from" ? "ee_from" : "ee_to");
+  const wrap    = document.getElementById(which === "from" ? "ee_from_pin_wrap" : "ee_to_pin_wrap");
+  if(!nodeSel || !wrap) return;
+  const node    = STATE.nodes[nodeSel.value];
+  const fieldId = which === "from" ? "ee_from_pin" : "ee_to_pin";
+  wrap.innerHTML = renderPinField(fieldId, node?.connectors, undefined, undefined);
+};
+
+window.updateEdgeTypeColorSuggestion = function(type){
+  const colorSel = document.getElementById("ee_color");
+  if(!colorSel || colorSel.value) return; // don't override an existing choice
+  const allowed = (COLOR_RULES||{})[type];
+  if(allowed && allowed.length) colorSel.value = allowed[0];
+};
 
 window.startAddEdge = function(){
   EDGE_EDITOR_MODE = "add";
@@ -1094,21 +1551,25 @@ window.saveEdge = function(){
   // Wire detail fields for WireViz
   const color      = document.getElementById("ee_color")?.value;
   const stripe     = document.getElementById("ee_color_stripe")?.value;
-  const fromPin    = document.getElementById("ee_from_pin")?.value;
-  const toPin      = document.getElementById("ee_to_pin")?.value;
+  const fromPinInfo = readPinField("ee_from_pin");
+  const toPinInfo    = readPinField("ee_to_pin");
   const length     = document.getElementById("ee_length")?.value;
   const twisted    = document.getElementById("ee_twisted")?.checked;
   const shield     = document.getElementById("ee_shield")?.checked;
   const drain      = document.getElementById("ee_drain")?.value;
+  const notes      = document.getElementById("ee_notes")?.value.trim();
 
   if(color)   edge.color        = color;
   if(stripe)  edge.colorStripe  = stripe;
-  if(fromPin) edge.fromPin      = parseInt(fromPin);
-  if(toPin)   edge.toPin        = parseInt(toPin);
+  if(fromPinInfo.connector) edge.fromConnector = fromPinInfo.connector;
+  if(fromPinInfo.pin)       edge.fromPin       = fromPinInfo.pin;
+  if(toPinInfo.connector)   edge.toConnector   = toPinInfo.connector;
+  if(toPinInfo.pin)         edge.toPin         = toPinInfo.pin;
   if(length)  edge.length       = parseInt(length);
   if(twisted) edge.twisted      = true;
   if(shield)  edge.shield       = true;
   if(shield && drain) edge.drainGround = drain;
+  if(notes)   edge.notes        = notes;
 
   if(EDGE_EDITOR_MODE === "add"){
     EDGES.push(edge);
@@ -1394,11 +1855,8 @@ window.exportSystemJSON = function(){
         partNumber:n.partNumber||"—",
         notes:n.notes||""
       };
-      // Connector detail — only include if populated
-      if(n.connectorBody)    node.connectorBody    = n.connectorBody;
-      if(n.connectorSubtype) node.connectorSubtype = n.connectorSubtype;
-      if(n.pincount)         node.pincount         = n.pincount;
-      if(n.pinlabels?.length) node.pinlabels       = n.pinlabels;
+      // Connector groups — only include if at least one group is defined
+      if(n.connectors?.length) node.connectors = n.connectors;
       return node;
     }),
     edges: cleanEdges.map(e=>{
@@ -1409,14 +1867,17 @@ window.exportSystemJSON = function(){
       // Wire override
       if(e.wireOverride) edge.wireOverride = e.wireOverride;
       // Wire detail — only include if populated
-      if(e.color)       edge.color       = e.color;
-      if(e.colorStripe) edge.colorStripe = e.colorStripe;
-      if(e.fromPin)     edge.fromPin     = e.fromPin;
-      if(e.toPin)       edge.toPin       = e.toPin;
-      if(e.length)      edge.length      = e.length;
-      if(e.twisted)     edge.twisted     = e.twisted;
-      if(e.shield)      edge.shield      = e.shield;
-      if(e.drainGround) edge.drainGround = e.drainGround;
+      if(e.color)        edge.color        = e.color;
+      if(e.colorStripe)  edge.colorStripe  = e.colorStripe;
+      if(e.fromConnector) edge.fromConnector = e.fromConnector;
+      if(e.fromPin)       edge.fromPin       = e.fromPin;
+      if(e.toConnector)   edge.toConnector    = e.toConnector;
+      if(e.toPin)         edge.toPin          = e.toPin;
+      if(e.length)        edge.length         = e.length;
+      if(e.twisted)        edge.twisted        = e.twisted;
+      if(e.shield)         edge.shield         = e.shield;
+      if(e.drainGround)    edge.drainGround    = e.drainGround;
+      if(e.notes)          edge.notes          = e.notes;
       return edge;
     })
   };
