@@ -1,7 +1,12 @@
 // =============================
 // drc.js — Design Rule Checker
-// C10 Build Board v29+
+// C10 Build Board v29.1
 // Load order: after data.js, before ui.js
+// v29.1: generateWireVizYAML now emits one WireViz connector per
+//        documented connector group (was connectors[0] only), and
+//        resolves edge fromConnector/toConnector against the correct
+//        group so multi-connector nodes (ecm J1A/J1B/J3, estopp
+//        ES_PWR/ES_ACT/ES_BTN) render and wire up correctly.
 // =============================
 
 // ── Wire gauge ampacity (continuous, chassis wiring, 105°C TXL) ──
@@ -397,66 +402,64 @@ function renderDRCSummary(containerId) {
 
 // ── WIREVIZ YAML EXPORT ──
 // Generates a WireViz-compatible YAML string for the active loom
-// ── Flatten a node's pin data into a single ordered list, regardless of
-//    whether it uses the nested connectors[] schema (possibly multiple
-//    connector groups, e.g. estopp's ES_PWR/ES_ACT/ES_BTN) or the legacy
-//    flat pincount/pinlabels schema. Returns:
-//      { labels: [...], lookup: { "DESIGNATOR|pinNum": flatIndex } }
-//    lookup is keyed by "designator|localPinNumber" so callers can resolve
-//    an edge's fromConnector/fromPin (or toConnector/toPin) to the correct
-//    flat WireViz pin index even when multiple groups reuse pin numbers 1,2,3...
-function flattenNodePins(node) {
-  const labels = [];
-  const lookup = {};
-  if (node.connectors && node.connectors.length > 0) {
-    node.connectors.forEach(conn => {
-      const desig = conn.designator || "";
-      (conn.pins || []).forEach(p => {
-        labels.push(p.label);
-        lookup[`${desig}|${p.pin}`] = labels.length; // 1-indexed
-      });
-    });
-  } else if (node.pinlabels && node.pinlabels.length > 0) {
-    // Legacy flat schema fallback — single implicit connector group
-    node.pinlabels.forEach((lbl, i) => {
-      labels.push(lbl);
-      lookup[`|${i + 1}`] = i + 1;
-    });
-  }
-  return { labels, lookup };
+
+// Sanitizes any string into a YAML/WireViz-safe identifier (alphanumeric
+// + underscore only). Applied to node IDs and labels so hyphens or other
+// punctuation in future IDs/labels can't break generated YAML keys.
+function yamlKey(str) {
+  return String(str || "").replace(/[^a-zA-Z0-9_]/g, "_");
 }
 
-// ── Resolve an edge-side pin reference to a flat WireViz pin index.
-//    Tries the (connectorDesignator, pin) pair first; falls back to a
-//    bare pin-number match only when the node has a single connector
-//    group (unambiguous) or no flattening data at all.
-function resolvePinIndex(node, pin, connectorDesignator, flattened) {
-  const p = pin || 1;
-  if (!flattened || flattened.labels.length === 0) return p;
-  const key = `${connectorDesignator || ""}|${p}`;
-  if (key in flattened.lookup) return flattened.lookup[key];
-  // Fallback: single connector group (or legacy flat schema) — bare pin
-  // number is unambiguous, safe to use directly.
-  const groupCount = (node.connectors && node.connectors.length) || 1;
-  if (groupCount <= 1) return p;
-  // Ambiguous multi-group node with no designator given — best effort,
-  // first matching pin number across groups.
-  for (const k in flattened.lookup) {
-    if (k.endsWith(`|${p}`)) return flattened.lookup[k];
+// Normalizes a node's connector data into an array of groups, regardless
+// of which schema it's using:
+//  - nested (current):  node.connectors = [{ designator, body, pins:[{pin,label,type}] }, ...]
+//  - flat (legacy):      node.pincount / node.pinlabels directly on the node
+// Always returns an array — callers iterate uniformly instead of special
+// casing each schema, and a node with no connector data yet returns [].
+function getConnectorGroups(node) {
+  if (!node) return [];
+  if (Array.isArray(node.connectors) && node.connectors.length > 0) {
+    return node.connectors;
   }
-  return p;
+  if (node.pincount || (node.pinlabels && node.pinlabels.length)) {
+    return [{
+      designator: undefined,
+      body: node.connectorBody,
+      pinCount: node.pincount,
+      pins: (node.pinlabels || []).map((label, i) => ({ pin: i + 1, label }))
+    }];
+  }
+  return [];
 }
 
-// ── Escape text for safe embedding in WireViz/graphviz HTML-like labels.
-//    A bare '<', '>', or '&' breaks graphviz's HTML table parser and
-//    causes the renderer to silently truncate or crash mid-document.
-function escapeYamlNote(s) {
-  return (s || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "'")
-    .split("\n")[0];
+// Builds the WireViz connector key for a node + connector group. Nodes
+// with a single connector group keep the plain node-label key (matches
+// every loom already validated against real `wireviz` runs — no churn
+// for ecm-less nodes). Nodes with multiple physical connector bodies
+// (ecm's J1A/J1B/J3, estopp's ES_PWR/ES_ACT/ES_BTN, etc.) get one key
+// per group, suffixed with the designator, so every documented connector
+// actually appears in the rendered diagram instead of only the first.
+function connectorKeyFor(node, fallbackId, groups, designator) {
+  const base = yamlKey(node?.label || fallbackId);
+  if (groups.length <= 1) return base;
+  const grp = designator
+    ? groups.find(g => g.designator === designator)
+    : groups[0];
+  return `${base}_${yamlKey(grp?.designator || "CONN")}`;
+}
+
+// Resolves the pin WireViz should reference for one side of an edge.
+// Prefers the documented pin LABEL (WireViz accepts label or numeric
+// index — labels are robust regardless of array ordering or future pin
+// renumbering) and falls back to the raw pin number, or 1, when nothing
+// is documented yet for that circuit.
+function resolvePinRef(groups, designator, pinNum) {
+  if (!pinNum) return 1;
+  const grp = designator
+    ? groups.find(g => g.designator === designator)
+    : groups[0];
+  const pinEntry = grp?.pins?.find(p => p.pin === pinNum);
+  return pinEntry?.label || pinNum;
 }
 
 function generateWireVizYAML(loom) {
@@ -469,15 +472,8 @@ function generateWireVizYAML(loom) {
     ...filteredEdges.map(e => e.to)
   ])];
 
-  // Pre-flatten pin data for every node in this loom so both the
-  // connectors: block and the connections: block stay consistent.
-  const flatPinsByNode = {};
-  nodeIds.forEach(id => {
-    const node = STATE.nodes[id];
-    if (node) flatPinsByNode[id] = flattenNodePins(node);
-  });
-
-  // Build connectors block
+  // Build connectors block — one WireViz connector per documented
+  // connector group, not just the first one on the node.
   let yaml = `# Auto-generated by C10 Build Board\n`;
   yaml += `# Loom: ${loom}\n`;
   yaml += `# Generated: ${new Date().toLocaleDateString()}\n\n`;
@@ -486,74 +482,87 @@ function generateWireVizYAML(loom) {
   nodeIds.forEach(id => {
     const node = STATE.nodes[id];
     if (!node) return;
-    const label = (node.label || id).replace(/[^a-zA-Z0-9_]/g, "_");
-    yaml += `  ${label}:\n`;
-    yaml += `    type: ${node.partNumber || "—"}\n`;
-    yaml += `    notes: "${escapeYamlNote(node.notes)}"\n`;
+    const groups   = getConnectorGroups(node);
+    const noteLine = (node.notes || "").replace(/"/g, "'").split("\n")[0];
 
-    // Pin labels — flattened across all connector groups (nested schema)
-    // or read directly from the legacy flat pincount/pinlabels schema.
-    // A node with zero pin data anywhere (neither schema populated) is
-    // left with no pincount/pinlabels lines, matching WireViz's own
-    // "no pins" connector style rather than crashing the parser.
-    const flat = flatPinsByNode[id];
-    if (flat && flat.labels.length > 0) {
-      yaml += `    pincount: ${flat.labels.length}\n`;
-      yaml += `    pinlabels: [${flat.labels.join(", ")}]\n`;
+    if (groups.length === 0) {
+      // No connector data documented yet — still emit a bare placeholder
+      // so the node appears in the diagram and any edge referencing it
+      // (even without pin detail) still resolves to something.
+      yaml += `  ${yamlKey(node.label || id)}:\n`;
+      yaml += `    type: ${node.partNumber || "—"}\n`;
+      if (noteLine) yaml += `    notes: "${noteLine}"\n`;
+      yaml += `\n`;
+      return;
     }
-    yaml += `\n`;
+
+    groups.forEach(grp => {
+      const key  = connectorKeyFor(node, id, groups, grp.designator);
+      const pins = grp.pins || [];
+      yaml += `  ${key}:\n`;
+      yaml += `    type: ${grp.body || node.partNumber || "—"}\n`;
+      if (noteLine) yaml += `    notes: "${noteLine}"\n`;
+      if (pins.length > 0) {
+        yaml += `    pincount: ${grp.pinCount || pins.length}\n`;
+        yaml += `    pinlabels: [${pins.map(p => p.label || `pin${p.pin}`).join(", ")}]\n`;
+      }
+      yaml += `\n`;
+    });
   });
 
   // Build cables block — one cable per unique loom segment
   yaml += `cables:\n\n`;
   filteredEdges.forEach((edge, i) => {
-    const cableId = `W${String(i+1).padStart(2,"0")}_${edge.from}_${edge.to}`;
+    const cableId = `W${String(i+1).padStart(2,"0")}_${yamlKey(edge.from)}_${yamlKey(edge.to)}`;
+    // WireViz 0.4.1 color stripes are concatenated, not slash-separated
+    // (e.g. "RDBK", not "RD/BK")
     const colorStr = edge.colorStripe
-      ? `${edge.color}/${edge.colorStripe}`
+      ? `${edge.color}${edge.colorStripe}`
       : (edge.color || "WH");
 
     yaml += `  ${cableId}:\n`;
     yaml += `    gauge: ${edge.wireOverride || "18 AWG"}\n`;
     yaml += `    colors: [${colorStr}]\n`;
     yaml += `    wirecount: 1\n`;
+    // WireViz 0.4.1's `shield` takes a single color value, not a
+    // boolean + separate shieldcolor key
     if (edge.shield) {
-      // WireViz 0.4.1 Cable.shield accepts a single value: bool OR a color
-      // string. There is no separate shieldcolor key -- emitting one
-      // crashes the parser with "unexpected keyword argument 'shieldcolor'".
-      const shieldColor = (typeof edge.shield === "string") ? edge.shield : "GN";
-      yaml += `    shield: ${shieldColor}\n`;
+      yaml += `    shield: ${typeof edge.shield === "string" ? edge.shield : "GN"}\n`;
     }
-    // WireViz 0.4.1 has no "twisted" Cable field at all -- fold the intent
-    // into the notes text below rather than emit an invalid key.
-    const noteParts = [];
-    if (edge.notes) noteParts.push(edge.notes);
-    if (edge.twisted) noteParts.push("Twisted pair.");
-    if (edge.length)  yaml += `    length: ${edge.length} in\n`;
-    if (noteParts.length) yaml += `    notes: "${escapeYamlNote(noteParts.join(" "))}"\n`;
+    if (edge.length) yaml += `    length: ${edge.length} in\n`;
+    // `twisted` is not a valid 0.4.1 cable parameter — record the intent
+    // in notes instead so it isn't silently dropped
+    const noteBits = [];
+    if (edge.notes) noteBits.push(edge.notes.replace(/"/g,"'"));
+    if (edge.twisted) noteBits.push("twisted pair");
+    if (noteBits.length) yaml += `    notes: "${noteBits.join(" — ")}"\n`;
     yaml += `\n`;
   });
 
-  // Build connections block
+  // Build connections block — resolve each side against the correct
+  // connector group (via fromConnector/toConnector) instead of always
+  // assuming the node has only one connector.
   yaml += `connections:\n\n`;
   filteredEdges.forEach((edge, i) => {
-    const cableId = `W${String(i+1).padStart(2,"0")}_${edge.from}_${edge.to}`;
-    const fromNodeObj = STATE.nodes[edge.from];
-    const toNodeObj   = STATE.nodes[edge.to];
-    const fromNode = (fromNodeObj?.label || edge.from).replace(/[^a-zA-Z0-9_]/g,"_");
-    const toNode   = (toNodeObj?.label   || edge.to  ).replace(/[^a-zA-Z0-9_]/g,"_");
+    const cableId = `W${String(i+1).padStart(2,"0")}_${yamlKey(edge.from)}_${yamlKey(edge.to)}`;
+    const fromNode   = STATE.nodes[edge.from];
+    const toNode     = STATE.nodes[edge.to];
+    const fromGroups = getConnectorGroups(fromNode);
+    const toGroups   = getConnectorGroups(toNode);
 
-    // Resolve to flat pin index, honoring fromConnector/toConnector
-    // designators when a node has multiple connector groups (e.g. estopp).
-    const fromPin = fromNodeObj
-      ? resolvePinIndex(fromNodeObj, edge.fromPin, edge.fromConnector, flatPinsByNode[edge.from])
-      : (edge.fromPin || 1);
-    const toPin = toNodeObj
-      ? resolvePinIndex(toNodeObj, edge.toPin, edge.toConnector, flatPinsByNode[edge.to])
-      : (edge.toPin || 1);
+    const fromKey = fromNode
+      ? connectorKeyFor(fromNode, edge.from, fromGroups, edge.fromConnector)
+      : yamlKey(edge.from);
+    const toKey = toNode
+      ? connectorKeyFor(toNode, edge.to, toGroups, edge.toConnector)
+      : yamlKey(edge.to);
 
-    yaml += `  - - ${fromNode}: [${fromPin}]\n`;
+    const fromPinRef = resolvePinRef(fromGroups, edge.fromConnector, edge.fromPin);
+    const toPinRef    = resolvePinRef(toGroups, edge.toConnector, edge.toPin);
+
+    yaml += `  - - ${fromKey}: [${fromPinRef}]\n`;
     yaml += `    - ${cableId}: [1]\n`;
-    yaml += `    - ${toNode}: [${toPin}]\n\n`;
+    yaml += `    - ${toKey}: [${toPinRef}]\n\n`;
   });
 
   return yaml;
