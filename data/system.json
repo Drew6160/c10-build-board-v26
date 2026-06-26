@@ -2445,7 +2445,13 @@
       "zone": "B",
       "loom": "charge_system",
       "resistance": 0.01,
-      "wireOverride": "2/0 AWG"
+      "wireOverride": "2/0 AWG",
+      "color": "BK",
+      "fromConnector": "BAT",
+      "fromPin": 2,
+      "toConnector": "SGND",
+      "toPin": 1,
+      "length": 36
     },
     {
       "from": "battery",
