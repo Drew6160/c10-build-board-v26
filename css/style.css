@@ -282,7 +282,7 @@ button {
 button:hover { opacity: 0.85; }
 /* ---- Forms ---- */
 input, select, textarea {
-  width: 100%;
+  width: 90%;
   padding: 6px 8px;
   border: 1px solid var(--line);
   border-radius: 4px;
