@@ -1,3 +1,39 @@
+/* =============================
+   style.css v2 — Build Mgmt grid
+   blowout fix + dead viewer rule
+   removed
+   Changelog vs prior version:
+   - .stack was used by .manage-grid's
+     two columns but had NO rule of
+     its own (no display, no gap, no
+     min-width). Grid/flex children
+     default to min-width:auto, so a
+     wide table in #wiringSpecPanel
+     or #bomPanel could force the
+     equal 1fr/1fr columns wider than
+     the page. Added .stack itself
+     plus min-width:0 at every level
+     in that chain (.manage-grid > *,
+     .stack > .card, .form-row/-3 > *).
+   - Added overflow-x:auto to the
+     table-bearing panels so an
+     oversized table scrolls inside
+     its own card instead of forcing
+     the card wider.
+   - Removed the orphaned
+     #viewer-container rules: that ID
+     never existed in the page (the
+     iframe is #wirevizFrame) and
+     even if it had, parent-document
+     CSS can't reach into a
+     same-origin iframe's content
+     anyway. The WireViz viewer
+     sizing fix now lives in
+     wireviz-viewer.js v2, which
+     injects pan/zoom CSS+JS directly
+     into the uploaded HTML before
+     it's loaded into the iframe.
+   ============================= */
 :root {
   --bg:     #F4F1EC;
   --card:   #FFFFFF;
@@ -178,6 +214,31 @@ header h2 {
   padding: 10px;
   align-items: start;
 }
+.manage-grid > * {
+  min-width: 0;   /* grid items default to min-width:auto -- without
+                     this, a wide table anywhere inside either column
+                     forces that 1fr track wider than the page */
+}
+/* .stack is the two-column-content wrapper used inside .manage-grid
+   (and, historically, inside the Diagram tab's right rail). It had no
+   rule at all before this patch -- cards inside it had no gap and, more
+   importantly, no min-width override of their own, which is the second
+   half of the same min-width:auto chain described above. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.stack-left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.stack > .card {
+  min-width: 0;
+}
 /* ---- Panel sizing (Build Mgmt + non-rail contexts) ---- */
 #loomPanel        { padding: 10px 12px; }
 #graphPanel {
@@ -191,12 +252,17 @@ header h2 {
   max-height: 440px;
 }
 #bomPanel {
+  overflow-x: auto;
   overflow-y: auto;
   max-height: 320px;
 }
 #wiringSpecPanel {
+  overflow-x: auto;
   overflow-y: auto;
   max-height: 400px;
+}
+#drcPanel {
+  overflow-x: auto;
 }
 #componentEditorPanel {
   min-height: 500px;
@@ -244,23 +310,19 @@ label {
   grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
+.form-row > * {
+  min-width: 0;
+}
 .form-row-3 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 8px;
 }
+.form-row-3 > * {
+  min-width: 0;
+}
 pre {
   margin: 0;
   white-space: pre-wrap;
   word-break: break-word;
-}
-/* Replace #viewer-container with the actual ID of your WireViz tab or div */
-#viewer-container {
-    width: 100%;
-    overflow: auto; /* This forces both vertical and horizontal scrollbars */
-    border: 1px solid #ccc; /* Optional: adds a nice border around your viewer */
-}
-#viewer-container svg {
-    max-width: none; /* Prevents the browser from squishing the diagram */
-    display: block;
 }
