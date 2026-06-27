@@ -2141,16 +2141,30 @@
       "zone": "A",
       "loom": "charge_system",
       "resistance": 0.003,
-      "wireOverride": "2/0 AWG"
+      "wireOverride": "2/0 AWG",
+      "color": "RD",
+      "fromConnector": "ALT",
+      "fromPin": 1,
+      "toConnector": "BAT",
+      "toPin": 1,
+      "length": 48,
+      "notes": "Primary Alternator power wire."
     },
     {
-      "from": "battery",
+     "from": "battery",
       "to": "starter",
       "type": "POWER",
       "zone": "A",
       "loom": "charge_system",
       "resistance": 0.004,
-      "wireOverride": "2/0 AWG"
+      "wireOverride": "2/0 AWG",
+      "color": "RD",
+      "fromConnector": "BAT",
+      "fromPin": 1,
+      "toConnector": "STR",
+      "toPin": 1,
+      "length": 36,
+      "notes": "Primary Starter wire (will need update once Fuse/breaker is built)"
     },
     {
       "from": "fuse_panel",
