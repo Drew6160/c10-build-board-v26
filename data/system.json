@@ -7,7 +7,7 @@
       "zone": "A",
       "label": "Battery",
       "load": 0,
-      "partNumber": "\u2014",
+      "partNumber": "—",
       "notes": "Group 34/78 minimum for full accessory load",
       "connectors": [
         {
@@ -38,7 +38,7 @@
       "label": "Alternator",
       "load": 0,
       "partNumber": "Level 7 Motorsports",
-      "notes": "Powermaster-based unit for Holley mid-mount. No assigned part number \u2014 contact Level 7 directly. Includes external ground lug and corrected 3in pulley ratio. Self-exciting \u2014 no exciter wire needed.",
+      "notes": "Powermaster-based unit for Holley mid-mount. No assigned part number — contact Level 7 directly. Includes external ground lug and corrected 3in pulley ratio. Self-exciting — no exciter wire needed.",
       "connectors": [
         {
           "designator": "ALT",
@@ -67,7 +67,7 @@
       "zone": "A",
       "label": "Starter",
       "load": 150,
-      "partNumber": "\u2014",
+      "partNumber": "—",
       "notes": "Powermaster Starter for LS from Level 7 Motorsports. 2.5kW / 3.4hp motor. 4.4:1 gear reduction. Inrush multiplier 1.1x (gear reduction).",
       "connectors": [
         {
@@ -98,7 +98,7 @@
       "label": "Holley ECM",
       "load": 5,
       "partNumber": "Holley 550-931",
-      "notes": "Terminator X Max. Flat mounted under passenger seat \u2014 LED face toward door opening. Requires external 2-bar MAP: GM 12592525 + adapter 558-416.",
+      "notes": "Terminator X Max. Flat mounted under passenger seat — LED face toward door opening. Requires external 2-bar MAP: GM 12592525 + adapter 558-416.",
       "connectors": [
         {
           "designator": "J1A",
@@ -464,7 +464,7 @@
       "label": "LS3 Coils (x8)",
       "load": 8,
       "partNumber": "OEM LS3",
-      "notes": "Factory LS3 coil packs \u2014 retained from crate engine",
+      "notes": "Factory LS3 coil packs — retained from crate engine",
       "connectors": [
         {
           "designator": "COIL",
@@ -578,7 +578,7 @@
       "zone": "A",
       "label": "Cooling Fan",
       "load": 20,
-      "partNumber": "\u2014",
+      "partNumber": "—",
       "notes": "ECM-controlled via PWM output. Fan-on threshold set in Holley software.",
       "connectors": [
         {
@@ -608,7 +608,7 @@
       "zone": "A",
       "label": "A/C Compressor",
       "load": 10,
-      "partNumber": "\u2014",
+      "partNumber": "—",
       "notes": "Vintage Air Gen 5 compressor. Clutch relay controlled by ECM J1B OUT_4.",
       "connectors": [
         {
@@ -719,7 +719,7 @@
       "label": "AAW Fuse Panel",
       "load": 0,
       "partNumber": "AAW 510333",
-      "notes": "Classic Update Series \u2014 First Design. Add 150A mega fuse on charge cable. 20 fused circuits.",
+      "notes": "Classic Update Series — First Design. Add 150A mega fuse on charge cable. 20 fused circuits.",
       "connectors": [
         {
           "designator": "AAW",
@@ -1029,7 +1029,7 @@
       "label": "Vintage Air HVAC",
       "load": 15,
       "partNumber": "Vintage Air Gen 5",
-      "notes": "491210-RUA ProLine 3-knob horizontal control. Requires 246404 ECU. Refrigerant lines route under fender \u2014 not through firewall. Mounted in anodized black billet center dash bezel \u2014 see center_dash_disconnect_hvac for service connector.",
+      "notes": "491210-RUA ProLine 3-knob horizontal control. Requires 246404 ECU. Refrigerant lines route under fender — not through firewall. Mounted in anodized black billet center dash bezel — see center_dash_disconnect_hvac for service connector.",
       "connectors": [
         {
           "designator": "HVAC",
@@ -1076,10 +1076,10 @@
       "type": "connector",
       "tier": 1,
       "zone": "B",
-      "label": "Center Dash Disconnect \u2014 Radio",
+      "label": "Center Dash Disconnect — Radio",
       "load": 0,
       "partNumber": "Deutsch DT 8-pin",
-      "notes": "Service disconnect at base of center dash sub-frame, in the 5in service pocket behind the bezel. Covers Kenwood DMX958XR power/ground/illum/VSS only \u2014 separate from HVAC disconnect so radio can be pulled without disturbing A/C wiring. Allows full bezel removal without cutting cab wiring.",
+      "notes": "Service disconnect at base of center dash sub-frame, in the 5in service pocket behind the bezel. Covers Kenwood DMX958XR power/ground/illum/VSS only — separate from HVAC disconnect so radio can be pulled without disturbing A/C wiring. Allows full bezel removal without cutting cab wiring.",
       "connectors": [
         {
           "designator": "CDDR",
@@ -1136,10 +1136,10 @@
       "type": "connector",
       "tier": 1,
       "zone": "B",
-      "label": "Center Dash Disconnect \u2014 HVAC",
+      "label": "Center Dash Disconnect — HVAC",
       "load": 0,
       "partNumber": "Deutsch DT 6-pin",
-      "notes": "Service disconnect at base of center dash sub-frame, in the 5in service pocket behind the bezel. Covers Vintage Air 491210-RUA control head only \u2014 separate from radio disconnect for independent serviceability. Allows full bezel removal without cutting cab wiring.",
+      "notes": "Service disconnect at base of center dash sub-frame, in the 5in service pocket behind the bezel. Covers Vintage Air 491210-RUA control head only — separate from radio disconnect for independent serviceability. Allows full bezel removal without cutting cab wiring.",
       "connectors": [
         {
           "designator": "CDDH",
@@ -1189,7 +1189,7 @@
       "label": "Kenwood DMX958XR",
       "load": 5,
       "partNumber": "Kenwood DMX958XR",
-      "notes": "Wireless CarPlay/Android Auto. 6-ch 5V preouts. USB-C. HDMI input. 720p HD screen, LDAC, HD camera support. Same 3.3in chassis depth as DMX908S \u2014 no fitment change. Pink VSS input wired to second independent Bowler speed output for dead-reckoning nav when GPS signal is poor. Mounted in anodized black billet center dash bezel \u2014 see center_dash_disconnect for service connector.",
+      "notes": "Wireless CarPlay/Android Auto. 6-ch 5V preouts. USB-C. HDMI input. 720p HD screen, LDAC, HD camera support. Same 3.3in chassis depth as DMX908S — no fitment change. Pink VSS input wired to second independent Bowler speed output for dead-reckoning nav when GPS signal is poor. Mounted in anodized black billet center dash bezel — see center_dash_disconnect for service connector.",
       "connectors": [
         {
           "designator": "RADIO",
@@ -1314,7 +1314,7 @@
       "label": "DW810 Fuel Pump",
       "load": 22,
       "partNumber": "DW 9-811-C102-0900",
-      "notes": "810lph brushless \u2014 higher flow for boosted application. Custom hat on Boyd 6in cleanout plate. 10 AWG wiring per DW spec. Racetronix BCWS-001 bulkhead connector. C105 dual-speed controller \u2014 68% low / 100% high.",
+      "notes": "810lph brushless — higher flow for boosted application. Custom hat on Boyd 6in cleanout plate. 10 AWG wiring per DW spec. Racetronix BCWS-001 bulkhead connector. C105 dual-speed controller — 68% low / 100% high.",
       "connectors": [
         {
           "designator": "PUMP",
@@ -1414,7 +1414,7 @@
       "label": "Accuair Valves",
       "load": 2,
       "partNumber": "Accuair VU4",
-      "notes": "VU4 manifold \u2014 internal to ENDO CVT. Signal from e+ Connect ECU via M8 connector.",
+      "notes": "VU4 manifold — internal to ENDO CVT. Signal from e+ Connect ECU via M8 connector.",
       "connectors": [
         {
           "designator": "VU4",
@@ -1453,7 +1453,7 @@
       "zone": "C",
       "label": "Tail/Brake Lights",
       "load": 8,
-      "partNumber": "\u2014",
+      "partNumber": "—",
       "notes": "Rear trunk loom. LED recommended for reduced load.",
       "connectors": [
         {
@@ -1493,8 +1493,8 @@
       "zone": "B",
       "label": "Power Windows",
       "load": 20,
-      "partNumber": "\u2014",
-      "notes": "Tier 2 accessory \u2014 planned",
+      "partNumber": "—",
+      "notes": "Tier 2 accessory — planned",
       "connectors": [
         {
           "designator": "PWIN",
@@ -1533,8 +1533,8 @@
       "zone": "B",
       "label": "Heated Seats",
       "load": 8,
-      "partNumber": "\u2014",
-      "notes": "Tier 2 accessory \u2014 planned. Relay-switched ignition-keyed power. Do not ground to ECU ground block.",
+      "partNumber": "—",
+      "notes": "Tier 2 accessory — planned. Relay-switched ignition-keyed power. Do not ground to ECU ground block.",
       "connectors": [
         {
           "designator": "SEAT",
@@ -1573,8 +1573,8 @@
       "zone": "B",
       "label": "Alarm System",
       "load": 2,
-      "partNumber": "\u2014",
-      "notes": "Tier 2 accessory \u2014 planned",
+      "partNumber": "—",
+      "notes": "Tier 2 accessory — planned",
       "connectors": [
         {
           "designator": "ALRM",
@@ -1613,8 +1613,8 @@
       "zone": "B",
       "label": "Backup Camera",
       "load": 1,
-      "partNumber": "\u2014",
-      "notes": "Tier 2 \u2014 integrate with Kenwood DMX908S rear camera input. Power from Bowler reverse output.",
+      "partNumber": "—",
+      "notes": "Tier 2 — integrate with Kenwood DMX908S rear camera input. Power from Bowler reverse output.",
       "connectors": [
         {
           "designator": "CAM",
@@ -1701,16 +1701,16 @@
       "type": "distribution",
       "tier": 1,
       "zone": "B",
-      "label": "Ground Block (Marine)",
+      "label": "ground_block",
       "load": 0,
-      "partNumber": "Marine grade",
-      "notes": "Star ground point \u2014 engine to frame, frame to body, battery negative. Critical for Dakota HDX and ECM sensor accuracy. All sensor grounds terminate here.",
+      "partNumber": "Blue Sea Systems 2301",
+      "notes": "Star ground point — engine to frame, frame to body, battery negative. Critical for Dakota HDX and ECM sensor accuracy. All sensor grounds terminate here.",
       "connectors": [
         {
-          "designator": "SGND",
-          "body": "Bare Lug 3/8\"",
-          "gender": "male",
-          "pinCount": 6,
+          "designator": "GND-STUD",
+          "body": "Blue Sea 2301 Stud (1/4-20)",
+          "gender": "n/a",
+          "pinCount": 2,
           "pins": [
             {
               "pin": 1,
@@ -1719,27 +1719,65 @@
             },
             {
               "pin": 2,
-              "label": "ENG_GND",
+              "label": "ENG_FRAME",
+              "type": "GROUND"
+            }
+          ]
+        },
+        {
+          "designator": "GND-SCR",
+          "body": "Blue Sea 2301 Screw (#8-32)",
+          "gender": "n/a",
+          "pinCount": 10,
+          "pins": [
+            {
+              "pin": 3,
+              "label": "DAKOTA_HDX_GND",
               "type": "GROUND"
             },
             {
-              "pin": 3,
-              "label": "FRAME",
+              "pin": 2,
+              "label": "BIM_GND",
+              "type": "GROUND"
+            },
+            {
+              "pin": 1,
+              "label": "BODY_GND",
               "type": "GROUND"
             },
             {
               "pin": 4,
-              "label": "BODY",
+              "label": "SPARE_1",
               "type": "GROUND"
             },
             {
               "pin": 5,
-              "label": "ECM_GND",
+              "label": "SPARE_2",
               "type": "GROUND"
             },
             {
               "pin": 6,
-              "label": "SPARE",
+              "label": "SPARE_3",
+              "type": "GROUND"
+            },
+            {
+              "pin": 7,
+              "label": "SPARE_4",
+              "type": "GROUND"
+            },
+            {
+              "pin": 8,
+              "label": "SPARE_5",
+              "type": "GROUND"
+            },
+            {
+              "pin": 9,
+              "label": "SPARE_6",
+              "type": "GROUND"
+            },
+            {
+              "pin": 10,
+              "label": "SPARE_7",
               "type": "GROUND"
             }
           ]
@@ -1836,30 +1874,43 @@
       "type": "distribution",
       "tier": 1,
       "zone": "B",
-      "label": "MDB Fuse Block \u2014 Battery",
+      "label": "MDB Fuse Block — Battery",
       "load": 0,
       "partNumber": "Littelfuse 04980933.X",
       "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted near behind-the-cab battery on passenger side. Internally bussed 4 AWG input. Pole 1: ECM direct feed 40A. Pole 2: Heated seat relay 30A. Pole 3: Bowler T56 module 20A.",
       "connectors": [
         {
-          "designator": "MDB1",
-          "body": "Anderson SB175",
-          "gender": "male",
+          "designator": "MDB_IN",
+          "body": "Littelfuse MDB M5 Stud",
+          "gender": "n/a",
+          "pinCount": 1,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BUS_IN",
+              "type": "POWER"
+            }
+          ]
+        },
+        {
+          "designator": "MDB_OUT",
+          "body": "Littelfuse MDB M5 Stud",
+          "gender": "n/a",
           "pinCount": 3,
           "pins": [
             {
               "pin": 1,
-              "label": "ECM_40A",
+              "label": "POLE1_OUT",
               "type": "POWER"
             },
             {
               "pin": 2,
-              "label": "SEAT_30A",
+              "label": "POLE2_OUT",
               "type": "POWER"
             },
             {
               "pin": 3,
-              "label": "T56_20A",
+              "label": "POLE3_OUT",
               "type": "POWER"
             }
           ]
@@ -1871,7 +1922,7 @@
       "type": "distribution",
       "tier": 1,
       "zone": "A",
-      "label": "MDB Fuse Block \u2014 Engine Bay",
+      "label": "MDB Fuse Block — Engine Bay",
       "load": 0,
       "partNumber": "Littelfuse 04980933.X",
       "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on inner fender apron. Fed via 4 AWG from mid-ship power block. Pole 1: Dual brushless fans 80A. Pole 2: Vintage Air HVAC 40A. Pole 3: Radio/Kenwood constant feed 30A.",
@@ -1906,10 +1957,10 @@
       "type": "distribution",
       "tier": 1,
       "zone": "C",
-      "label": "MDB Fuse Block \u2014 Rear",
+      "label": "MDB Fuse Block — Rear",
       "load": 0,
       "partNumber": "Littelfuse 04980933.X",
-      "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on rear electronics plate adjacent to C105 controller. Fed via 4 AWG short run from behind-the-cab battery. Pole 1: Accuair ENDO CVT 50A. Pole 2: DW810 fuel pump controller 30A. Pole 3: Spare \u2014 sealed with cavity plug for future expansion.",
+      "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on rear electronics plate adjacent to C105 controller. Fed via 4 AWG short run from behind-the-cab battery. Pole 1: Accuair ENDO CVT 50A. Pole 2: DW810 fuel pump controller 30A. Pole 3: Spare — sealed with cavity plug for future expansion.",
       "connectors": [
         {
           "designator": "MDB3",
@@ -1944,7 +1995,7 @@
       "label": "E-Stopp Power Disconnect",
       "load": 0,
       "partNumber": "Deutsch DT 2-way",
-      "notes": "Service disconnect at battery junction \u2014 de-powers E-Stopp module without disturbing panel wiring. DT 2-way \u2014 power and ground.",
+      "notes": "Service disconnect at battery junction — de-powers E-Stopp module without disturbing panel wiring. DT 2-way — power and ground.",
       "connectors": [
         {
           "designator": "ES_PWR_DC",
@@ -1974,7 +2025,7 @@
       "label": "E-Stopp Module Disconnect",
       "load": 0,
       "partNumber": "Deutsch DT 2-way",
-      "notes": "Service disconnect at panel for E-Stopp button harness \u2014 allows button/switch wiring service without disturbing control box. Carries only the conductors in use: switch NO + COM (fail-safe wiring). LED ring and piezo speaker circuits omitted \u2014 not in use on this build.",
+      "notes": "Service disconnect at panel for E-Stopp button harness — allows button/switch wiring service without disturbing control box. Carries only the conductors in use: switch NO + COM (fail-safe wiring). LED ring and piezo speaker circuits omitted — not in use on this build.",
       "connectors": [
         {
           "designator": "ES_MOD_DC",
@@ -2004,7 +2055,7 @@
       "label": "E-Stopp Module",
       "load": 5,
       "partNumber": "E-Stopp",
-      "notes": "Electric parking brake control box (E-Stopp ESK1). Mounted under-seat panel, passenger side front zone. Electrical only \u2014 no hydraulic fittings on module. Power: RED +12V (10A fuse recommended, min 10A source), BLACK ground \u2014 manual explicitly prohibits chassis grounding, dedicated return required, do not tie to star ground block. Ignition safety: BLUE wire to ignition switch RUN \u2014 optional but manual strongly recommends, disables engagement while vehicle is running. Status output: GREEN switched ground (max 25mA) active while engaged, routed to Dakota HDX spare input for dash indicator. Actuator: RED/BLACK control box wires connect to BROWN/BLUE actuator wires respectively \u2014 16 AWG min, 15ft max extension. Button harness (LED ring + SPDT switch + piezo) is a separate factory pigtail \u2014 switch wired NO+COM (fail-safe). Manual explicitly prohibits coupling E-Stopp wiring with other circuits \u2014 isolated from Holley ECU power path. Exact button switch location still TBD, separate from Ring Brothers dash bezel switch panel. Retained as a module node (not just disconnect connectors) due to ENDO CVT reliability history that may require future rewiring.",
+      "notes": "Electric parking brake control box (E-Stopp ESK1). Mounted under-seat panel, passenger side front zone. Electrical only — no hydraulic fittings on module. Power: RED +12V (10A fuse recommended, min 10A source), BLACK ground — manual explicitly prohibits chassis grounding, dedicated return required, do not tie to star ground block. Ignition safety: BLUE wire to ignition switch RUN — optional but manual strongly recommends, disables engagement while vehicle is running. Status output: GREEN switched ground (max 25mA) active while engaged, routed to Dakota HDX spare input for dash indicator. Actuator: RED/BLACK control box wires connect to BROWN/BLUE actuator wires respectively — 16 AWG min, 15ft max extension. Button harness (LED ring + SPDT switch + piezo) is a separate factory pigtail — switch wired NO+COM (fail-safe). Manual explicitly prohibits coupling E-Stopp wiring with other circuits — isolated from Holley ECU power path. Exact button switch location still TBD, separate from Ring Brothers dash bezel switch panel. Retained as a module node (not just disconnect connectors) due to ENDO CVT reliability history that may require future rewiring.",
       "connectors": [
         {
           "designator": "ES_PWR",
@@ -2080,7 +2131,7 @@
       "label": "E-Stopp Actuator",
       "load": 8,
       "partNumber": "E-Stopp ESK1 Actuator",
-      "notes": "Physical actuator mounted at e-brake cable. Direct-wired from estopp control box \u2014 no service disconnect, not something routinely unbolted. Control box RED to actuator BROWN, control box BLACK to actuator BLUE. 16 AWG minimum, 15ft max wire run per manual. Properly adjusted unit takes 2-3 seconds to engage/disengage.",
+      "notes": "Physical actuator mounted at e-brake cable. Direct-wired from estopp control box — no service disconnect, not something routinely unbolted. Control box RED to actuator BROWN, control box BLACK to actuator BLUE. 16 AWG minimum, 15ft max wire run per manual. Properly adjusted unit takes 2-3 seconds to engage/disengage.",
       "connectors": [
         {
           "designator": "ACT",
@@ -2109,8 +2160,8 @@
       "zone": "B",
       "label": "Clutch Safety Switch",
       "load": 0.1,
-      "partNumber": "\u2014",
-      "notes": "Clutch pedal start interlock \u2014 normally-open switch, closes only when clutch pedal is fully depressed. Wired in series between ignition_sw CRNK output and starter S (signal) trigger pin, so starter solenoid only energizes when both key is in CRANK and clutch is depressed. T56/Bowler harness has no neutral safety circuit (not applicable to manual transmission) -- this switch is the actual start-safety interlock for this build. Mount location: clutch pedal bracket, lever or plunger actuated.",
+      "partNumber": "—",
+      "notes": "Clutch pedal start interlock — normally-open switch, closes only when clutch pedal is fully depressed. Wired in series between ignition_sw CRNK output and starter S (signal) trigger pin, so starter solenoid only energizes when both key is in CRANK and clutch is depressed. T56/Bowler harness has no neutral safety circuit (not applicable to manual transmission) -- this switch is the actual start-safety interlock for this build. Mount location: clutch pedal bracket, lever or plunger actuated.",
       "connectors": [
         {
           "designator": "CSW",
@@ -2127,6 +2178,61 @@
               "pin": 2,
               "label": "OUT",
               "type": "SIGNAL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "racewire_bulkhead_dual",
+      "type": "connector",
+      "tier": 1,
+      "zone": "B",
+      "label": "RaceWire Billet Pass-Thru — Dual",
+      "load": 0,
+      "partNumber": "RaceWire Solutions — Billet Battery Pass-Thru, Dual (Red/Black)",
+      "notes": "",
+      "connectors": [
+        {
+          "designator": "RWB-D",
+          "body": "RaceWire Billet 3/8\" Stud",
+          "gender": "n/a",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "POS",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "NEG",
+              "type": "GROUND"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "racewire_bulkhead_single",
+      "type": "connector",
+      "tier": 1,
+      "zone": "B",
+      "label": "RaceWire Billet Pass-Thru — Single",
+      "load": 0,
+      "partNumber": "RaceWire Solutions — Billet Battery Pass-Thru, Single (Red)",
+      "notes": "",
+      "connectors": [
+        {
+          "designator": "RWB-S",
+          "body": "RaceWire Billet 3/8\\\" Stud",
+          "gender": "n/a",
+          "pinCount": 1,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "POS",
+              "type": "POWER"
             }
           ]
         }
@@ -2151,7 +2257,7 @@
       "notes": "Primary Alternator power wire."
     },
     {
-     "from": "battery",
+      "from": "battery",
       "to": "starter",
       "type": "POWER",
       "zone": "A",
@@ -2547,9 +2653,9 @@
       "loom": "fuel_system",
       "resistance": 0.02,
       "color": "BU",
+      "fromPin": 1,
       "toPin": 8,
       "length": 96,
-      "fromPin": 1,
       "notes": "Fuel level signal from Boyd sender to Dakota HDX gauge input."
     },
     {
@@ -2559,12 +2665,12 @@
       "zone": "B",
       "loom": "cab_harness",
       "resistance": 0.02,
-      "color": "RD",
-      "toPin": 1,
       "wireOverride": "16 AWG",
-      "notes": "Manual recommends 10A fuse inline. 10A minimum source capacity. Dedicated return required -- do not ground to chassis.",
+      "color": "RD",
       "fromConnector": "SPWR",
-      "toConnector": "ES_PWR_DC"
+      "toConnector": "ES_PWR_DC",
+      "toPin": 1,
+      "notes": "Manual recommends 10A fuse inline. 10A minimum source capacity. Dedicated return required -- do not ground to chassis."
     },
     {
       "from": "estopp_pwr_disconnect",
@@ -2573,12 +2679,12 @@
       "zone": "B",
       "loom": "cab_harness",
       "resistance": 0.02,
-      "color": "RD",
-      "fromPin": 1,
-      "toPin": 1,
       "wireOverride": "16 AWG",
+      "color": "RD",
       "fromConnector": "ES_PWR_DC",
-      "toConnector": "ES_PWR"
+      "fromPin": 1,
+      "toConnector": "ES_PWR",
+      "toPin": 1
     },
     {
       "from": "estopp_pwr_disconnect",
@@ -2587,13 +2693,13 @@
       "zone": "B",
       "loom": "cab_harness",
       "resistance": 0.02,
-      "color": "BK",
-      "fromPin": 2,
-      "toPin": 2,
       "wireOverride": "16 AWG",
-      "notes": "Dedicated ground return -- manual explicitly prohibits chassis grounding for this circuit.",
+      "color": "BK",
       "fromConnector": "ES_PWR_DC",
-      "toConnector": "ES_PWR"
+      "fromPin": 2,
+      "toConnector": "ES_PWR",
+      "toPin": 2,
+      "notes": "Dedicated ground return -- manual explicitly prohibits chassis grounding for this circuit."
     },
     {
       "from": "ignition_sw",
@@ -2603,11 +2709,11 @@
       "loom": "cab_harness",
       "resistance": 0.02,
       "color": "BU",
-      "fromPin": 3,
-      "toPin": 3,
-      "notes": "Ignition safety sense -- disables E-Stopp engagement while vehicle is running. Optional per manual but strongly recommended.",
       "fromConnector": "IGN",
-      "toConnector": "ES_PWR"
+      "fromPin": 3,
+      "toConnector": "ES_PWR",
+      "toPin": 3,
+      "notes": "Ignition safety sense -- disables E-Stopp engagement while vehicle is running. Optional per manual but strongly recommended."
     },
     {
       "from": "estopp",
@@ -2617,11 +2723,11 @@
       "loom": "cab_harness",
       "resistance": 0.02,
       "color": "GN",
-      "fromPin": 4,
-      "toPin": 7,
-      "notes": "Switched ground status output, active while E-Stopp engaged, max 25mA. Lands on Dakota HDX spare input (relabeled ESTOPP_STATUS).",
       "fromConnector": "ES_PWR",
-      "toConnector": "HDX"
+      "fromPin": 4,
+      "toConnector": "HDX",
+      "toPin": 7,
+      "notes": "Switched ground status output, active while E-Stopp engaged, max 25mA. Lands on Dakota HDX spare input (relabeled ESTOPP_STATUS)."
     },
     {
       "from": "estopp",
@@ -2630,13 +2736,13 @@
       "zone": "C",
       "loom": "cab_harness",
       "resistance": 0.02,
-      "color": "RD",
-      "fromPin": 1,
-      "toPin": 1,
       "wireOverride": "16 AWG",
-      "notes": "Control box RED to actuator BROWN. 16 AWG min, 15ft max per manual.",
+      "color": "RD",
       "fromConnector": "ES_ACT",
-      "toConnector": "ACT"
+      "fromPin": 1,
+      "toConnector": "ACT",
+      "toPin": 1,
+      "notes": "Control box RED to actuator BROWN. 16 AWG min, 15ft max per manual."
     },
     {
       "from": "estopp",
@@ -2645,13 +2751,13 @@
       "zone": "C",
       "loom": "cab_harness",
       "resistance": 0.02,
-      "color": "BK",
-      "fromPin": 2,
-      "toPin": 2,
       "wireOverride": "16 AWG",
-      "notes": "Control box BLACK to actuator BLUE. 16 AWG min, 15ft max per manual.",
+      "color": "BK",
       "fromConnector": "ES_ACT",
-      "toConnector": "ACT"
+      "fromPin": 2,
+      "toConnector": "ACT",
+      "toPin": 2,
+      "notes": "Control box BLACK to actuator BLUE. 16 AWG min, 15ft max per manual."
     },
     {
       "from": "estopp_mod_disconnect",
@@ -2661,11 +2767,11 @@
       "loom": "cab_harness",
       "resistance": 0.02,
       "color": "GY",
-      "fromPin": 1,
-      "toPin": 1,
-      "notes": "Button NO contact, wired fail-safe (NO+COM).",
       "fromConnector": "ES_MOD_DC",
-      "toConnector": "ES_BTN"
+      "fromPin": 1,
+      "toConnector": "ES_BTN",
+      "toPin": 1,
+      "notes": "Button NO contact, wired fail-safe (NO+COM)."
     },
     {
       "from": "estopp_mod_disconnect",
@@ -2675,11 +2781,11 @@
       "loom": "cab_harness",
       "resistance": 0.02,
       "color": "WH",
-      "fromPin": 2,
-      "toPin": 2,
-      "notes": "Button COM contact.",
       "fromConnector": "ES_MOD_DC",
-      "toConnector": "ES_BTN"
+      "fromPin": 2,
+      "toConnector": "ES_BTN",
+      "toPin": 2,
+      "notes": "Button COM contact."
     },
     {
       "from": "ignition_sw",
