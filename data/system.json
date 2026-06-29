@@ -2855,7 +2855,7 @@
       "toConnector": "RWB-D",
       "toPin": 1,
       "length": 30,
-      "notes": "Battery to power rear componentw"
+      "notes": "Battery to power Engine Bay components"
     },
     {
       "from": "racewire_bulkhead_dual",
