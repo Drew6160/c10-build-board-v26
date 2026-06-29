@@ -979,7 +979,7 @@
       "label": "Accuair e+ ECU",
       "load": 3,
       "partNumber": "Accuair e+ Connect",
-      "notes": "Under passenger seat panel. USB/M8 interface to ENDO CVT. TouchPad+ controller connects here.",
+      "notes": "Locatedd behind cab next to ENDO-CVT USB cable from harness to TouchPad+ controller connects here.",
       "connectors": [
         {
           "designator": "ECTL",
@@ -1414,7 +1414,7 @@
       "label": "Accuair Valves",
       "load": 2,
       "partNumber": "Accuair VU4",
-      "notes": "VU4 manifold — internal to ENDO CVT. Signal from e+ Connect ECU via M8 connector.",
+      "notes": "Valve manifold — internal to ENDO CVT. Signal from e+ Connect ECU via USB connector.",
       "connectors": [
         {
           "designator": "VU4",
