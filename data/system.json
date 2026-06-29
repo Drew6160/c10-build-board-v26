@@ -2596,7 +2596,7 @@
       "fromConnector": "BAT",
       "fromPin": 2,
       "toConnector": "GND-STUD",
-      "toPin": 2,
+      "toPin": 1,
       "length": 36
     },
     {
