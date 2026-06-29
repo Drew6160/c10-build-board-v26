@@ -1731,53 +1731,53 @@
           "pinCount": 10,
           "pins": [
             {
-              "pin": 3,
+              "pin": 2,
               "label": "DAKOTA_HDX_GND",
               "type": "GROUND"
             },
             {
-              "pin": 2,
+              "pin": 3,
               "label": "BIM_GND",
               "type": "GROUND"
             },
             {
               "pin": 1,
-              "label": "BODY_GND",
+              "label": "ECM_GND",
               "type": "GROUND"
             },
             {
               "pin": 4,
-              "label": "SPARE_1",
+              "label": "VINTAGE_AIR_GND",
               "type": "GROUND"
             },
             {
               "pin": 5,
-              "label": "SPARE_2",
+              "label": "RADIO_GND",
               "type": "GROUND"
             },
             {
               "pin": 6,
-              "label": "SPARE_3",
+              "label": "ACCUAIR_CTRL_GND",
               "type": "GROUND"
             },
             {
               "pin": 7,
-              "label": "SPARE_4",
+              "label": "FUEL_SENDER_GND",
               "type": "GROUND"
             },
             {
               "pin": 8,
-              "label": "SPARE_5",
+              "label": "BODY_GND",
               "type": "GROUND"
             },
             {
               "pin": 9,
-              "label": "SPARE_6",
+              "label": "SPARE_1",
               "type": "GROUND"
             },
             {
               "pin": 10,
-              "label": "SPARE_7",
+              "label": "SPARE_2",
               "type": "GROUND"
             }
           ]
@@ -1900,17 +1900,17 @@
           "pins": [
             {
               "pin": 1,
-              "label": "POLE1_OUT",
+              "label": "Pole 1 ECM 40A",
               "type": "POWER"
             },
             {
               "pin": 2,
-              "label": "POLE2_OUT",
+              "label": "Pole 2 heated seat relay 30A",
               "type": "POWER"
             },
             {
               "pin": 3,
-              "label": "POLE3_OUT",
+              "label": "Pole 3 Bowler T56 module 20A",
               "type": "POWER"
             }
           ]
@@ -1928,24 +1928,37 @@
       "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on inner fender apron. Fed via 4 AWG from mid-ship power block. Pole 1: Dual brushless fans 80A. Pole 2: Vintage Air HVAC 40A. Pole 3: Radio/Kenwood constant feed 30A.",
       "connectors": [
         {
-          "designator": "MDB2",
-          "body": "Anderson SB175",
-          "gender": "male",
+          "designator": "MDB-IN",
+          "body": "Littelfuse MDB M5 Stud",
+          "gender": "n/a",
+          "pinCount": 2,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BUS_IN",
+              "type": "POWER"
+            }
+          ]
+        },
+        {
+          "designator": "MDB-OUT",
+          "body": "Littelfuse MDB M5 Stud",
+          "gender": "n/a",
           "pinCount": 3,
           "pins": [
             {
               "pin": 1,
-              "label": "FANS_80A",
+              "label": "Pole 1 dual fans 80A",
               "type": "POWER"
             },
             {
               "pin": 2,
-              "label": "HVAC_40A",
+              "label": "Pole 2 Vintage Air 40A",
               "type": "POWER"
             },
             {
               "pin": 3,
-              "label": "RADIO_30A",
+              "label": "Pole 3 radio 30A",
               "type": "POWER"
             }
           ]
@@ -1963,24 +1976,37 @@
       "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on rear electronics plate adjacent to C105 controller. Fed via 4 AWG short run from behind-the-cab battery. Pole 1: Accuair ENDO CVT 50A. Pole 2: DW810 fuel pump controller 30A. Pole 3: Spare — sealed with cavity plug for future expansion.",
       "connectors": [
         {
-          "designator": "MDB3",
-          "body": "Anderson SB175",
-          "gender": "male",
+          "designator": "MDB-IN",
+          "body": "Littelfuse MDB M5 Stud",
+          "gender": "n/a",
+          "pinCount": 1,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "BUS_IN",
+              "type": "POWER"
+            }
+          ]
+        },
+        {
+          "designator": "MDB-OUT",
+          "body": "Littelfuse MDB M5 Stud",
+          "gender": "n/a",
           "pinCount": 3,
           "pins": [
             {
               "pin": 1,
-              "label": "CVT_50A",
+              "label": " Pole 1 Accuair ENDO CVT 50A",
               "type": "POWER"
             },
             {
               "pin": 2,
-              "label": "PUMP_30A",
+              "label": "Pole 2 DW810/C105 controller 30A",
               "type": "POWER"
             },
             {
               "pin": 3,
-              "label": "SPARE",
+              "label": "Pole 3 spare",
               "type": "POWER"
             }
           ]
@@ -2569,8 +2595,8 @@
       "color": "BK",
       "fromConnector": "BAT",
       "fromPin": 2,
-      "toConnector": "SGND",
-      "toPin": 1,
+      "toConnector": "GND-STUD",
+      "toPin": 2,
       "length": 36
     },
     {
