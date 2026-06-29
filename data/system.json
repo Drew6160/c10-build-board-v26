@@ -2901,21 +2901,6 @@
       "toConnector": "MDB_IN",
       "toPin": 1,
       "length": 36
-    },
-    {
-      "from": "racewire_bulkhead_single",
-      "to": "mdb_rear",
-      "type": "POWER",
-      "zone": "C",
-      "loom": "charge_system",
-      "resistance": 0.02,
-      "color": "RD",
-      "fromConnector": "RWB-S",
-      "fromPin": 1,
-      "toConnector": "MDB_IN",
-      "toPin": 1,
-      "length": 30
     }
-      
   ]
 }
