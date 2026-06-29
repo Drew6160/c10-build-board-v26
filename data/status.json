@@ -52,10 +52,10 @@
       "status": "planned"
     },
     "center_dash_disconnect_radio": {
-      "status": "planned"
+      "status": "ordered"
     },
     "center_dash_disconnect_hvac": {
-      "status": "planned"
+      "status": "ordered"
     },
     "estopp": {
       "status": "ordered"
@@ -64,7 +64,7 @@
       "status": "planned"
     },
     "fuel_relay": {
-      "status": "planned"
+      "status": "ordered"
     },
     "c102_ctrl": {
       "status": "ordered"
@@ -94,7 +94,7 @@
       "status": "planned"
     },
     "t56_disconnect": {
-      "status": "planned"
+      "status": "ordered"
     },
     "ground_block": {
       "status": "ordered"
@@ -118,6 +118,21 @@
       "status": "ordered"
     },
     "mdb_rear": {
+      "status": "ordered"
+    },
+    "racewire_bulkhead_dual": {
+      "status": "ordered"
+    },
+    "racewire_bulkhead_single": {
+      "status": "ordered"
+    },
+    "estopp_actuator": {
+      "status": "ordered"
+    },
+    "estopp_mod_disconnect": {
+      "status": "ordered"
+    },
+    "estopp_pwr_disconnect": {
       "status": "ordered"
     }
   }

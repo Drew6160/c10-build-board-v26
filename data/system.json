@@ -2871,6 +2871,20 @@
       "toConnector": "MDB_IN",
       "toPin": 1,
       "length": 24
+    },
+    {
+      "from": "battery",
+      "to": "racewire_bulkhead_single",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "charge_system",
+      "resistance": 0.02,
+      "wireOverride": "4/0 AWG",
+      "color": "RD",
+      "toConnector": "RWB-S",
+      "toPin": 1,
+      "length": 48,
+      "notes": "Primary power to rear components"
     }
   ]
 }
