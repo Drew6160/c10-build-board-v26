@@ -2504,8 +2504,10 @@
       "resistance": 0.05,
       "wireOverride": "18 AWG",
       "color": "OG",
+      "fromConnector": "AAW",
       "fromPin": 3,
-      "toPin": 1,
+      "toConnector": "CVT",
+      "toPin": 3,
       "length": 48
     },
     {
