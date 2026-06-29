@@ -1928,10 +1928,10 @@
       "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on inner fender apron. Fed via 4 AWG from mid-ship power block. Pole 1: Dual brushless fans 80A. Pole 2: Vintage Air HVAC 40A. Pole 3: Radio/Kenwood constant feed 30A.",
       "connectors": [
         {
-          "designator": "MDB-IN",
+          "designator": "MDB_IN",
           "body": "Littelfuse MDB M5 Stud",
           "gender": "n/a",
-          "pinCount": 2,
+          "pinCount": 1,
           "pins": [
             {
               "pin": 1,
@@ -1941,7 +1941,7 @@
           ]
         },
         {
-          "designator": "MDB-OUT",
+          "designator": "MDB_OUT",
           "body": "Littelfuse MDB M5 Stud",
           "gender": "n/a",
           "pinCount": 3,
@@ -1976,7 +1976,7 @@
       "notes": "3-pole sealed MIDI PDM. IP67/IP69K. Mounted on rear electronics plate adjacent to C105 controller. Fed via 4 AWG short run from behind-the-cab battery. Pole 1: Accuair ENDO CVT 50A. Pole 2: DW810 fuel pump controller 30A. Pole 3: Spare — sealed with cavity plug for future expansion.",
       "connectors": [
         {
-          "designator": "MDB-IN",
+          "designator": "MDB_IN",
           "body": "Littelfuse MDB M5 Stud",
           "gender": "n/a",
           "pinCount": 1,
@@ -1989,14 +1989,14 @@
           ]
         },
         {
-          "designator": "MDB-OUT",
+          "designator": "MDB_OUT",
           "body": "Littelfuse MDB M5 Stud",
           "gender": "n/a",
           "pinCount": 3,
           "pins": [
             {
               "pin": 1,
-              "label": " Pole 1 Accuair ENDO CVT 50A",
+              "label": "Pole 1 Accuair ENDO CVT 50A",
               "type": "POWER"
             },
             {
