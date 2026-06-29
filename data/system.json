@@ -2498,7 +2498,7 @@
     {
       "from": "fuse_panel",
       "to": "accuair_comp",
-      "type": "POWER",
+      "type": "SIGNAL",
       "zone": "C",
       "loom": "rear_trunk",
       "resistance": 0.05,
