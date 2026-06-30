@@ -70,6 +70,7 @@ const LAYOUT_POS = {
 
   fuel_relay:    { x: 760, y: 140 },
   fuel_sender:   { x: 930, y: 140 },
+  RWB_Pass_Thru_Single: { x: 8200, y: 140 },
   c105_ctrl:     { x: 760, y: 260 },
   dw810_pump:    { x: 920, y: 260 },
   accuair_valves:{ x: 760, y: 370 },
