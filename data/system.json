@@ -1303,8 +1303,33 @@
               "type": "SIGNAL"
             }
           ]
-        }
-      ]
+        },
+         {
+          "designator": "C105",
+          "body": "Deutsch DT 4-way",
+          "gender": "male",
+          "pinCount": 4,
+          "pins": [
+            {
+              "pin": 1,
+              "label": "12V Key On Power",
+              "type": "POWER"
+            },
+            {
+              "pin": 2,
+              "label": "Chassis Ground",
+              "type": "GROUND"
+            },
+            {
+              "pin": 3,
+              "label": "High Speed Input",
+              "type": "SIGNAL"
+            },
+            { "pin": 4,
+              "label": "SPARE",
+              "type": "SIGNAL"
+            }
+          ] 
     },
     {
       "id": "dw810_pump",
