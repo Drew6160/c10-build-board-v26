@@ -2213,7 +2213,7 @@
       "id": "racewire_bulkhead_dual",
       "type": "connector",
       "tier": 1,
-      "zone": "A",
+      "zone": "B",
       "label": "RaceWire Billet Pass-Thru — Dual",
       "load": 0,
       "partNumber": "RaceWire Solutions — Billet Battery Pass-Thru, Dual (Red/Black)",
@@ -2243,7 +2243,7 @@
       "id": "racewire_bulkhead_single",
       "type": "connector",
       "tier": 1,
-      "zone": "C",
+      "zone": "B",
       "label": "RaceWire Billet Pass-Thru — Single",
       "load": 0,
       "partNumber": "RaceWire Solutions — Billet Battery Pass-Thru, Single (Red)",
@@ -2847,7 +2847,7 @@
       "from": "battery",
       "to": "racewire_bulkhead_dual",
       "type": "POWER",
-      "zone": "A",
+      "zone": "C",
       "loom": "charge_system",
       "resistance": 0.02,
       "wireOverride": "4/0 AWG",
@@ -2883,10 +2883,26 @@
       "resistance": 0.02,
       "wireOverride": "4/0 AWG",
       "color": "RD",
+      "fromConnector": "BAT",
+      "fromPin": 1,
       "toConnector": "RWB-S",
       "toPin": 1,
       "length": 48,
       "notes": "Primary power to rear components"
+    },
+    {
+      "from": "battery",
+      "to": "mdb_rear",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "charge_system",
+      "resistance": 0.03,
+      "color": "RD",
+      "fromConnector": "BAT",
+      "fromPin": 1,
+      "toConnector": "MDB_IN",
+      "toPin": 1,
+      "length": 36
     },
     {
       "from": "racewire_bulkhead_single",
@@ -2902,18 +2918,6 @@
       "toConnector": "MDB_IN",
       "toPin": 1,
       "length": 24
-    },
-    {
-      "from": "mdb_rear",
-      "to": "racewire_bulkhead_single",
-      "type": "POWER",
-      "zone": "C",
-      "loom": "charge_system",
-      "resistance": 0.03,
-      "color": "RD",
-      "fromConnector": "MDB_IN",
-      "fromPin": 1,
-      "toConnector": "RWB-S",
-      "toPin": 1
+    }
   ]
 }
