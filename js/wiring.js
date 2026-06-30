@@ -4,17 +4,20 @@
 // =============================
 
 const WIRE_TABLE = [
-  { gauge: "16 AWG", maxAmp: 10  },
-  { gauge: "14 AWG", maxAmp: 15  },
-  { gauge: "12 AWG", maxAmp: 20  },
-  { gauge: "10 AWG", maxAmp: 30  },
-  { gauge: "8 AWG",  maxAmp: 50  },
-  { gauge: "6 AWG",  maxAmp: 65  },
-  { gauge: "4 AWG",  maxAmp: 85  },
+  { gauge: "22 AWG", maxAmp: 3 },
+  { gauge: "20 AWG", maxAmp: 5 },
+  { gauge: "18 AWG", maxAmp: 7 },
+  { gauge: "16 AWG", maxAmp: 10 },
+  { gauge: "14 AWG", maxAmp: 15 },
+  { gauge: "12 AWG", maxAmp: 20 },
+  { gauge: "10 AWG", maxAmp: 30 },
+  { gauge: "8 AWG",  maxAmp: 50 },
+  { gauge: "6 AWG",  maxAmp: 65 },
+  { gauge: "4 AWG",  maxAmp: 85 },
   { gauge: "2 AWG",  maxAmp: 115 },
-  { gauge: "1/0 AWG",maxAmp: 150 },
-  { gauge: "2/0 AWG",maxAmp: 200 },
-  { gauge: "4/0 AWG",maxAmp: 300 }
+  { gauge: "1/0 AWG", maxAmp: 150 },
+  { gauge: "2/0 AWG", maxAmp: 200 },
+  { gauge: "4/0 AWG", maxAmp: 300 }
 ];
 
 function selectWireSize(current){
