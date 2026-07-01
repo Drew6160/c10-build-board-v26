@@ -402,66 +402,6 @@ function renderDRCSummary(containerId) {
 
 // ── WIREVIZ YAML EXPORT ──
 // Generates a WireViz-compatible YAML string for the active loom
-
-// Sanitizes any string into a YAML/WireViz-safe identifier (alphanumeric
-// + underscore only). Applied to node IDs and labels so hyphens or other
-// punctuation in future IDs/labels can't break generated YAML keys.
-function yamlKey(str) {
-  return String(str || "").replace(/[^a-zA-Z0-9_]/g, "_");
-}
-
-// Normalizes a node's connector data into an array of groups, regardless
-// of which schema it's using:
-//  - nested (current):  node.connectors = [{ designator, body, pins:[{pin,label,type}] }, ...]
-//  - flat (legacy):      node.pincount / node.pinlabels directly on the node
-// Always returns an array — callers iterate uniformly instead of special
-// casing each schema, and a node with no connector data yet returns [].
-function getConnectorGroups(node) {
-  if (!node) return [];
-  if (Array.isArray(node.connectors) && node.connectors.length > 0) {
-    return node.connectors;
-  }
-  if (node.pincount || (node.pinlabels && node.pinlabels.length)) {
-    return [{
-      designator: undefined,
-      body: node.connectorBody,
-      pinCount: node.pincount,
-      pins: (node.pinlabels || []).map((label, i) => ({ pin: i + 1, label }))
-    }];
-  }
-  return [];
-}
-
-// Builds the WireViz connector key for a node + connector group. Nodes
-// with a single connector group keep the plain node-label key (matches
-// every loom already validated against real `wireviz` runs — no churn
-// for ecm-less nodes). Nodes with multiple physical connector bodies
-// (ecm's J1A/J1B/J3, estopp's ES_PWR/ES_ACT/ES_BTN, etc.) get one key
-// per group, suffixed with the designator, so every documented connector
-// actually appears in the rendered diagram instead of only the first.
-function connectorKeyFor(node, fallbackId, groups, designator) {
-  const base = yamlKey(node?.label || fallbackId);
-  if (groups.length <= 1) return base;
-  const grp = designator
-    ? groups.find(g => g.designator === designator)
-    : groups[0];
-  return `${base}_${yamlKey(grp?.designator || "CONN")}`;
-}
-
-// Resolves the pin WireViz should reference for one side of an edge.
-// Prefers the documented pin LABEL (WireViz accepts label or numeric
-// index — labels are robust regardless of array ordering or future pin
-// renumbering) and falls back to the raw pin number, or 1, when nothing
-// is documented yet for that circuit.
-function resolvePinRef(groups, designator, pinNum) {
-  if (!pinNum) return 1;
-  const grp = designator
-    ? groups.find(g => g.designator === designator)
-    : groups[0];
-  const pinEntry = grp?.pins?.find(p => p.pin === pinNum);
-  return pinEntry?.label || pinNum;
-}
-
 function generateWireVizYAML(loom) {
   const filteredEdges = EDGES.filter(e => e.loom === loom);
   if (filteredEdges.length === 0) return "# No edges found for loom: " + loom;
@@ -472,8 +412,43 @@ function generateWireVizYAML(loom) {
     ...filteredEdges.map(e => e.to)
   ])];
 
-  // Build connectors block — one WireViz connector per documented
-  // connector group, not just the first one on the node.
+  const sanitize = (s) => (s || "").replace(/[^a-zA-Z0-9_]/g, "_");
+
+  // Resolves the correct WireViz connector block name for a given
+  // node + connector group designator. Single-connector-group nodes
+  // keep the bare label (matches existing rendered output like
+  // "AAW_Fuse_Panel"); multi-group nodes (ecm, estopp, ground_block)
+  // get "{Label}_{designator}" so each physical connector renders as
+  // its own block instead of collapsing into node.connectors[0].
+  function wireVizConnectorName(nodeId, designator) {
+    const node = STATE.nodes[nodeId];
+    if (!node) return sanitize(nodeId);
+    const label  = sanitize(node.label || nodeId);
+    const groups = node.connectors || [];
+    if (groups.length <= 1) return label;
+    return `${label}_${sanitize(designator || groups[0]?.designator || "")}`;
+  }
+
+  // Resolves a stored pin NUMBER (edge.fromPin/toPin, e.g. 25) to its
+  // positional index within that specific connector group's pins[]
+  // array (WireViz addresses pins by position, e.g. J1A's FUEL_P is
+  // pin:25 and also array position 25 — this just guards against any
+  // future group where pin numbers and array order diverge).
+  function resolvePinPosition(nodeId, designator, pinNumber) {
+    const node = STATE.nodes[nodeId];
+    if (!node) return pinNumber || 1;
+    const groups = node.connectors || [];
+    if (groups.length === 0) return pinNumber || 1;
+    const grp = designator
+      ? groups.find(g => g.designator === designator)
+      : groups[0];
+    if (!grp || !grp.pins || grp.pins.length === 0) return pinNumber || 1;
+    if (!pinNumber) return 1;
+    const idx = grp.pins.findIndex(p => p.pin === pinNumber);
+    return idx >= 0 ? idx + 1 : pinNumber;
+  }
+
+  // Build connectors block
   let yaml = `# Auto-generated by C10 Build Board\n`;
   yaml += `# Loom: ${loom}\n`;
   yaml += `# Generated: ${new Date().toLocaleDateString()}\n\n`;
@@ -482,29 +457,21 @@ function generateWireVizYAML(loom) {
   nodeIds.forEach(id => {
     const node = STATE.nodes[id];
     if (!node) return;
-    const groups   = getConnectorGroups(node);
-    const noteLine = (node.notes || "").replace(/"/g, "'").split("\n")[0];
+    const label  = sanitize(node.label || id);
+    const groups = (node.connectors && node.connectors.length > 0)
+      ? node.connectors
+      : [null]; // no connector data documented yet — still emit a placeholder block
 
-    if (groups.length === 0) {
-      // No connector data documented yet — still emit a bare placeholder
-      // so the node appears in the diagram and any edge referencing it
-      // (even without pin detail) still resolves to something.
-      yaml += `  ${yamlKey(node.label || id)}:\n`;
+    groups.forEach(conn => {
+      const connName = conn ? wireVizConnectorName(id, conn.designator) : label;
+
+      yaml += `  ${connName}:\n`;
       yaml += `    type: ${node.partNumber || "—"}\n`;
-      if (noteLine) yaml += `    notes: "${noteLine}"\n`;
-      yaml += `\n`;
-      return;
-    }
+      yaml += `    notes: "${(node.notes || "").replace(/"/g, "'").split("\n")[0]}"\n`;
 
-    groups.forEach(grp => {
-      const key  = connectorKeyFor(node, id, groups, grp.designator);
-      const pins = grp.pins || [];
-      yaml += `  ${key}:\n`;
-      yaml += `    type: ${grp.body || node.partNumber || "—"}\n`;
-      if (noteLine) yaml += `    notes: "${noteLine}"\n`;
-      if (pins.length > 0) {
-        yaml += `    pincount: ${grp.pinCount || pins.length}\n`;
-        yaml += `    pinlabels: [${pins.map(p => p.label || `pin${p.pin}`).join(", ")}]\n`;
+      if (conn && conn.pins && conn.pins.length > 0) {
+        yaml += `    pincount: ${conn.pinCount || conn.pins.length}\n`;
+        yaml += `    pinlabels: [${conn.pins.map(p => p.label).join(", ")}]\n`;
       }
       yaml += `\n`;
     });
@@ -513,56 +480,40 @@ function generateWireVizYAML(loom) {
   // Build cables block — one cable per unique loom segment
   yaml += `cables:\n\n`;
   filteredEdges.forEach((edge, i) => {
-    const cableId = `W${String(i+1).padStart(2,"0")}_${yamlKey(edge.from)}_${yamlKey(edge.to)}`;
-    // WireViz 0.4.1 color stripes are concatenated, not slash-separated
-    // (e.g. "RDBK", not "RD/BK")
+    const cableId = `W${String(i+1).padStart(2,"0")}_${edge.from}_${edge.to}`;
     const colorStr = edge.colorStripe
-      ? `${edge.color}${edge.colorStripe}`
+      ? `${edge.color}${edge.colorStripe}`   // concatenated, e.g. RDBK — not RD/BK
       : (edge.color || "WH");
 
     yaml += `  ${cableId}:\n`;
     yaml += `    gauge: ${edge.wireOverride || "18 AWG"}\n`;
     yaml += `    colors: [${colorStr}]\n`;
     yaml += `    wirecount: 1\n`;
-    // WireViz 0.4.1's `shield` takes a single color value, not a
-    // boolean + separate shieldcolor key
     if (edge.shield) {
-      yaml += `    shield: ${typeof edge.shield === "string" ? edge.shield : "GN"}\n`;
+      // WireViz 0.4.1: shield takes a single color value, not a boolean + shieldcolor key
+      yaml += `    shield: ${edge.color || "GN"}\n`;
     }
+    // NOTE: "twisted" is not a valid WireViz cable parameter — dropped.
+    // If a run needs to be documented as twisted pair, that lives in notes: below.
     if (edge.length) yaml += `    length: ${edge.length} in\n`;
-    // `twisted` is not a valid 0.4.1 cable parameter — record the intent
-    // in notes instead so it isn't silently dropped
-    const noteBits = [];
-    if (edge.notes) noteBits.push(edge.notes.replace(/"/g,"'"));
-    if (edge.twisted) noteBits.push("twisted pair");
-    if (noteBits.length) yaml += `    notes: "${noteBits.join(" — ")}"\n`;
+    if (edge.notes)  yaml += `    notes: "${edge.notes.replace(/"/g,"'")}"\n`;
     yaml += `\n`;
   });
 
-  // Build connections block — resolve each side against the correct
-  // connector group (via fromConnector/toConnector) instead of always
-  // assuming the node has only one connector.
+  // Build connections block — routes each edge to the correct
+  // connector GROUP via fromConnector/toConnector, and resolves the
+  // local pin position within that group
   yaml += `connections:\n\n`;
   filteredEdges.forEach((edge, i) => {
-    const cableId = `W${String(i+1).padStart(2,"0")}_${yamlKey(edge.from)}_${yamlKey(edge.to)}`;
-    const fromNode   = STATE.nodes[edge.from];
-    const toNode     = STATE.nodes[edge.to];
-    const fromGroups = getConnectorGroups(fromNode);
-    const toGroups   = getConnectorGroups(toNode);
+    const cableId  = `W${String(i+1).padStart(2,"0")}_${edge.from}_${edge.to}`;
+    const fromNode = wireVizConnectorName(edge.from, edge.fromConnector);
+    const toNode   = wireVizConnectorName(edge.to,   edge.toConnector);
+    const fromPin  = resolvePinPosition(edge.from, edge.fromConnector, edge.fromPin);
+    const toPin    = resolvePinPosition(edge.to,   edge.toConnector,   edge.toPin);
 
-    const fromKey = fromNode
-      ? connectorKeyFor(fromNode, edge.from, fromGroups, edge.fromConnector)
-      : yamlKey(edge.from);
-    const toKey = toNode
-      ? connectorKeyFor(toNode, edge.to, toGroups, edge.toConnector)
-      : yamlKey(edge.to);
-
-    const fromPinRef = resolvePinRef(fromGroups, edge.fromConnector, edge.fromPin);
-    const toPinRef    = resolvePinRef(toGroups, edge.toConnector, edge.toPin);
-
-    yaml += `  - - ${fromKey}: [${fromPinRef}]\n`;
+    yaml += `  - - ${fromNode}: [${fromPin}]\n`;
     yaml += `    - ${cableId}: [1]\n`;
-    yaml += `    - ${toKey}: [${toPinRef}]\n\n`;
+    yaml += `    - ${toNode}: [${toPin}]\n\n`;
   });
 
   return yaml;
