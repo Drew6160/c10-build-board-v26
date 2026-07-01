@@ -1277,7 +1277,7 @@
       "notes": "Dual speed controller. White trigger wire on controller, ground-side trigger on J1B OUT_3 switches low/high speed. 55% duty cycle low / 100% high.",
       "connectors": [
         {
-          "designator": "C105",
+          "designator": "C105_IN",
           "body": "Deutsch DTP 4-way",
           "gender": "male",
           "pinCount": 4,
@@ -1305,7 +1305,7 @@
           ]
         },
          {
-          "designator": "C105",
+          "designator": "C105_OUT",
           "body": "Deutsch DT 4-way",
           "gender": "male",
           "pinCount": 4,
@@ -1330,6 +1330,8 @@
               "type": "SIGNAL"
             }
           ] 
+         }
+      ]
     },
     {
       "id": "dw810_pump",
