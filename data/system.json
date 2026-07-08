@@ -2300,6 +2300,156 @@
           ]
         }
       ]
+    },
+    {
+  "id": "ml_rbs",
+  "type": "distribution",
+  "tier": 1,
+  "zone": "B",
+  "label": "Blue Sea ML-RBS",
+  "load": 0,
+  "partNumber": "Blue Sea Systems ML-RBS",
+  "notes": "500A magnetic latching battery switch. Positive-side insertion (battery POS -> ML-RBS -> power_block) -- keeps star ground network permanently bonded, unaffected by kill switch state. Zero holding current in either state. Manual override knob on unit body for emergency/service access, lockable OFF. Control pins 3/8 require permanently-hot fused +12V feed (available even when switch is OFF) -- do not power control circuit from the switched side.",
+  "connectors": [
+    {
+      "designator": "ML_MAIN",
+      "body": "Bare Lug 3/8\"",
+      "gender": "n/a",
+      "pinCount": 2,
+      "pins": [
+        { "pin": 1, "label": "BATT_IN", "type": "POWER" },
+        { "pin": 2, "label": "SWITCHED_OUT", "type": "POWER" }
+      ]
+    },
+    {
+      "designator": "ML_CTRL",
+      "body": "Deutsch DT 4-way",
+      "gender": "female",
+      "pinCount": 4,
+      "pins": [
+        { "pin": 1, "label": "CTRL_HOT", "type": "POWER" },
+        { "pin": 2, "label": "CTRL_GND", "type": "GROUND" },
+        { "pin": 3, "label": "TRIG_ON", "type": "SIGNAL" },
+        { "pin": 4, "label": "TRIG_OFF", "type": "SIGNAL" }
+      ]
+    }
+  ]
+},
+{
+  "id": "alternator_apm",
+  "type": "control",
+  "tier": 1,
+  "zone": "A",
+  "label": "Alternator Protection Module",
+  "load": 0,
+  "partNumber": "Balmar APM-12",
+  "notes": "Solid-state load-dump/surge protection, mounted directly at alternator B+ and ground terminals. Parallel/shunt connection only -- not in-line with charging current path, does not interfere with alternator's self-exciting internal regulation. Clamps spikes up to 60V, sustained over-voltage from ~20V. Meets ISO 16750-2 (Load Dump) and ISO 7637-2 (Surge). Self-monitoring -- visual/audible alarm if module has absorbed a surge and needs replacement. Independent backstop to the kill switch sequencing (kill_master_latch -> kill_delay_timer -> ml_rbs); protects against relay failure, mistimed disconnect, or any other unrelated momentary connection loss.",
+  "connectors": [
+    {
+      "designator": "APM",
+      "body": "Bare Lug 3/8\"",
+      "gender": "n/a",
+      "pinCount": 3,
+      "pins": [
+        { "pin": 1, "label": "B+", "type": "POWER" },
+        { "pin": 2, "label": "GND", "type": "GROUND" },
+        { "pin": 3, "label": "ALARM_OUT", "type": "SIGNAL" }
+      ]
+    }
+  ]
+},
+{
+  "id": "kill_master_latch",
+  "type": "relay",
+  "tier": 1,
+  "zone": "B",
+  "label": "Kill Switch Master Latch",
+  "load": 0.5,
+  "partNumber": "SPDT Latching Relay (SET/RESET)",
+  "notes": "Latching relay with separate SET/RESET coil trigger inputs. SET (via ON button) closes contact feeding SW_12V through to ECM. RESET (via OFF button) opens contact instantly -- zero delay, kills injectors/coils in under a second regardless of key position. Contact rated to handle SW_12V ignition feed current directly, no interposing relay needed. Powered from always-hot fused tap upstream of ml_rbs -- must NOT be fed from the switched side or it can never re-latch ON.",
+  "connectors": [
+    {
+      "designator": "LATCH",
+      "body": "Deutsch DT 6-way",
+      "gender": "female",
+      "pinCount": 6,
+      "pins": [
+        { "pin": 1, "label": "HOT_IN", "type": "POWER" },
+        { "pin": 2, "label": "GND", "type": "GROUND" },
+        { "pin": 3, "label": "SET_TRIG", "type": "SIGNAL" },
+        { "pin": 4, "label": "RESET_TRIG", "type": "SIGNAL" },
+        { "pin": 5, "label": "SW12V_IN", "type": "POWER" },
+        { "pin": 6, "label": "SW12V_OUT", "type": "POWER" }
+      ]
+    }
+  ]
+},
+{
+   "id": "kill_delay_timer",
+  "type": "control",
+  "tier": 1,
+  "zone": "B",
+  "label": "Kill Switch Delay Timer",
+  "load": 0.1,
+  "partNumber": "Hella Time Delay Relay (delay-on-release), ISO 7588 socket -- PRODUCTION TARGET. Bench validation in progress using UCTRONICS DC12V Programmable Time Delay Relay Module (ASIN B097GLMDM3) to confirm exact delay-on-release logic and mode before ordering final Hella part number.",
+  "notes": "Standard 5-pin automotive relay footprint (final part). Trigger input taken from kill_master_latch RESET event. 2-second delay, confirmed against manufacturer timing diagram before permanent install. At end of delay, output contact closes and sends momentary +12V pulse to ml_rbs TRIG_OFF lead. Mounted adjacent to ml_rbs and kill_master_latch on same sub-plate near mid-ship battery.",
+  "connectors": [
+    {
+      "designator": "TIMER",
+      "body": "Deutsch DT 4-way",
+      "gender": "female",
+      "pinCount": 4,
+      "pins": [
+        { "pin": 1, "label": "HOT_IN", "type": "POWER" },
+        { "pin": 2, "label": "GND", "type": "GROUND" },
+        { "pin": 3, "label": "TRIG_IN", "type": "SIGNAL" },
+        { "pin": 4, "label": "DELAYED_OUT", "type": "SIGNAL" }
+      ]
+    }
+  ]
+},
+{
+  "id": "kill_off_button",
+  "type": "control",
+  "tier": 1,
+  "zone": "B",
+  "label": "Kill Switch — OFF Button",
+  "load": 0,
+  "partNumber": "Momentary N.O. Pushbutton",
+  "notes": "Dash/console mounted. Pulses kill_master_latch RESET input. Consider a guarded or recessed button to prevent accidental engagement.",
+  "connectors": [
+    {
+      "designator": "OFFBTN",
+      "body": "Deutsch DT 2-way",
+      "gender": "female",
+      "pinCount": 2,
+      "pins": [
+        { "pin": 1, "label": "TRIG", "type": "SIGNAL" },
+        { "pin": 2, "label": "GND", "type": "GROUND" }
+      ]
+    }
+  ]
+},
+{
+  "id": "kill_on_button",
+  "type": "control",
+  "tier": 1,
+  "zone": "B",
+  "label": "Kill Switch — ON Button",
+  "load": 0,
+  "partNumber": "Momentary N.O. Pushbutton",
+  "notes": "Dash/console mounted, separate from OFF button. Pulses kill_master_latch SET input AND ml_rbs TRIG_ON lead simultaneously -- no delay needed on power-up.",
+  "connectors": [
+    {
+      "designator": "ONBTN",
+      "body": "Deutsch DT 2-way",
+      "gender": "female",
+      "pinCount": 2,
+      "pins": [
+        { "pin": 1, "label": "TRIG", "type": "SIGNAL" },
+        { "pin": 2, "label": "GND", "type": "GROUND" }]
+       }
+      ]
     }
   ],
   "edges": [
@@ -2931,15 +3081,17 @@
       "from": "battery",
       "to": "mdb_rear",
       "type": "POWER",
-      "zone": "C",
+      "zone": "B",
       "loom": "charge_system",
       "resistance": 0.03,
+      "wireOverride": "4/0 AWG",
       "color": "RD",
       "fromConnector": "BAT",
       "fromPin": 1,
       "toConnector": "MDB_IN",
       "toPin": 1,
-      "length": 36
+      "length": 36,
+      "notes": "mapping actual path from battery to MDB for the rear section"
     },
     {
       "from": "racewire_bulkhead_single",
@@ -2955,6 +3107,169 @@
       "toConnector": "MDB_IN",
       "toPin": 1,
       "length": 24
+    },
+    {
+  "from": "battery",
+  "to": "ml_rbs",
+  "type": "POWER",
+  "zone": "B",
+  "loom": "charge_system",
+  "resistance": 0.005,
+  "wireOverride": "4/0 AWG",
+  "color": "RD",
+  "fromConnector": "BAT",
+  "fromPin": 1,
+  "toConnector": "ML_MAIN",
+  "toPin": 1,
+  "notes": "Positive-side insertion -- keeps ground_block/star ground permanently bonded, isolates only the supply."
+},
+{
+  "from": "ml_rbs",
+  "to": "power_block",
+  "type": "POWER",
+  "zone": "B",
+  "loom": "charge_system",
+  "resistance": 0.004,
+  "wireOverride": "4/0 AWG",
+  "color": "RD",
+  "fromConnector": "ML_MAIN",
+  "fromPin": 2,
+  "toConnector": "SPWR",
+  "toPin": 1
+},
+{
+  "from": "racewire_bulkhead_single",
+  "to": "kill_master_latch",
+  "type": "POWER",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "wireOverride": "16 AWG",
+  "color": "RD",
+  "toConnector": "LATCH",
+  "toPin": 1,
+  "notes": "Always-hot fused tap (1-2A), upstream of ml_rbs. Feeds both kill_master_latch and kill_delay_timer control power -- required so the ON button can always re-latch even with battery switch OFF."
+},
+{
+  "from": "racewire_bulkhead_single",
+  "to": "kill_delay_timer",
+  "type": "POWER",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "wireOverride": "16 AWG",
+  "color": "RD",
+  "toConnector": "TIMER",
+  "toPin": 1
+},
+{
+  "from": "ml_rbs",
+  "to": "kill_master_latch",
+  "type": "GROUND",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "BK",
+  "toConnector": "LATCH",
+  "toPin": 2,
+  "notes": "Ground reference for latch/timer control circuit -- ties to ground_block, not ml_rbs body."
+},
+{
+  "from": "kill_on_button",
+  "to": "kill_master_latch",
+  "type": "SIGNAL",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "GY",
+  "fromConnector": "ONBTN",
+  "fromPin": 1,
+  "toConnector": "LATCH",
+  "toPin": 3,
+  "notes": "SET trigger -- immediate, no delay."
+},
+{
+  "from": "kill_off_button",
+  "to": "kill_master_latch",
+  "type": "SIGNAL",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "GY/BK",
+  "fromConnector": "OFFBTN",
+  "fromPin": 1,
+  "toConnector": "LATCH",
+  "toPin": 4,
+  "notes": "RESET trigger -- immediate, breaks SW12V feed instantly."
+},
+{
+  "from": "ignition_sw",
+  "to": "kill_master_latch",
+  "type": "POWER",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "PK",
+  "toConnector": "LATCH",
+  "toPin": 5,
+  "notes": "SW_12V feed enters the latch here -- kill switch now overrides key position, replacing the direct ignition_sw-to-ecm edge."
+},
+{
+  "from": "kill_master_latch",
+  "to": "ecm",
+  "type": "POWER",
+  "zone": "A",
+  "loom": "engine_harness",
+  "resistance": 0.02,
+  "color": "PK",
+  "fromConnector": "LATCH",
+  "fromPin": 6,
+  "toConnector": "J1A",
+  "toPin": 10,
+  "notes": "SW_12V continues to ECM J1A pin 10 (SW_12V) only when latch is SET. This replaces the prior direct fuse_panel/ignition_sw to ecm SW_12V path."
+},
+{
+  "from": "kill_master_latch",
+  "to": "kill_delay_timer",
+  "type": "SIGNAL",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "VT",
+  "fromConnector": "LATCH",
+  "fromPin": 6,
+  "toConnector": "TIMER",
+  "toPin": 3,
+  "notes": "Timer trigger input follows SW12V_OUT state. When this de-energizes (RESET), the delay-on-release timer starts counting."
+},
+{
+  "from": "kill_delay_timer",
+  "to": "ml_rbs",
+  "type": "SIGNAL",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "VT/BK",
+  "fromConnector": "TIMER",
+  "fromPin": 4,
+  "toConnector": "ML_CTRL",
+  "toPin": 4,
+  "notes": "Fires 2 seconds after latch RESET -- pulses ml_rbs TRIG_OFF, opening the battery switch after the engine has had time to stop turning and the alternator field to collapse."
+},
+{
+  "from": "kill_on_button",
+  "to": "ml_rbs",
+  "type": "SIGNAL",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "GY",
+  "fromConnector": "ONBTN",
+  "fromPin": 1,
+  "toConnector": "ML_CTRL",
+  "toPin": 3,
+  "notes": "TRIG_ON -- fires simultaneously with the latch SET, no delay needed on power-up."
+}]
     }
-  ]
-}
+  
+
