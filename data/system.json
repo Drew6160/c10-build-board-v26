@@ -3132,18 +3132,6 @@
   "notes": "Always-hot fused tap feeds the interlock's N.C. contact, not the timer directly."
 },
 {
-  "from": "racewire_bulkhead_single",
-  "to": "kill_delay_timer",
-  "type": "POWER",
-  "zone": "B",
-  "loom": "cab_harness",
-  "resistance": 0.02,
-  "wireOverride": "16 AWG",
-  "color": "RD",
-  "toConnector": "TIMER",
-  "toPin": 1
-},
-{
   "from": "ml_rbs",
   "to": "kill_master_latch",
   "type": "GROUND",
@@ -3222,20 +3210,6 @@
   "toConnector": "TIMER",
   "toPin": 1,
   "notes": "Timer only receives power (and therefore only starts its 2s count) when interlock N.C. contact is closed, i.e. only during confirmed OFF state."
-},
-{
-  "from": "kill_delay_timer",
-  "to": "kill_off_interlock",
-  "type": "SIGNAL",
-  "zone": "B",
-  "loom": "cab_harness",
-  "resistance": 0.02,
-  "color": "VT/BK",
-  "fromConnector": "TIMER",
-  "fromPin": 3,
-  "toConnector": "INTLK",
-  "toPin": 3,
-  "notes": "Hella NO(87) output feeds into the interlock's N.C. contact, not directly to ml_rbs."
 },
 {
   "from": "kill_delay_timer",
