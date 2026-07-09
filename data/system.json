@@ -2447,10 +2447,35 @@
       "pinCount": 2,
       "pins": [
         { "pin": 1, "label": "TRIG", "type": "SIGNAL" },
-        { "pin": 2, "label": "GND", "type": "GROUND" }]
-       }
+        { "pin": 2, "label": "GND", "type": "GROUND" }
       ]
     }
+  ]
+},
+  {
+  "id": "kill_off_interlock",
+  "type": "relay",
+  "tier": 1,
+  "zone": "B",
+  "label": "Kill Switch OFF-Path Interlock",
+  "load": 0.1,
+  "partNumber": "Standard 5-pin automotive relay",
+  "notes": "Prevents TRIG_ON and TRIG_OFF from ever being asserted to ml_rbs simultaneously during the ON transition. Coil energized whenever kill_master_latch is SET (system ON) -- source from same latch output feeding kill_master_latch pin 6 (SW12V_OUT). N.C. contact wired in series in the path between kill_delay_timer NO(87) output and ml_rbs TRIG_OFF. While system is ON, N.C. contact is held open, physically blocking TRIG_OFF regardless of kill_delay_timer's output state (which may still be closed for a moment during the ON transition before its own timer resets). N.C. contact only closes when latch drops to OFF, by which point kill_on_button's direct TRIG_ON pulse has already completed.",
+  "connectors": [
+    {
+      "designator": "INTLK",
+      "body": "Deutsch DT 4-way",
+      "gender": "female",
+      "pinCount": 4,
+      "pins": [
+        { "pin": 1, "label": "COIL_86", "type": "POWER" },
+        { "pin": 2, "label": "COIL_85", "type": "SIGNAL" },
+        { "pin": 3, "label": "NC_87A_IN", "type": "SIGNAL" },
+        { "pin": 4, "label": "NC_87A_OUT", "type": "SIGNAL" }
+      ]
+    }
+  ]
+}
   ],
   "edges": [
     {
@@ -3230,7 +3255,7 @@
 },
 {
   "from": "kill_master_latch",
-  "to": "kill_delay_timer",
+  "to": "kill_off_interlock",
   "type": "SIGNAL",
   "zone": "B",
   "loom": "cab_harness",
@@ -3238,24 +3263,38 @@
   "color": "VT",
   "fromConnector": "LATCH",
   "fromPin": 6,
-  "toConnector": "TIMER",
-  "toPin": 3,
-  "notes": "Timer trigger input follows SW12V_OUT state. When this de-energizes (RESET), the delay-on-release timer starts counting."
+  "toConnector": "INTLK",
+  "toPin": 1,
+  "notes": "Interlock coil energized whenever latch is SET/ON -- keeps N.C. contact open, blocking TRIG_OFF path during normal running."
 },
 {
   "from": "kill_delay_timer",
-  "to": "ml_rbs",
+  "to": "kill_off_interlock",
   "type": "SIGNAL",
   "zone": "B",
   "loom": "cab_harness",
   "resistance": 0.02,
   "color": "VT/BK",
   "fromConnector": "TIMER",
+  "fromPin": 3,
+  "toConnector": "INTLK",
+  "toPin": 3,
+  "notes": "Hella NO(87) output feeds into the interlock's N.C. contact, not directly to ml_rbs."
+},
+{
+  "from": "kill_off_interlock",
+  "to": "ml_rbs",
+  "type": "SIGNAL",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "VT/BK",
+  "fromConnector": "INTLK",
   "fromPin": 4,
   "toConnector": "ML_CTRL",
   "toPin": 4,
-  "notes": "Fires 2 seconds after latch RESET -- pulses ml_rbs TRIG_OFF, opening the battery switch after the engine has had time to stop turning and the alternator field to collapse."
-},
+  "notes": "Replaces the earlier direct kill_delay_timer -> ml_rbs TRIG_OFF edge. TRIG_OFF only reaches ml_rbs when this interlock's N.C. contact is closed, i.e. only when system is confirmed OFF."
+}
 {
   "from": "kill_on_button",
   "to": "ml_rbs",
