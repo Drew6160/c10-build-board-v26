@@ -2385,14 +2385,14 @@
   ]
 },
 {
-   "id": "kill_delay_timer",
+  "id": "kill_delay_timer",
   "type": "control",
   "tier": 1,
   "zone": "B",
   "label": "Kill Switch Delay Timer",
   "load": 0.1,
-  "partNumber": "Hella Time Delay Relay (delay-on-release), ISO 7588 socket -- PRODUCTION TARGET. Bench validation in progress using UCTRONICS DC12V Programmable Time Delay Relay Module (ASIN B097GLMDM3) to confirm exact delay-on-release logic and mode before ordering final Hella part number.",
-  "notes": "Standard 5-pin automotive relay footprint (final part). Trigger input taken from kill_master_latch RESET event. 2-second delay, confirmed against manufacturer timing diagram before permanent install. At end of delay, output contact closes and sends momentary +12V pulse to ml_rbs TRIG_OFF lead. Mounted adjacent to ml_rbs and kill_master_latch on same sub-plate near mid-ship battery.",
+  "partNumber": "HELLA 996152151, Delay-on-Operate, 12V 5-pin, 0-900s adjustable",
+  "notes": "Power-in-is-trigger relay (not a separate supply+CH1 design like the UCTRONICS bench unit) -- applying power to its main terminals starts the 2s count; removing power resets it. Fed exclusively through kill_off_interlock's N.C. contact, NOT a direct always-hot tap -- this means the timer only ever has power during a confirmed-OFF state, which is what lets its NO(87) output feed ml_rbs TRIG_OFF directly with no further gating needed. Set delay 2s via onboard adjustment.",
   "connectors": [
     {
       "designator": "TIMER",
@@ -2400,59 +2400,15 @@
       "gender": "female",
       "pinCount": 4,
       "pins": [
-        { "pin": 1, "label": "HOT_IN", "type": "POWER" },
+        { "pin": 1, "label": "PWR_TRIG_IN", "type": "POWER" },
         { "pin": 2, "label": "GND", "type": "GROUND" },
-        { "pin": 3, "label": "TRIG_IN", "type": "SIGNAL" },
-        { "pin": 4, "label": "DELAYED_OUT", "type": "SIGNAL" }
+        { "pin": 3, "label": "NO_87_OUT", "type": "SIGNAL" },
+        { "pin": 4, "label": "COMMON_30", "type": "GROUND" }
       ]
     }
   ]
 },
 {
-  "id": "kill_off_button",
-  "type": "control",
-  "tier": 1,
-  "zone": "B",
-  "label": "Kill Switch — OFF Button",
-  "load": 0,
-  "partNumber": "Momentary N.O. Pushbutton",
-  "notes": "Dash/console mounted. Pulses kill_master_latch RESET input. Consider a guarded or recessed button to prevent accidental engagement.",
-  "connectors": [
-    {
-      "designator": "OFFBTN",
-      "body": "Deutsch DT 2-way",
-      "gender": "female",
-      "pinCount": 2,
-      "pins": [
-        { "pin": 1, "label": "TRIG", "type": "SIGNAL" },
-        { "pin": 2, "label": "GND", "type": "GROUND" }
-      ]
-    }
-  ]
-},
-{
-  "id": "kill_on_button",
-  "type": "control",
-  "tier": 1,
-  "zone": "B",
-  "label": "Kill Switch — ON Button",
-  "load": 0,
-  "partNumber": "Momentary N.O. Pushbutton",
-  "notes": "Dash/console mounted, separate from OFF button. Pulses kill_master_latch SET input AND ml_rbs TRIG_ON lead simultaneously -- no delay needed on power-up.",
-  "connectors": [
-    {
-      "designator": "ONBTN",
-      "body": "Deutsch DT 2-way",
-      "gender": "female",
-      "pinCount": 2,
-      "pins": [
-        { "pin": 1, "label": "TRIG", "type": "SIGNAL" },
-        { "pin": 2, "label": "GND", "type": "GROUND" }
-      ]
-    }
-  ]
-},
-  {
   "id": "kill_off_interlock",
   "type": "relay",
   "tier": 1,
@@ -2460,7 +2416,7 @@
   "label": "Kill Switch OFF-Path Interlock",
   "load": 0.1,
   "partNumber": "Standard 5-pin automotive relay",
-  "notes": "Prevents TRIG_ON and TRIG_OFF from ever being asserted to ml_rbs simultaneously during the ON transition. Coil energized whenever kill_master_latch is SET (system ON) -- source from same latch output feeding kill_master_latch pin 6 (SW12V_OUT). N.C. contact wired in series in the path between kill_delay_timer NO(87) output and ml_rbs TRIG_OFF. While system is ON, N.C. contact is held open, physically blocking TRIG_OFF regardless of kill_delay_timer's output state (which may still be closed for a moment during the ON transition before its own timer resets). N.C. contact only closes when latch drops to OFF, by which point kill_on_button's direct TRIG_ON pulse has already completed.",
+  "notes": "REPOSITIONED from downstream output-gate to upstream power-gate for kill_delay_timer. Coil energized whenever kill_master_latch is SET (system ON) -- N.C. contact held open, cutting power to kill_delay_timer entirely and keeping it reset/idle during normal running. When latch drops to OFF, coil de-energizes, N.C. contact closes, and the always-hot tap powers the timer for the first time -- starting its 2s count. This single relay now handles both jobs (blocking during ON, enabling during OFF) that previously needed a downstream gate as well.",
   "connectors": [
     {
       "designator": "INTLK",
@@ -2470,8 +2426,8 @@
       "pins": [
         { "pin": 1, "label": "COIL_86", "type": "POWER" },
         { "pin": 2, "label": "COIL_85", "type": "SIGNAL" },
-        { "pin": 3, "label": "NC_87A_IN", "type": "SIGNAL" },
-        { "pin": 4, "label": "NC_87A_OUT", "type": "SIGNAL" }
+        { "pin": 3, "label": "NC_IN_ALWAYS_HOT", "type": "POWER" },
+        { "pin": 4, "label": "NC_OUT_TO_TIMER", "type": "POWER" }
       ]
     }
   ]
@@ -3164,16 +3120,16 @@
 },
 {
   "from": "racewire_bulkhead_single",
-  "to": "kill_master_latch",
+  "to": "kill_off_interlock",
   "type": "POWER",
   "zone": "B",
   "loom": "cab_harness",
   "resistance": 0.02,
   "wireOverride": "16 AWG",
   "color": "RD",
-  "toConnector": "LATCH",
-  "toPin": 1,
-  "notes": "Always-hot fused tap (1-2A), upstream of ml_rbs. Feeds both kill_master_latch and kill_delay_timer control power -- required so the ON button can always re-latch even with battery switch OFF."
+  "toConnector": "INTLK",
+  "toPin": 3,
+  "notes": "Always-hot fused tap feeds the interlock's N.C. contact, not the timer directly."
 },
 {
   "from": "racewire_bulkhead_single",
@@ -3254,18 +3210,18 @@
   "notes": "SW_12V continues to ECM J1A pin 10 (SW_12V) only when latch is SET. This replaces the prior direct fuse_panel/ignition_sw to ecm SW_12V path."
 },
 {
-  "from": "kill_master_latch",
-  "to": "kill_off_interlock",
-  "type": "SIGNAL",
+ "from": "kill_off_interlock",
+  "to": "kill_delay_timer",
+  "type": "POWER",
   "zone": "B",
   "loom": "cab_harness",
   "resistance": 0.02,
-  "color": "VT",
-  "fromConnector": "LATCH",
-  "fromPin": 6,
-  "toConnector": "INTLK",
+  "color": "RD/BK",
+  "fromConnector": "INTLK",
+  "fromPin": 4,
+  "toConnector": "TIMER",
   "toPin": 1,
-  "notes": "Interlock coil energized whenever latch is SET/ON -- keeps N.C. contact open, blocking TRIG_OFF path during normal running."
+  "notes": "Timer only receives power (and therefore only starts its 2s count) when interlock N.C. contact is closed, i.e. only during confirmed OFF state."
 },
 {
   "from": "kill_delay_timer",
@@ -3282,18 +3238,18 @@
   "notes": "Hella NO(87) output feeds into the interlock's N.C. contact, not directly to ml_rbs."
 },
 {
-  "from": "kill_off_interlock",
+  "from": "kill_delay_timer",
   "to": "ml_rbs",
   "type": "SIGNAL",
   "zone": "B",
   "loom": "cab_harness",
   "resistance": 0.02,
   "color": "VT/BK",
-  "fromConnector": "INTLK",
-  "fromPin": 4,
+  "fromConnector": "TIMER",
+  "fromPin": 3,
   "toConnector": "ML_CTRL",
   "toPin": 4,
-  "notes": "Replaces the earlier direct kill_delay_timer -> ml_rbs TRIG_OFF edge. TRIG_OFF only reaches ml_rbs when this interlock's N.C. contact is closed, i.e. only when system is confirmed OFF."
+  "notes": "NO(87) output feeds ml_rbs TRIG_OFF directly -- no further gating needed since the timer itself can only ever be running during OFF state." 
 },
 {
   "from": "kill_on_button",
