@@ -3294,7 +3294,7 @@
   "toConnector": "ML_CTRL",
   "toPin": 4,
   "notes": "Replaces the earlier direct kill_delay_timer -> ml_rbs TRIG_OFF edge. TRIG_OFF only reaches ml_rbs when this interlock's N.C. contact is closed, i.e. only when system is confirmed OFF."
-}
+},
 {
   "from": "kill_on_button",
   "to": "ml_rbs",
@@ -3311,4 +3311,3 @@
 }]
     }
   
-
