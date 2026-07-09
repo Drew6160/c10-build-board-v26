@@ -3143,34 +3143,7 @@
   "toPin": 2,
   "notes": "Ground reference for latch/timer control circuit -- ties to ground_block, not ml_rbs body."
 },
-{
-  "from": "kill_on_button",
-  "to": "kill_master_latch",
-  "type": "SIGNAL",
-  "zone": "B",
-  "loom": "cab_harness",
-  "resistance": 0.02,
-  "color": "GY",
-  "fromConnector": "ONBTN",
-  "fromPin": 1,
-  "toConnector": "LATCH",
-  "toPin": 3,
-  "notes": "SET trigger -- immediate, no delay."
-},
-{
-  "from": "kill_off_button",
-  "to": "kill_master_latch",
-  "type": "SIGNAL",
-  "zone": "B",
-  "loom": "cab_harness",
-  "resistance": 0.02,
-  "color": "GY/BK",
-  "fromConnector": "OFFBTN",
-  "fromPin": 1,
-  "toConnector": "LATCH",
-  "toPin": 4,
-  "notes": "RESET trigger -- immediate, breaks SW12V feed instantly."
-},
+
 {
   "from": "ignition_sw",
   "to": "kill_master_latch",
@@ -3224,20 +3197,7 @@
   "toConnector": "ML_CTRL",
   "toPin": 4,
   "notes": "NO(87) output feeds ml_rbs TRIG_OFF directly -- no further gating needed since the timer itself can only ever be running during OFF state." 
-},
-{
-  "from": "kill_on_button",
-  "to": "ml_rbs",
-  "type": "SIGNAL",
-  "zone": "B",
-  "loom": "cab_harness",
-  "resistance": 0.02,
-  "color": "GY",
-  "fromConnector": "ONBTN",
-  "fromPin": 1,
-  "toConnector": "ML_CTRL",
-  "toPin": 3,
-  "notes": "TRIG_ON -- fires simultaneously with the latch SET, no delay needed on power-up."
+
 }]
-    }
+   }
   
