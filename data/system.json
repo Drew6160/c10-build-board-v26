@@ -2867,15 +2867,6 @@
       "wireOverride": "8 AWG"
     },
     {
-      "from": "battery",
-      "to": "mdb_rear",
-      "type": "POWER",
-      "zone": "C",
-      "loom": "rear_trunk",
-      "resistance": 0.005,
-      "wireOverride": "4 AWG"
-    },
-    {
       "from": "mdb_rear",
       "to": "c105_ctrl",
       "type": "POWER",
