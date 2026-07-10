@@ -4,7 +4,7 @@
       "id": "battery",
       "type": "source",
       "tier": 1,
-      "zone": "A",
+      "zone": "B",
       "label": "Battery",
       "load": 0,
       "partNumber": "—",
