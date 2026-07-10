@@ -2790,6 +2790,21 @@
       "wireOverride": "10 AWG"
     },
     {
+      "from": "mdb_rear",
+      "to": "accuair_comp",
+      "type": "POWER",
+      "zone": "C",
+      "loom": "rear_trunk",
+      "resistance": 0.02,
+      "wireOverride": "8 AWG",
+      "color": "RD",
+      "fromConnector": "MDB_OUT",
+      "fromPin": 1,
+      "toConnector": "CVT",
+      "toPin": 1,
+      "notes": "Actual 23A power feed for the ENDO CVT compressor -- MDB Rear Pole 1 (50A). The existing fuse_panel edge to this node is signal-only (ignition wake sense), not the compressor's real supply."
+   },
+   {
       "from": "power_block",
       "to": "mdb_engine",
       "type": "POWER",
