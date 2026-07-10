@@ -2431,7 +2431,51 @@
       ]
     }
   ]
-}
+},
+ {
+  "id": "kill_on_button",
+  "type": "control",
+  "tier": 1,
+  "zone": "B",
+  "label": "Kill Switch — ON Button",
+  "load": 0,
+  "partNumber": "Momentary N.O. Pushbutton",
+  "notes": "Dash/console mounted, separate from OFF button. Pulses kill_master_latch SET input AND ml_rbs TRIG_ON lead simultaneously -- no delay needed on power-up.",
+  "connectors": [
+    {
+      "designator": "ONBTN",
+      "body": "Deutsch DT 2-way",
+      "gender": "female",
+      "pinCount": 2,
+      "pins": [
+        { "pin": 1, "label": "TRIG", "type": "SIGNAL" },
+        { "pin": 2, "label": "GND", "type": "GROUND" }
+      ]
+    }
+  ]
+},
+{
+  "id": "kill_off_button",
+  "type": "control",
+  "tier": 1,
+  "zone": "B",
+  "label": "Kill Switch — OFF Button",
+  "load": 0,
+  "partNumber": "Momentary N.O. Pushbutton",
+  "notes": "Dash/console mounted. Pulses kill_master_latch RESET input. Consider a guarded or recessed button to prevent accidental engagement.",
+  "connectors": [
+    {
+      "designator": "OFFBTN",
+      "body": "Deutsch DT 2-way",
+      "gender": "female",
+      "pinCount": 2,
+      "pins": [
+        { "pin": 1, "label": "TRIG", "type": "SIGNAL" },
+        { "pin": 2, "label": "GND", "type": "GROUND" }
+      ]
+    }
+  ]
+}   
   ],
   "edges": [
     {
@@ -3224,8 +3268,89 @@
   "toConnector": "APM",
   "toPin": 2,
   "notes": "Ground directly at alternator case/mounting ear."
-}]
-
+},
+{
+  "from": "racewire_bulkhead_single",
+  "to": "kill_master_latch",
+  "type": "POWER",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "wireOverride": "16 AWG",
+  "color": "RD",
+  "toConnector": "LATCH",
+  "toPin": 1,
+  "notes": "Always-hot fused tap -- required so the ON button can always re-latch even with battery switch OFF."
+},
+{
+  "from": "kill_on_button",
+  "to": "kill_master_latch",
+  "type": "SIGNAL",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "GY",
+  "fromConnector": "ONBTN",
+  "fromPin": 1,
+  "toConnector": "LATCH",
+  "toPin": 3,
+  "notes": "SET trigger -- immediate, no delay."
+},
+{
+  "from": "kill_off_button",
+  "to": "kill_master_latch",
+  "type": "SIGNAL",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "GY/BK",
+  "fromConnector": "OFFBTN",
+  "fromPin": 1,
+  "toConnector": "LATCH",
+  "toPin": 4,
+  "notes": "RESET trigger -- immediate, breaks SW12V feed instantly."
+},
+{
+  "from": "kill_on_button",
+  "to": "ml_rbs",
+  "type": "SIGNAL",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "GY",
+  "fromConnector": "ONBTN",
+  "fromPin": 1,
+  "toConnector": "ML_CTRL",
+  "toPin": 3,
+  "notes": "TRIG_ON -- fires simultaneously with the latch SET, no delay needed on power-up."
+},
+{
+  "from": "kill_master_latch",
+  "to": "kill_off_interlock",
+  "type": "SIGNAL",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "VT",
+  "fromConnector": "LATCH",
+  "fromPin": 6,
+  "toConnector": "INTLK",
+  "toPin": 1,
+  "notes": "Coil hot feed -- energizes interlock coil only while latch is SET, using the latch's own switched output rather than a separate always-hot tap."
+},
+{
+  "from": "ground_block",
+  "to": "kill_off_interlock",
+  "type": "GROUND",
+  "zone": "B",
+  "loom": "cab_harness",
+  "resistance": 0.02,
+  "color": "BK",
+  "toConnector": "INTLK",
+  "toPin": 2,
+  "notes": "Interlock coil ground return."
+ }
+  ]
 }
    
   
