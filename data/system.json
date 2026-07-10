@@ -2550,23 +2550,7 @@
       "shield": true,
       "drainGround": "source"
     },
-    {
-      "from": "fuse_panel",
-      "to": "ecm",
-      "type": "POWER",
-      "zone": "A",
-      "loom": "engine_harness",
-      "resistance": 0.02
-    },
-    {
-      "from": "fuse_panel",
-      "to": "cooling_fan",
-      "type": "POWER",
-      "zone": "A",
-      "loom": "engine_harness",
-      "resistance": 0.03
-    },
-    {
+        {
       "from": "fuse_panel",
       "to": "ac_compressor",
       "type": "POWER",
