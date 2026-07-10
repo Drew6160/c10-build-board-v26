@@ -3196,7 +3196,36 @@
   "fromPin": 3,
   "toConnector": "ML_CTRL",
   "toPin": 4,
-  "notes": "NO(87) output feeds ml_rbs TRIG_OFF directly -- no further gating needed since the timer itself can only ever be running during OFF state." 
+  "notes": "NO(87) output feeds ml_rbs TRIG_OFF directly -- no further gating needed since the timer itself can only ever be running during OFF state."
+},
+{
+  "from": "alternator",
+  "to": "alternator_apm",
+  "type": "POWER",
+  "zone": "A",
+  "loom": "engine_harness",
+  "resistance": 0.001,
+  "color": "RD",
+  "fromConnector": "ALT",
+  "fromPin": 1,
+  "toConnector": "APM",
+  "toPin": 1,
+  "notes": "Parallel/shunt tap directly at alternator B+ stud."
+},
+{
+  "from": "alternator",
+  "to": "alternator_apm",
+  "type": "GROUND",
+  "zone": "A",
+  "loom": "engine_harness",
+  "resistance": 0.001,
+  "color": "BK",
+  "fromConnector": "ALT",
+  "fromPin": 2,
+  "toConnector": "APM",
+  "toPin": 2,
+  "notes": "Ground directly at alternator case/mounting ear."
+}
 
 }]
    }
