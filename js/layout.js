@@ -45,7 +45,7 @@ const LAYOUT_POS = {
   injectors:     { x: 100, y: 310 },
   wideband_o2:   { x: 230, y: 310 },
   cooling_fan:   { x: 150, y: 390 },
-  battery:       { x: 60,  y: 430 },
+  battery:       { x: 420,  y: 400 },
   map_sensor:    { x: 280, y: 390 },
   ac_compressor: { x: 70,  y: 490 },
   starter:       { x: 200, y: 490 },
